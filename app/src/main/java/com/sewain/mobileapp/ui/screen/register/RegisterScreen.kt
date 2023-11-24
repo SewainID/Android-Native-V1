@@ -64,7 +64,7 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 fun RegisterScreen(
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        factory = ViewModelFactory(Injection.provideRepository(LocalContext.current))
+        factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
     navigateToLogin: () -> Unit
 ) {
@@ -93,7 +93,10 @@ fun RegisterScreen(
             inputConfirmPassword = newInputConfirmPassword
         },
         passwordHidden = passwordHidden,
-        navigateToLogin = navigateToLogin
+        navigateToLogin = navigateToLogin,
+        onClickRegister = {
+            viewModel.register(inputUsername, inputEmail, inputPassword)
+        }
     )
 }
 
@@ -111,6 +114,7 @@ fun RegisterContent(
     onInputConfirmPassword: (String) -> Unit,
     passwordHidden: Boolean,
     navigateToLogin: () -> Unit,
+    onClickRegister: () -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -325,7 +329,7 @@ fun RegisterContent(
                 )
 
                 Button(
-                    onClick = { },
+                    onClick = onClickRegister,
                     modifier
                         .padding(
                             top = 19.dp,
