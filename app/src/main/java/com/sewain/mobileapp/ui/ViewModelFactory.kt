@@ -1,0 +1,20 @@
+package com.sewain.mobileapp.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.sewain.mobileapp.data.SewainRepository
+import com.sewain.mobileapp.ui.screen.login.LoginViewModel
+import com.sewain.mobileapp.ui.screen.register.RegisterViewModel
+
+class ViewModelFactory(private val repository: SewainRepository) :
+    ViewModelProvider.NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            return LoginViewModel(repository) as T
+        } else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
+            return RegisterViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+    }
+}

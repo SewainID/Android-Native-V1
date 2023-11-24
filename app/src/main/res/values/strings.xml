@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Sewain App</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_message">Access to your account</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="or">OR</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_message">Create an account</string>
+    <string name="already_account_message">Already have an account?</string>
 </resources>
