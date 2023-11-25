@@ -23,6 +23,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
@@ -30,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,8 +55,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sewain.mobileapp.R
-import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.theme.DarkPurple
@@ -59,11 +64,13 @@ import com.sewain.mobileapp.ui.theme.Purple500
 import com.sewain.mobileapp.ui.theme.Purple700
 import com.sewain.mobileapp.ui.theme.PurpleGrey40
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    viewModel: RegisterViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    viewModel: RegisterViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
     navigateToLogin: () -> Unit
@@ -74,30 +81,52 @@ fun RegisterScreen(
     var inputConfirmPassword by remember { mutableStateOf("") }
     val passwordHidden by rememberSaveable { mutableStateOf(true) }
 
-    RegisterContent(
-        modifier = modifier,
-        inputUsername = inputUsername,
-        onInputUsername = { newInputUsername ->
-            inputUsername = newInputUsername
-        },
-        inputEmail = inputEmail,
-        onInputEmail = { newInputEmail ->
-            inputEmail = newInputEmail
-        },
-        inputPassword = inputPassword,
-        onInputPassword = { newInputPassword ->
-            inputPassword = newInputPassword
-        },
-        inputConfirmPassword = inputConfirmPassword,
-        onInputConfirmPassword = { newInputConfirmPassword ->
-            inputConfirmPassword = newInputConfirmPassword
-        },
-        passwordHidden = passwordHidden,
-        navigateToLogin = navigateToLogin,
-        onClickRegister = {
-            viewModel.register(inputUsername, inputEmail, inputPassword)
-        }
-    )
+    val snackbarHost by remember { mutableStateOf((SnackbarHostState())) }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHost) },
+    ) { padding ->
+        RegisterContent(
+            modifier = modifier.padding(padding),
+            inputUsername = inputUsername,
+            onInputUsername = { newInputUsername ->
+                inputUsername = newInputUsername
+            },
+            inputEmail = inputEmail,
+            onInputEmail = { newInputEmail ->
+                inputEmail = newInputEmail
+            },
+            inputPassword = inputPassword,
+            onInputPassword = { newInputPassword ->
+                inputPassword = newInputPassword
+            },
+            inputConfirmPassword = inputConfirmPassword,
+            onInputConfirmPassword = { newInputConfirmPassword ->
+                inputConfirmPassword = newInputConfirmPassword
+            },
+            passwordHidden = passwordHidden,
+            navigateToLogin = navigateToLogin,
+            onClickRegister = {
+                scope.launch {
+                    if (inputPassword.contentEquals(inputConfirmPassword)) {
+                        viewModel.register(inputUsername, inputEmail, inputPassword).let {
+                            snackbarHost.showSnackbar(
+                                message = viewModel.signupMessage.value,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                        navigateToLogin()
+                    } else {
+                        snackbarHost.showSnackbar(
+                            message = "Password Do Not Match!",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -386,6 +415,9 @@ fun RegisterContent(
     showBackground = true,
     showSystemUi = true,
     device = Devices.PIXEL_4_XL
+)
+@Preview(
+    apiLevel = 30
 )
 @Composable
 fun PreviewRegisterScreen() {

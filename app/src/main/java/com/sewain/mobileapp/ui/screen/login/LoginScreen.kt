@@ -24,6 +24,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
@@ -31,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +47,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -52,34 +58,74 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.theme.DarkPurple
 import com.sewain.mobileapp.ui.theme.Purple500
 import com.sewain.mobileapp.ui.theme.Purple700
 import com.sewain.mobileapp.ui.theme.PurpleGrey40
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
-
-@Composable
-fun LoginScreen(
-    modifier: Modifier = Modifier,
-    navigateToRegister: () -> Unit,
-) {
-    LoginContent(
-        modifier = modifier,
-        navigateToRegister = navigateToRegister
-    )
-}
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginContent(
-    modifier: Modifier,
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
+    ),
     navigateToRegister: () -> Unit,
 ) {
     var inputEmail by remember { mutableStateOf("") }
     var inputPassword by remember { mutableStateOf("") }
     val passwordHidden by rememberSaveable { mutableStateOf(true) }
 
+    val snackbarHost by remember { mutableStateOf((SnackbarHostState())) }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHost) },
+    ) { padding ->
+        LoginContent(
+            modifier = modifier.padding(padding),
+            inputEmail = inputEmail,
+            onInputEmail = { newInputEmail ->
+                inputEmail = newInputEmail
+            },
+            inputPassword = inputPassword,
+            onInputPassword = { newInputPassword ->
+                inputPassword = newInputPassword
+            },
+            passwordHidden = passwordHidden,
+            navigateToRegister = navigateToRegister,
+            onClickLogin = {
+                scope.launch {
+                    viewModel.login(inputEmail, inputPassword).let {
+                        snackbarHost.showSnackbar(
+                            message = viewModel.signInMessage.value,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoginContent(
+    modifier: Modifier,
+    inputEmail: String,
+    onInputEmail: (String) -> Unit,
+    inputPassword: String,
+    onInputPassword: (String) -> Unit,
+    passwordHidden: Boolean,
+    navigateToRegister: () -> Unit,
+    onClickLogin: () -> Unit,
+) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -160,9 +206,7 @@ fun LoginContent(
 
                 OutlinedTextField(
                     value = inputEmail,
-                    onValueChange = { newInputEmail ->
-                        inputEmail = newInputEmail
-                    },
+                    onValueChange = onInputEmail,
                     modifier = modifier
                         .padding(
                             top = 48.dp,
@@ -195,9 +239,7 @@ fun LoginContent(
 
                 OutlinedTextField(
                     value = inputPassword,
-                    onValueChange = { newInputPassword ->
-                        inputPassword = newInputPassword
-                    },
+                    onValueChange = onInputPassword,
                     modifier = modifier
                         .padding(
                             top = 13.dp,
@@ -242,9 +284,7 @@ fun LoginContent(
                 }
 
                 Button(
-                    onClick = {
-//                              on click login
-                    },
+                    onClick = onClickLogin,
                     modifier
                         .padding(
                             top = 16.dp,

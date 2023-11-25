@@ -2,16 +2,16 @@ package com.sewain.mobileapp.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterResponse(
+data class LoginResponse(
 
 	@field:SerializedName("message")
 	val message: String? = null,
 
 	@field:SerializedName("results")
-	val results: ResultsRegister? = null
+	val results: ResultsLogin? = null
 )
 
-data class ResultsRegister(
+data class ResultsLogin(
 
 	@field:SerializedName("email")
 	val email: String? = null,

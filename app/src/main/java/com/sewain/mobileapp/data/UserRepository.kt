@@ -1,12 +1,19 @@
 package com.sewain.mobileapp.data
 
+import androidx.lifecycle.liveData
+import com.google.gson.Gson
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.local.preferences.SessionPreferences
+import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.response.LoginResponse
+import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
+import com.sewain.mobileapp.ui.common.UiState
 import com.sewain.mobileapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
+import retrofit2.HttpException
 
 class UserRepository private constructor(
     private val userPreference: SessionPreferences,
@@ -22,14 +29,13 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
-
     suspend fun registerUser(username: String, email: String, password: String): RegisterResponse {
         return apiService.register(Register(username, email, password))
     }
 
-//    suspend fun loginUser(email: String, password: String): LoginResponse {
-//        return apiService.login(email, password)
-//    }
+    suspend fun loginUser(email: String, password: String): LoginResponse {
+        return apiService.login(Login(email, password))
+    }
 
     suspend fun logout() {
         userPreference.logout()
