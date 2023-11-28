@@ -23,32 +23,31 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     val signupMessage: StateFlow<String>
         get() = _signupMessage
 
-    private val _signupSuccess = MutableLiveData<Boolean>()
-    val signupSuccess: LiveData<Boolean>
+    private val _signupSuccess = MutableStateFlow(false)
+    val signupSuccess: StateFlow<Boolean>
         get() = _signupSuccess
 
-    private val _isSignupLoading = MutableLiveData<Boolean>()
-    val isSignupLoading: LiveData<Boolean>
+    private val _isSignupLoading = MutableStateFlow(false)
+    val isSignupLoading: StateFlow<Boolean>
         get() = _isSignupLoading
 
     suspend fun register(name: String, email: String, password: String) {
-        _isSignupLoading.postValue(true)
+        _isSignupLoading.value = true
         try {
             //get success message
             val message = repository.registerUser(name, email, password)
             _signupMessage.value = "Success: ${message.message}"
-            _signupSuccess.postValue(true)
+            _signupSuccess.value = true
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, RegisterErrorResponse::class.java)
             val errorMessage = errorBody.message
             _signupMessage.value = "Error: $errorMessage"
-            _signupSuccess.postValue(false)
+            _signupSuccess.value = false
         } catch (e: SocketTimeoutException) {
             _signupMessage.value = "Error: Timeout! ${e.message}"
-            _signupSuccess.postValue(false)
+            _signupSuccess.value = false
         }
-        _isSignupLoading.postValue(false)
     }
 }
