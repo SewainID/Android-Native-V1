@@ -37,7 +37,7 @@ jobs:
     - name: Send Notification to Discord
       env:
         DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        GCP_BUCKET_URL: https://storage.googleapis.com/sewain/apk/debug/app-debug-unsigned.apk
+        GCP_BUCKET_URL: https://storage.googleapis.com/sewain/apk/debug/app-debug.apk
       run: |
         curl -H "Content-Type: application/json" \
              -X POST \
