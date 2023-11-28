@@ -153,7 +153,6 @@ fun LoginContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-
     Column(modifier = modifier.fillMaxSize()) {
         Box(
             modifier = modifier
