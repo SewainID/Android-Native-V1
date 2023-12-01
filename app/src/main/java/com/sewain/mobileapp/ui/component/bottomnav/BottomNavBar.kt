@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -26,6 +29,8 @@ import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.login.LoginScreen
+import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
+import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +53,7 @@ fun HomeBottomNavBar() {
         bottomBar = {
             NavigationBar {
                 //getting the list of bottom navigation items for our data class
-                BottomNavItem().bottomNavigationItems().forEachIndexed {index,navigationItem ->
+                BottomNavItem().bottomNavigationItems().forEachIndexed { index, navigationItem ->
 
                     //iterating all items with their respective indexes
                     NavigationBarItem(
@@ -71,7 +76,8 @@ fun HomeBottomNavBar() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.onPrimary)
                     )
                 }
             }
@@ -80,7 +86,8 @@ fun HomeBottomNavBar() {
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(paddingValues = paddingValues)) {
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
             composable(Screen.Home.route) {
                 HomeScreen(navController)
             }
@@ -92,6 +99,7 @@ fun HomeBottomNavBar() {
             }
             composable(Screen.Profile.route) {
                 //call our composable screens here
+                ProfileScreen(navController)
             }
         }
     }
@@ -111,5 +119,7 @@ fun HomeBottomNavBar() {
 )
 @Composable
 fun PreviewBottomNavigationBar() {
-    HomeBottomNavBar()
+    SewainAppTheme {
+        HomeBottomNavBar()
+    }
 }

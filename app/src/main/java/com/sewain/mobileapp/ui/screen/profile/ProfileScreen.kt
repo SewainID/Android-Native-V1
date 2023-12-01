@@ -1,13 +1,24 @@
 package com.sewain.mobileapp.ui.screen.profile
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,42 +28,240 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.ui.theme.Gray700
+import com.sewain.mobileapp.ui.theme.LightBlueGray
+import com.sewain.mobileapp.ui.theme.SalmonPink
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.profile),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+        )
+
+        Image(
+            painter = painterResource(R.drawable.profile),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            alignment = Alignment.Center,
+            modifier = modifier
+                .padding(top = 24.dp)
+                .size(150.dp)
+                .clip(CircleShape)
+                .background(Gray700),
+        )
+
+        Text(
+            text = "Jane Doe",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier.padding(top = 24.dp)
+        )
+
+        Text(
+            text = "Hello, Jane",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = modifier.padding(top = 4.dp)
+        )
+
+        Text(
+            text = "janedoe@gmail.com",
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = modifier.padding(top = 4.dp)
+        )
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp)
+                .height(50.dp)
+                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.switch_account),
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .height(50.dp)
+                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.edit_profile),
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .height(50.dp)
+                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.change_password),
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .height(50.dp)
+                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.add_addresses),
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .height(50.dp)
+                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.add_social_media),
+                modifier = modifier.padding(start = 16.dp),
+                color = MaterialTheme.colorScheme.secondary
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .height(50.dp)
+                .border(1.dp, SalmonPink, RoundedCornerShape(8.dp))
+                .clickable {  },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.logout),
+                modifier = modifier.padding(start = 16.dp),
+                color = SalmonPink
+            )
+
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = modifier.padding(end = 16.dp),
+                tint = SalmonPink
+            )
+        }
+
+    }
+
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = Devices.PIXEL_4_XL,
+    uiMode = UI_MODE_NIGHT_NO,
+)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = Devices.PIXEL_4_XL,
+    uiMode = UI_MODE_NIGHT_YES,
+)
+@Composable
+fun PreviewProfileScreen() {
     SewainAppTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(15.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                        .height(200.dp)
-                        .padding(horizontal = 15.dp, vertical = 10.dp)
-                        .clip(MaterialTheme.shapes.large)
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_person),
-                        contentDescription = "home_screen_bg",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-                Text(
-                    "Profile Screen",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 20.dp)
-                )
-            }
+            ProfileScreen(navController = rememberNavController())
         }
     }
 }

@@ -15,12 +15,14 @@ private val LightColorScheme = lightColorScheme(
     background = md_theme_light_background,
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
+    secondary = md_theme_light_secondary,
 )
 
 private val DarkColorScheme = darkColorScheme(
     background = md_theme_dark_background,
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
+    secondary = md_theme_dark_secondary,
 )
 
 @Composable

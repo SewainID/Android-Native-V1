@@ -12,4 +12,19 @@
     <string name="sign_up">Sign Up</string>
     <string name="sign_up_message">Create an account</string>
     <string name="already_account_message">Already have an account?</string>
+    <string name="profile">Profile</string>
+    <string name="switch_account">Switch to Shop Account</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="add_addresses">Add Addresses</string>
+    <string name="add_social_media">Add Social Media</string>
+    <string name="logout">Logout</string>
+    <string name="full_name">Full Name</string>
+    <string name="number">Number</string>
+    <string name="save">Save</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="repeat_new_password">Repeat New Password</string>
+    <string name="password_page_message_1">In order to change your password,</string>
+    <string name="password_page_message_2">you need to confirm current password first.</string>
 </resources>
