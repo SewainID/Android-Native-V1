@@ -2,7 +2,6 @@ package com.sewain.mobileapp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +10,7 @@ import com.sewain.mobileapp.data.local.preferences.SessionPreferences
 import com.sewain.mobileapp.ui.component.bottomnav.HomeBottomNavBar
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.login.LoginScreen
+import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.register.RegisterScreen
 
 @Composable
@@ -49,7 +49,7 @@ fun SewainApp(
             )
         }
         composable(Screen.Home.route) {
-            HomeBottomNavBar()
+            HomeBottomNavBar(sessionModel!!)
         }
     }
 }

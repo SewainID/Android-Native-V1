@@ -18,15 +18,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,9 +39,15 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.data.local.model.SessionModel
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.ViewModelFactory
+import com.sewain.mobileapp.ui.component.DialogScreen
+import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.LightBlueGray
 import com.sewain.mobileapp.ui.theme.SalmonPink
@@ -46,8 +56,28 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    sessionModel: SessionModel,
+    viewModel: ProfileViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
+    ),
     modifier: Modifier = Modifier,
 ) {
+    val openDialog = remember { mutableStateOf(false) }
+
+    when {
+        openDialog.value -> {
+            DialogScreen(
+                onDismissRequest = { openDialog.value = false },
+                onConfirmation = {
+                    openDialog.value = false
+                    viewModel.logout()
+                },
+                message = R.string.logout_message,
+                icon = Icons.Outlined.Info
+            )
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -74,14 +104,14 @@ fun ProfileScreen(
         )
 
         Text(
-            text = "Jane Doe",
+            text = sessionModel.username,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)
         )
 
         Text(
-            text = "Hello, Jane",
+            text = "Hello, ${sessionModel.username}",
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.secondary,
@@ -89,7 +119,7 @@ fun ProfileScreen(
         )
 
         Text(
-            text = "janedoe@gmail.com",
+            text = sessionModel.email,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.secondary,
             modifier = modifier.padding(top = 4.dp)
@@ -101,7 +131,7 @@ fun ProfileScreen(
                 .padding(top = 24.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -125,7 +155,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { navController.navigate(Screen.DetailProfile.route) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -149,7 +179,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { navController.navigate(Screen.ChangePassword.route) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -173,7 +203,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -197,7 +227,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -221,7 +251,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, SalmonPink, RoundedCornerShape(8.dp))
-                .clickable {  },
+                .clickable { openDialog.value = true },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -258,10 +288,9 @@ fun ProfileScreen(
 @Composable
 fun PreviewProfileScreen() {
     SewainAppTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-            ProfileScreen(navController = rememberNavController())
-        }
+        ProfileScreen(
+            navController = rememberNavController(),
+            sessionModel = SessionModel("Jane Doe", "janedoe@gmail.com", "")
+        )
     }
 }

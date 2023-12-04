@@ -27,4 +27,7 @@
     <string name="repeat_new_password">Repeat New Password</string>
     <string name="password_page_message_1">In order to change your password,</string>
     <string name="password_page_message_2">you need to confirm current password first.</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="logout_message">Are you sure to Logout?</string>
 </resources>

@@ -36,8 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -51,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
@@ -59,12 +58,12 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProfileScreen(
+    sessionModel: SessionModel,
     modifier: Modifier = Modifier,
 ) {
-    // State for input
-    var inputFullName by remember { mutableStateOf("") }
-    var inputEmail by remember { mutableStateOf("janedoe@mail.com") }
-    var inputNumber by remember { mutableStateOf("+62 888 8888 8888") }
+    var inputFullName by remember { mutableStateOf(sessionModel.username) }
+    var inputEmail by remember { mutableStateOf(sessionModel.email) }
+    var inputNumber by remember { mutableStateOf("") }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,7 +81,7 @@ fun DetailProfileScreen(
         Box(
             modifier = modifier
                 .padding(top = 24.dp)
-                .clickable {  },
+                .clickable { },
             contentAlignment = Center
         ) {
             Image(
@@ -126,7 +125,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = "Jane Doe",
+                    text = sessionModel.username,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -166,7 +165,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = "janedoe@mail.com",
+                    text = sessionModel.email,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -283,7 +282,7 @@ fun DetailProfileScreenPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            DetailProfileScreen()
+            DetailProfileScreen(SessionModel("", "", ""))
         }
     }
 }

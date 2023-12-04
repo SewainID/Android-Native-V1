@@ -123,10 +123,6 @@ fun LoginScreen(
                                 message = viewModel.signInMessage.value,
                                 duration = SnackbarDuration.Short
                             )
-
-                            if (success) {
-                                // navigation to the home page
-                            }
                         }
                         loading = false
                         enabled = true

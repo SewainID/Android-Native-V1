@@ -26,16 +26,19 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.login.LoginScreen
+import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
+import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeBottomNavBar() {
+fun HomeBottomNavBar(sessionModel: SessionModel) {
 //initializing the default selected item
     var navigationSelectedItem by remember {
         mutableIntStateOf(0)
@@ -99,7 +102,13 @@ fun HomeBottomNavBar() {
             }
             composable(Screen.Profile.route) {
                 //call our composable screens here
-                ProfileScreen(navController)
+                ProfileScreen(navController, sessionModel)
+            }
+            composable(Screen.DetailProfile.route) {
+                DetailProfileScreen(sessionModel)
+            }
+            composable(Screen.ChangePassword.route) {
+                ChangeScreenPasswordScreen()
             }
         }
     }
@@ -120,6 +129,6 @@ fun HomeBottomNavBar() {
 @Composable
 fun PreviewBottomNavigationBar() {
     SewainAppTheme {
-        HomeBottomNavBar()
+        HomeBottomNavBar(sessionModel = SessionModel("", "", ""))
     }
 }
