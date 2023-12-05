@@ -15,15 +15,15 @@ val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 class SessionPreferences private constructor(private val datastore: DataStore<Preferences>) {
     private val USERNAME_KEY = stringPreferencesKey("username")
+    private val EMAIL_KEY = stringPreferencesKey("email")
     private val TOKEN_KEY = stringPreferencesKey("token")
-    private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
 
     fun getSession(): Flow<SessionModel> {
         return datastore.data.map { data ->
             SessionModel(
                 data[USERNAME_KEY] ?: "",
+                data[EMAIL_KEY] ?: "",
                 data[TOKEN_KEY] ?: "",
-                data[IS_LOGIN_KEY] ?: false
             )
         }
     }
@@ -31,8 +31,8 @@ class SessionPreferences private constructor(private val datastore: DataStore<Pr
     suspend fun saveSession(sessionModel: SessionModel) {
         datastore.edit { data ->
             data[USERNAME_KEY] = sessionModel.username
+            data[EMAIL_KEY] = sessionModel.email
             data[TOKEN_KEY] = sessionModel.token
-            data[IS_LOGIN_KEY] = sessionModel.isLogin
         }
     }
 
