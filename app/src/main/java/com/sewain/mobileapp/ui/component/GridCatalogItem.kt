@@ -60,5 +60,5 @@ fun GridCatalogItem (item : CatalogEntity){
 @Preview
 @Composable
 fun PreviewCatalogItem(){
-    GridCatalogItem(CatalogEntity(dayRent = 3, name = "Gojo SAtoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"))
+    GridCatalogItem(CatalogEntity(dayRent = 3, name = "Gojo SAtoru", price = 100000.0, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"))
 }

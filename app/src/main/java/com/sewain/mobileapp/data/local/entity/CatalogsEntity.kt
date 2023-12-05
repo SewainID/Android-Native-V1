@@ -11,7 +11,7 @@ data class CatalogEntity(
     @PrimaryKey(autoGenerate = false)
     var id: String = "",
     var name: String? = "",
-    var price: Int? = null,
+    var price: Double? = null,
     var dayRent: Int? = null,
     var size: String? = null,
     var photoUrl: String? = null,

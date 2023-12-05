@@ -2,6 +2,7 @@ package com.sewain.mobileapp.ui.screen.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +34,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -48,16 +56,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
     factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
 ),) {
     val items = viewModel.catalogs.collectAsLazyPagingItems()
-
-    val testList = listOf(
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-    )
     SewainAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -86,19 +84,42 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
 
 @Composable
 fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Adjust the number of columns
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(catalogItems.itemCount) { index ->
-            catalogItems[index]?.let { catalogItem ->
-                GridCatalogItem(catalogItem)
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(catalogItems.itemCount) { index ->
+                catalogItems[index]?.let { catalogItem ->
+                    GridCatalogItem(catalogItem)
+                }
             }
+        }
+
+        when (catalogItems.loadState.refresh) {
+            is LoadState.Loading -> {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            is LoadState.Error, is LoadState.NotLoading -> {
+                if (catalogItems.itemCount == 0) {
+                    Button(
+                        onClick = { catalogItems.retry() },
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Text("Reload")
+                    }
+                }
+            }
+            else -> { /* Do nothing for other states */ }
         }
     }
 }
+
 @Composable
 fun HeaderHome(){
     Row(
@@ -143,22 +164,6 @@ fun PreviewHeaderHome(){
     HeaderHome()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCatalogsHome() {
-    val testList = listOf(
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-        CatalogItem(id = "1",dayRent = 3, name = "Gojo Satoru", price = 100000, photoUrl = "https://storage.googleapis.com/sewain/etc/sample.jpg"),
-    )
-
-//    CatalogsHome(testList)
-}
-
 @Preview(
     showBackground = true,
     showSystemUi = true,
@@ -174,4 +179,26 @@ fun PreviewCatalogsHome() {
 @Composable
 fun PreviewBottomNavigationBar() {
     HomeScreen(rememberNavController())
+}
+
+class FakeCatalogPagingSource : PagingSource<Int, CatalogEntity>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CatalogEntity> {
+        val items = List(20) { CatalogEntity(id = it.toString(), "Catalog Item $it") }
+        return LoadResult.Page(items, prevKey = null, nextKey = null)
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, CatalogEntity>): Int? {
+        return null
+    }
+}
+
+// Preview Composable
+@Preview(showBackground = true)
+@Composable
+fun CatalogsHomePreview() {
+    val fakePagingSource = FakeCatalogPagingSource()
+    val pager = Pager(PagingConfig(pageSize = 10)) { fakePagingSource }
+    val catalogItems = pager.flow.collectAsLazyPagingItems()
+
+    CatalogsHome(catalogItems = catalogItems)
 }

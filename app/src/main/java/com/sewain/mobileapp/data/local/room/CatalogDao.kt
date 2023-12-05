@@ -11,16 +11,16 @@ import com.sewain.mobileapp.data.local.entity.CatalogEntity
 @Dao
 interface CatalogDao {
     @Query("SELECT * FROM catalog")
-    fun getStory(): LiveData<List<CatalogEntity>>
+    fun getCatalogs(): LiveData<List<CatalogEntity>>
 
     @Query("SELECT * FROM catalog")
-    fun getAllStory(): PagingSource<Int, CatalogEntity>
+    fun getAllCatalogs(): PagingSource<Int, CatalogEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertStory(user: List<CatalogEntity>)
+    fun insertCatalog(user: List<CatalogEntity>)
 
     @Update
-    fun updateStory(user: CatalogEntity)
+    fun updateCatalog(user: CatalogEntity)
 
     @Query("DELETE FROM catalog")
     fun deleteAll()

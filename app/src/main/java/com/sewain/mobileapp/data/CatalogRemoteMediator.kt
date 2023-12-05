@@ -1,5 +1,6 @@
 package com.sewain.mobileapp.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -50,7 +51,7 @@ class StoryRemoteMediator(
 
         try {
             val responseData = apiService.getCatalogs(page, state.config.pageSize)
-
+            Log.d("Catalog", responseData.results.toString())
             val endOfPaginationReached = responseData.results.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -63,10 +64,11 @@ class StoryRemoteMediator(
                     RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
                 database.remoteKeysDao().insertAll(keys)
-                val listStory = responseData.results.map {
+                val listCatalogs = responseData.results.map {
                     CatalogEntity(it.id, it.name, it.price, it.dayRent, it.size, it.photoUrl)
                 }
-                database.catalogDao().insertStory(listStory)
+                Log.d("Catalog", listCatalogs.toString())
+                database.catalogDao().insertCatalog(listCatalogs)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: Exception) {

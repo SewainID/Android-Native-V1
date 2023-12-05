@@ -28,7 +28,7 @@ class CatalogRepository private constructor(
             ),
             remoteMediator = StoryRemoteMediator(sewainDatabase, apiService),
             pagingSourceFactory = {
-                sewainDatabase.catalogDao().getAllStory()
+                sewainDatabase.catalogDao().getAllCatalogs()
             }
         ).flow
     }
