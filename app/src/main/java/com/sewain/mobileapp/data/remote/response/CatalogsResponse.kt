@@ -14,7 +14,7 @@ data class CatalogsResponse(
 data class CatalogItem(
 	val dayRent: Int? = null,
 	val size: String? = null,
-	val price: Int? = null,
+	val price: Double? = null,
 	val name: String? = null,
 	val photoUrl: String? = null,
 	val id: String
