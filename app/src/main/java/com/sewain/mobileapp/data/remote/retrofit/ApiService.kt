@@ -2,10 +2,13 @@ package com.sewain.mobileapp.data.remote.retrofit
 
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @POST("/api/v1/register")
@@ -13,4 +16,10 @@ interface ApiService {
 
     @POST("/api/v1/login")
     suspend fun login(@Body login: Login): LoginResponse
+
+    @GET("/api/v1/catalogs")
+    suspend fun getCatalogs(
+        @Query("page") page: Int = 1,
+        @Query("per_page") size: Int = 20
+    ): CatalogsResponse
 }

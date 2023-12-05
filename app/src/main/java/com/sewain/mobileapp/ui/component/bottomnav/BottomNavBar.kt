@@ -12,21 +12,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
-import com.sewain.mobileapp.ui.screen.login.LoginScreen
-import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

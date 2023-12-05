@@ -1,11 +1,9 @@
 package com.sewain.mobileapp.ui.screen.login
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.google.gson.Gson
-import com.sewain.mobileapp.data.SewainRepository
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse

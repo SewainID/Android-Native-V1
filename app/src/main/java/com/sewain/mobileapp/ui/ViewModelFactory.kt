@@ -2,7 +2,6 @@ package com.sewain.mobileapp.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sewain.mobileapp.data.SewainRepository
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.ui.screen.login.LoginViewModel
 import com.sewain.mobileapp.ui.screen.register.RegisterViewModel
