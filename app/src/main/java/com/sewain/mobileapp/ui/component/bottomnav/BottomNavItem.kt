@@ -5,9 +5,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.sewain.mobileapp.R
 import com.sewain.mobileapp.ui.navigation.Screen
 
 //initializing the data class with default parameters

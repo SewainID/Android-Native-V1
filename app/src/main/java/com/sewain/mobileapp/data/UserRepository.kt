@@ -16,8 +16,8 @@ class UserRepository private constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun saveSession(token: String, username: String, isLogin: Boolean) {
-        userPreference.saveSession(SessionModel(token, username, isLogin))
+    suspend fun saveSession(username: String, email: String, token: String) {
+        userPreference.saveSession(SessionModel(username, email, token))
     }
 
     fun getSession(): Flow<SessionModel> {
