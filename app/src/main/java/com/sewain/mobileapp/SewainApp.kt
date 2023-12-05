@@ -10,7 +10,6 @@ import com.sewain.mobileapp.data.local.preferences.SessionPreferences
 import com.sewain.mobileapp.ui.component.bottomnav.HomeBottomNavBar
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.login.LoginScreen
-import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.register.RegisterScreen
 
 @Composable

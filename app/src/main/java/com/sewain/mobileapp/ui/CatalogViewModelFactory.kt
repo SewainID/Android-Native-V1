@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sewain.mobileapp.data.CatalogRepository
 import com.sewain.mobileapp.ui.screen.home.HomeScreenViewModel
-import com.sewain.mobileapp.ui.screen.login.LoginViewModel
 
 class CatalogViewModelFactory(private val repository: CatalogRepository) :
     ViewModelProvider.NewInstanceFactory() {
