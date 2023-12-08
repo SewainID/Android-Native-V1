@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.ui.screen.home
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.Pager
@@ -49,6 +53,7 @@ import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.CatalogViewModelFactory
 import com.sewain.mobileapp.ui.component.GridCatalogItem
 import com.sewain.mobileapp.ui.component.SearchBar
+import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @Composable
@@ -56,6 +61,8 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
     factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
 ),) {
     val items = viewModel.catalogs.collectAsLazyPagingItems()
+    val query = viewModel.searchQuery.collectAsState()
+
     SewainAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -67,12 +74,10 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
                 ,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ){
-                HeaderHome()
+                HeaderHome(navController)
                 SearchBar(
-//                    query = query,
-//                    onQueryChange = viewModel::search,
-                    query = "",
-                    onQueryChange = {},
+                    query = query.value,
+                    onQueryChange = viewModel::setSearchQuery,
                     modifier = Modifier
                 )
 //                BannerHome()
@@ -121,7 +126,7 @@ fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>) {
 }
 
 @Composable
-fun HeaderHome(){
+fun HeaderHome(navController: NavController){
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -142,13 +147,23 @@ fun HeaderHome(){
             )
         }
         AsyncImage(
-            model = "https://storage.googleapis.com/sewain/etc/sample.jpg",
+            model = "https://storage.googleapis.com/sewain/etc/profile.png",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(8.dp)
                 .size(60.dp)
                 .clip(CircleShape)
+                .clickable {
+                    navController.navigate(Screen.Profile.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+
         )
     }
 }
@@ -161,7 +176,7 @@ fun BannerHome(){
 @Preview
 @Composable
 fun PreviewHeaderHome(){
-    HeaderHome()
+    HeaderHome(rememberNavController())
 }
 
 @Preview(
