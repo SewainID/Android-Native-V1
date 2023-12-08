@@ -20,6 +20,7 @@ interface ApiService {
     @GET("/api/v1/catalogs")
     suspend fun getCatalogs(
         @Query("page") page: Int = 1,
-        @Query("per_page") size: Int = 20
+        @Query("per_page") size: Int = 20,
+        @Query("search") search: String? = null
     ): CatalogsResponse
 }

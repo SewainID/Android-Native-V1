@@ -15,6 +15,7 @@ import com.sewain.mobileapp.data.remote.retrofit.ApiService
 class StoryRemoteMediator(
     private val database: SewainDatabase,
     private val apiService: ApiService,
+    private val querySearch: String
 ) : RemoteMediator<Int, CatalogEntity>() {
 
     private companion object {
@@ -50,8 +51,7 @@ class StoryRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getCatalogs(page, state.config.pageSize)
-            Log.d("Catalog", responseData.results.toString())
+            val responseData = apiService.getCatalogs(page, state.config.pageSize, querySearch)
             val endOfPaginationReached = responseData.results.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -67,7 +67,6 @@ class StoryRemoteMediator(
                 val listCatalogs = responseData.results.map {
                     CatalogEntity(it.id, it.name, it.price, it.dayRent, it.size, it.photoUrl)
                 }
-                Log.d("Catalog", listCatalogs.toString())
                 database.catalogDao().insertCatalog(listCatalogs)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
