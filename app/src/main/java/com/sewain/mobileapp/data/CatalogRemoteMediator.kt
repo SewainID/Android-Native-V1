@@ -51,7 +51,6 @@ class StoryRemoteMediator(
 
         try {
             val responseData = apiService.getCatalogs(page, state.config.pageSize)
-            Log.d("Catalog", responseData.results.toString())
             val endOfPaginationReached = responseData.results.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
