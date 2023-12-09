@@ -8,9 +8,11 @@ import androidx.paging.PagingData
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
 import com.sewain.mobileapp.data.local.room.CatalogDao
 import com.sewain.mobileapp.data.local.room.SewainDatabase
+import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 import com.sewain.mobileapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
 class CatalogRepository private constructor(
     private val apiService: ApiService,
@@ -31,6 +33,10 @@ class CatalogRepository private constructor(
                 sewainDatabase.catalogDao().getAllCatalogs()
             }
         ).flow
+    }
+
+    suspend fun getCatalogById(catalogId: String): Response<CatalogItem> {
+        return apiService.getCatalogById(catalogId)
     }
 
 

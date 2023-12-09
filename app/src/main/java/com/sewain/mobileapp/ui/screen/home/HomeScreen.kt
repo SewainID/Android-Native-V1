@@ -90,6 +90,12 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
 @Composable
 fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>) {
     Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = stringResource(R.string.new_arrivals),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(4.dp),
+        )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(16.dp),
