@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -68,7 +69,7 @@ fun ProfileScreen(
     viewModel.getUserById(sessionModel.id)
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
@@ -78,6 +79,9 @@ fun ProfileScreen(
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
+            modifier = modifier
+                .fillMaxWidth()
+                .height(50.dp)
         )
 
         // Condition photo profile
@@ -159,7 +163,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.DetailProfile.route) },
+                .clickable { navController.navigate(Screen.DetailProfile.createRoute(sessionModel.id)) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -281,7 +285,7 @@ fun ProfileScreen(
                 onDismissRequest = { openDialog.value = false },
                 onConfirmation = {
                     viewModel.logout()
-//                    navController.navigate(Screen.Login.route)
+                    navController.navigate(Screen.Login.route)
                     openDialog.value = false
                 },
                 message = R.string.logout_message,

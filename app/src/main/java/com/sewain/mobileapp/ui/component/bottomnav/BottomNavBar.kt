@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.ui.component.bottomnav
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +53,9 @@ fun HomeBottomNavBar(
     val navController = rememberNavController()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    var currentRoute = navBackStackEntry?.destination?.route
+
+    Log.d("Test", "$currentRoute")
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -61,6 +64,10 @@ fun HomeBottomNavBar(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
+            if (currentRoute == Screen.DetailProfile.route) {
+                currentRoute = Screen.Profile.route
+            }
+
             NavigationBar {
                 //getting the list of bottom navigation items for our data class
                 BottomNavItem().bottomNavigationItems().forEachIndexed { index, navigationItem ->
@@ -112,7 +119,8 @@ fun HomeBottomNavBar(
                 ProfileScreen(navController, sessionModel)
             }
             composable(Screen.DetailProfile.route) {
-                DetailProfileScreen(navController, sessionModel, snackbarHostState)
+                val id = it.arguments?.getString("id") ?: ""
+                DetailProfileScreen(id ,navController, snackbarHostState)
             }
             composable(Screen.ChangePassword.route) {
                 ChangeScreenPasswordScreen()

@@ -75,15 +75,15 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProfileScreen(
+    id: String,
     navController: NavController,
-    sessionModel: SessionModel,
     snackbarHostState: SnackbarHostState,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
     modifier: Modifier = Modifier,
 ) {
-    viewModel.getUserById(sessionModel.id)
+    viewModel.getUserById(id)
 
     var inputFullName by remember { mutableStateOf("") }
     var inputUsername by remember { mutableStateOf("") }
@@ -204,7 +204,8 @@ fun DetailProfileScreen(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.AccountBox,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Gray700
                 )
             },
             singleLine = true,
@@ -317,13 +318,13 @@ fun DetailProfileScreen(
         Button(
             onClick = {
                 scope.launch {
-                    if (inputFullName.isEmpty() &&
+                    if (inputUsername.isEmpty() &&
                         inputEmail.isEmpty()
                     ) {
                         snackbarHostState.showSnackbar(message = "Error: No changes made")
                     } else {
                         viewModel.updateUser(
-                            sessionModel.id,
+                            id,
                             inputUsername,
                             inputEmail
                         ).let {
@@ -392,8 +393,8 @@ fun DetailProfileScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             DetailProfileScreen(
+                id = "",
                 navController = rememberNavController(),
-                sessionModel = SessionModel("", ""),
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
