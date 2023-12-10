@@ -187,7 +187,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.ChangePassword.route) },
+                .clickable { navController.navigate(Screen.ChangePassword.createRoute(sessionModel.id)) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -211,7 +211,7 @@ fun ProfileScreen(
                 .padding(top = 12.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { },
+                .clickable { navController.navigate(Screen.Adresses.createRoute(sessionModel.id)) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

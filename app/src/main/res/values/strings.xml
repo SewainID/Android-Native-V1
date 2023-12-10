@@ -36,5 +36,12 @@
     <string name="logout_message">Are you sure to Logout?</string>
     <string name="click_to_change">Click to\nChange</string>
     <string name="back">Back</string>
+    <string name="adresses">Adresses</string>
     <string name="username_profile_format">Hello, %s</string>
+    <string name="detail_profile_message_1">Discover Yourself, One Costume at a Time: Unveil</string>
+    <string name="detail_profile_message_2">Your Unique Identity with Our Exclusive Costume Collection</string>
+    <string name="adresses_message_1">Discover Endless Style, One Address at a Time –</string>
+    <string name="adresses_message_2">Your Ultimate Costume Awaits</string>
+    <string name="full_address">Full Address</string>
+    <string name="number_phone">Number Phone</string>
 </resources>

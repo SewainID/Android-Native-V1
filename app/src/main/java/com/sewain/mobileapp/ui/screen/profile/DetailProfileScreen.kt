@@ -52,6 +52,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,7 +62,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
-import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.theme.Gray700
@@ -175,10 +175,22 @@ fun DetailProfileScreen(
         }
 
         Text(
+            text = stringResource(R.string.detail_profile_message_1),
+            fontSize = 13.sp,
+            modifier = modifier.padding(top = 36.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.detail_profile_message_2),
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
+        )
+
+        Text(
             text = stringResource(R.string.full_name),
             fontSize = 16.sp,
             modifier = modifier
-                .padding(start = 4.dp, top = 72.dp)
+                .padding(start = 4.dp, top = 24.dp)
                 .align(Start),
         )
 

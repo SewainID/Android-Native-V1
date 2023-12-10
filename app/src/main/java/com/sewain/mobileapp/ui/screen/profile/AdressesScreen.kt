@@ -14,8 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,10 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -41,8 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,22 +54,20 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChangeScreenPasswordScreen(
+fun AdressesScreen(
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     // State for input
-    var inputCurrentPassword by remember { mutableStateOf("") }
-    var inputNewPassword by remember { mutableStateOf("") }
-    var inputRepeatNewPassword by remember { mutableStateOf("") }
-    val passwordHidden by rememberSaveable { mutableStateOf(true) }
+    var inputFullAdress by remember { mutableStateOf("") }
+    var inputNumberPhone by remember { mutableStateOf("") }
 
     var loading by remember { mutableStateOf(false) }
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
     Column(
-        horizontalAlignment = CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
@@ -93,7 +88,7 @@ fun ChangeScreenPasswordScreen(
             )
 
             Text(
-                text = stringResource(R.string.change_password),
+                text = stringResource(R.string.adresses),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier.align(Alignment.Center)
@@ -101,7 +96,7 @@ fun ChangeScreenPasswordScreen(
         }
 
         Image(
-            painter = painterResource(R.drawable.change_password),
+            painter = painterResource(R.drawable.adresses),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = modifier
@@ -110,43 +105,42 @@ fun ChangeScreenPasswordScreen(
         )
 
         Text(
-            text = stringResource(R.string.password_page_message_1),
+            text = stringResource(R.string.adresses_message_1),
             fontSize = 13.sp,
-            modifier = modifier.padding(top = 16.dp)
+            modifier = modifier.padding(top = 38.dp)
         )
 
         Text(
-            text = stringResource(R.string.password_page_message_2),
+            text = stringResource(R.string.adresses_message_2),
             fontSize = 13.sp,
         )
 
         OutlinedTextField(
-            value = inputCurrentPassword,
+            value = inputFullAdress,
             onValueChange = { newInput ->
-                inputCurrentPassword = newInput
+                inputFullAdress = newInput
             },
             modifier = modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp),
+                .padding(top = 72.dp),
             textStyle = TextStyle(
                 color = MidnightBlue,
                 fontSize = 20.sp
             ),
             placeholder = {
                 Text(
-                    text = stringResource(R.string.current_password),
+                    text = stringResource(R.string.full_address),
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
             },
             trailingIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Lock,
+                    imageVector = Icons.Outlined.LocationOn,
                     contentDescription = null,
                     tint = Gray700
                 )
             },
-            visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
@@ -161,9 +155,9 @@ fun ChangeScreenPasswordScreen(
         )
 
         OutlinedTextField(
-            value = inputNewPassword,
+            value = inputNumberPhone,
             onValueChange = { newInput ->
-                inputNewPassword = newInput
+                inputNumberPhone = newInput
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -174,59 +168,18 @@ fun ChangeScreenPasswordScreen(
             ),
             placeholder = {
                 Text(
-                    text = stringResource(R.string.new_password),
+                    text = stringResource(R.string.number_phone),
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
             },
             trailingIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Lock,
+                    imageVector = Icons.Outlined.Phone,
                     contentDescription = null,
                     tint = Gray700
                 )
             },
-            visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = RoyalBlue,
-                selectionColors = TextSelectionColors(
-                    handleColor = RoyalBlue,
-                    backgroundColor = RoyalBlue
-                ),
-                focusedIndicatorColor = RoyalBlue,
-            )
-        )
-
-        OutlinedTextField(
-            value = inputRepeatNewPassword,
-            onValueChange = { newInput ->
-                inputRepeatNewPassword = newInput
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            textStyle = TextStyle(
-                color = MidnightBlue,
-                fontSize = 20.sp
-            ),
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.repeat_new_password),
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
@@ -243,7 +196,7 @@ fun ChangeScreenPasswordScreen(
         Button(
             onClick = { },
             modifier
-                .padding(top = 48.dp)
+                .padding(top = 81.dp)
                 .fillMaxWidth()
                 .height(50.dp),
             enabled = enabled,
@@ -256,7 +209,7 @@ fun ChangeScreenPasswordScreen(
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.change_password),
+                    text = stringResource(R.string.save),
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -279,12 +232,12 @@ fun ChangeScreenPasswordScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
-fun ChangeScreenPasswordScreenPreview() {
+fun AddressesScreenPreview() {
     SewainAppTheme {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            ChangeScreenPasswordScreen(
+            AdressesScreen(
                 navController = rememberNavController(),
             )
         }

@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
+import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
@@ -55,8 +56,6 @@ fun HomeBottomNavBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var currentRoute = navBackStackEntry?.destination?.route
 
-    Log.d("Test", "$currentRoute")
-
     val snackbarHostState = remember { SnackbarHostState() }
 
 //scaffold to hold our bottom navigation Bar
@@ -64,7 +63,10 @@ fun HomeBottomNavBar(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
-            if (currentRoute == Screen.DetailProfile.route) {
+            if (currentRoute == Screen.DetailProfile.route ||
+                currentRoute == Screen.ChangePassword.route ||
+                currentRoute == Screen.Adresses.route
+            ) {
                 currentRoute = Screen.Profile.route
             }
 
@@ -120,10 +122,13 @@ fun HomeBottomNavBar(
             }
             composable(Screen.DetailProfile.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                DetailProfileScreen(id ,navController, snackbarHostState)
+                DetailProfileScreen(id, navController, snackbarHostState)
             }
             composable(Screen.ChangePassword.route) {
-                ChangeScreenPasswordScreen()
+                ChangeScreenPasswordScreen(navController)
+            }
+            composable(Screen.Adresses.route) {
+                AdressesScreen(navController)
             }
         }
     }
