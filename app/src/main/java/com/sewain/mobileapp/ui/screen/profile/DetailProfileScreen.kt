@@ -1,6 +1,9 @@
 package com.sewain.mobileapp.ui.screen.profile
 
 import android.content.res.Configuration
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,8 +18,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -31,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -38,32 +46,64 @@ import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.model.SessionModel
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProfileScreen(
+    navController: NavController,
     sessionModel: SessionModel,
+    snackbarHostState: SnackbarHostState,
+    viewModel: ProfileViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
+    ),
     modifier: Modifier = Modifier,
 ) {
-    var inputFullName by remember { mutableStateOf(sessionModel.username) }
-    var inputEmail by remember { mutableStateOf(sessionModel.email) }
-    var inputNumber by remember { mutableStateOf("") }
+    viewModel.getUserById(sessionModel.id)
+
+    var inputFullName by remember { mutableStateOf("") }
+    var inputUsername by remember { mutableStateOf("") }
+    var inputEmail by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+
+    var loading by remember { mutableStateOf(false) }
+    var success by remember { mutableStateOf(false) }
+    var enabled by remember { mutableStateOf(true) }
+
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var hasImage by remember { mutableStateOf(false) }
+
+    val launcherGallery = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            hasImage = uri != null
+            imageUri = uri
+        }
+    )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -71,37 +111,68 @@ fun DetailProfileScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.profile),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-        )
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(50.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                modifier = modifier
+                    .size(50.dp)
+                    .clickable {
+                        navController.navigateUp()
+                    }
+            )
+
+            Text(
+                text = stringResource(R.string.detail_profile),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = modifier.align(Center)
+            )
+        }
 
         Box(
             modifier = modifier
                 .padding(top = 24.dp)
-                .clickable { },
+                .clickable {
+                    launcherGallery.launch("image/*")
+                },
             contentAlignment = Center
         ) {
-            Image(
-                painter = painterResource(R.drawable.profile),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                alpha = 0.5f,
-                modifier = modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(Gray700)
-            )
+            // Condition photo profile
+            if (hasImage) {
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.5f,
+                    alignment = Center,
+                    modifier = modifier
+                        .size(150.dp)
+                        .clip(CircleShape),
+                )
+            } else {
+                Image(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.5f,
+                    modifier = modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                )
+            }
 
             Text(
-                text = "Click to\nChange",
-                color = Color.White
+                text = stringResource(R.string.click_to_change),
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
-
-
 
         Text(
             text = stringResource(R.string.full_name),
@@ -125,9 +196,62 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = sessionModel.username,
+                    text = "Full Name",
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.AccountBox,
+                    contentDescription = null
+                )
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White,
+                cursorColor = RoyalBlue,
+                selectionColors = TextSelectionColors(
+                    handleColor = RoyalBlue,
+                    backgroundColor = RoyalBlue
+                ),
+                focusedIndicatorColor = RoyalBlue,
+            )
+        )
+
+        Text(
+            text = stringResource(R.string.username),
+            fontSize = 16.sp,
+            modifier = modifier
+                .padding(start = 4.dp, top = 16.dp)
+                .align(Start),
+        )
+
+        OutlinedTextField(
+            value = inputUsername,
+            onValueChange = { newInput ->
+                inputUsername = newInput
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 2.dp),
+            textStyle = TextStyle(
+                color = MidnightBlue,
+                fontSize = 20.sp
+            ),
+            placeholder = {
+                Text(
+                    text = viewModel.username.value,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    Icons.Outlined.Person,
+                    contentDescription = null,
+                    tint = Gray700
                 )
             },
             singleLine = true,
@@ -165,7 +289,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = sessionModel.email,
+                    text = viewModel.email.value,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -190,67 +314,52 @@ fun DetailProfileScreen(
             )
         )
 
-        Text(
-            text = stringResource(R.string.number),
-            fontSize = 16.sp,
-            modifier = modifier
-                .padding(start = 4.dp, top = 16.dp)
-                .align(Start),
-        )
-
-        OutlinedTextField(
-            value = inputNumber,
-            onValueChange = { newInput ->
-                inputNumber = newInput
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 2.dp),
-            textStyle = TextStyle(
-                color = MidnightBlue,
-                fontSize = 20.sp
-            ),
-            placeholder = {
-                Text(
-                    text = "+62 888 8888 8888",
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Outlined.Phone,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = RoyalBlue,
-                selectionColors = TextSelectionColors(
-                    handleColor = RoyalBlue,
-                    backgroundColor = RoyalBlue
-                ),
-                focusedIndicatorColor = RoyalBlue,
-            )
-        )
-
         Button(
-            onClick = { },
+            onClick = {
+                scope.launch {
+                    if (inputFullName.isEmpty() &&
+                        inputEmail.isEmpty()
+                    ) {
+                        snackbarHostState.showSnackbar(message = "Error: No changes made")
+                    } else {
+                        viewModel.updateUser(
+                            sessionModel.id,
+                            inputUsername,
+                            inputEmail
+                        ).let {
+                            loading = viewModel.loading.value
+                        }
+
+                        if (hasImage) {
+                            imageUri?.let { uri ->
+                                val imageFile = File(uri.path!!)
+                                viewModel.uploadImage(imageFile)
+                            }
+                        }
+
+
+                        delay(2000)
+
+                        snackbarHostState.showSnackbar(message = viewModel.message.value)
+                        loading = false
+
+                    }
+                    enabled = true
+                }
+            },
             modifier
                 .padding(top = 48.dp)
                 .fillMaxWidth()
                 .height(50.dp),
-            enabled = true,
+            enabled = enabled,
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            if (false) {
+            if (loading) {
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.primary
                 )
+                enabled = false
             } else {
                 Text(
                     text = stringResource(R.string.save),
@@ -282,7 +391,11 @@ fun DetailProfileScreenPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            DetailProfileScreen(SessionModel("", "", ""))
+            DetailProfileScreen(
+                navController = rememberNavController(),
+                sessionModel = SessionModel("", ""),
+                snackbarHostState = remember { SnackbarHostState() }
+            )
         }
     }
 }

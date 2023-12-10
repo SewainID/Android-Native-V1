@@ -20,35 +20,42 @@ fun SewainApp(
     // Retrieve the session
     val sessionModel = sessionPreferences.getSession().collectAsState(initial = null).value
 
-    // Determine the start destination
-    val startDestination =
-        if (sessionModel?.token?.isNotEmpty() == true) {
-        Screen.Home.route
-    } else {
-        Screen.Login.route
-    }
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(Screen.Login.route) {
-            LoginScreen(
-                navigateToRegister = {
-                    navController.popBackStack()
-                    navController.navigate(Screen.Register.route)
-                }
-            )
-        }
-        composable(Screen.Register.route) {
-            RegisterScreen(
-                navigateToLogin = {
-                    navController.popBackStack()
-                    navController.navigate(Screen.Login.route)
-                }
-            )
-        }
-        composable(Screen.Home.route) {
-            HomeBottomNavBar(sessionModel!!)
+    if (sessionModel != null) {
+        // Determine the start destination
+        val startDestination =
+            if (sessionModel?.token?.isNotEmpty() == true) {
+                Screen.Home.route
+            } else {
+                Screen.Login.route
+            }
+
+        NavHost(
+            navController = navController,
+            startDestination = startDestination
+        ) {
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    navigateToRegister = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Register.route)
+                    },
+                    navigateToHome = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Home.route)
+                    }
+                )
+            }
+            composable(Screen.Register.route) {
+                RegisterScreen(
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
+            composable(Screen.Home.route) {
+                HomeBottomNavBar(sessionModel!!)
+            }
         }
     }
 }

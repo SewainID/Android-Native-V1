@@ -68,7 +68,6 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
@@ -76,6 +75,7 @@ fun LoginScreen(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
     navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     var inputEmail by remember { mutableStateOf("") }
     var inputPassword by remember { mutableStateOf("") }
@@ -123,6 +123,10 @@ fun LoginScreen(
                                 message = viewModel.signInMessage.value,
                                 duration = SnackbarDuration.Short
                             )
+
+                            if (success) {
+                                navigateToHome()
+                            }
                         }
                         loading = false
                         enabled = true
@@ -149,8 +153,10 @@ fun LoginContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
         Box(
             modifier = modifier
                 .padding(top = 50.dp)
@@ -370,6 +376,9 @@ fun LoginContent(
 @Composable
 fun PreviewLoginScreen() {
     SewainAppTheme {
-        LoginScreen(navigateToRegister = { })
+        LoginScreen(
+            navigateToRegister = { },
+            navigateToHome = { }
+        )
     }
 }

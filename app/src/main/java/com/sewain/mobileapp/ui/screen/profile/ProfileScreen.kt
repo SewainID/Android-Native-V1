@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,9 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,13 +43,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.component.DialogScreen
 import com.sewain.mobileapp.ui.navigation.Screen
-import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.LightBlueGray
 import com.sewain.mobileapp.ui.theme.SalmonPink
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
@@ -63,19 +65,7 @@ fun ProfileScreen(
 ) {
     val openDialog = remember { mutableStateOf(false) }
 
-    when {
-        openDialog.value -> {
-            DialogScreen(
-                onDismissRequest = { openDialog.value = false },
-                onConfirmation = {
-                    openDialog.value = false
-                    viewModel.logout()
-                },
-                message = R.string.logout_message,
-                icon = Icons.Outlined.Info
-            )
-        }
-    }
+    viewModel.getUserById(sessionModel.id)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,27 +80,42 @@ fun ProfileScreen(
             textAlign = TextAlign.Center,
         )
 
-        Image(
-            painter = painterResource(R.drawable.profile),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            alignment = Alignment.Center,
-            modifier = modifier
-                .padding(top = 24.dp)
-                .size(150.dp)
-                .clip(CircleShape)
-                .background(Gray700),
-        )
+        // Condition photo profile
+        if (false) {
+            AsyncImage(
+                model = "",
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center,
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .size(150.dp)
+                    .clip(CircleShape),
+            )
+        } else {
+            Image(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center,
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+            )
+        }
 
         Text(
-            text = sessionModel.username,
+            text = "Full Name",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)
         )
 
         Text(
-            text = "Hello, ${sessionModel.username}",
+            text = stringResource(R.string.username_profile_format, viewModel.username.value),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.secondary,
@@ -118,7 +123,7 @@ fun ProfileScreen(
         )
 
         Text(
-            text = sessionModel.email,
+            text = viewModel.email.value,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.secondary,
             modifier = modifier.padding(top = 4.dp)
@@ -270,6 +275,21 @@ fun ProfileScreen(
 
     }
 
+    when {
+        openDialog.value -> {
+            DialogScreen(
+                onDismissRequest = { openDialog.value = false },
+                onConfirmation = {
+                    viewModel.logout()
+//                    navController.navigate(Screen.Login.route)
+                    openDialog.value = false
+                },
+                message = R.string.logout_message,
+                icon = Icons.Outlined.Info
+            )
+        }
+    }
+
 }
 
 @Preview(
@@ -287,9 +307,13 @@ fun ProfileScreen(
 @Composable
 fun PreviewProfileScreen() {
     SewainAppTheme {
-        ProfileScreen(
-            navController = rememberNavController(),
-            sessionModel = SessionModel("Jane Doe", "janedoe@gmail.com", "")
-        )
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            ProfileScreen(
+                navController = rememberNavController(),
+                sessionModel = SessionModel("", "")
+            )
+        }
     }
 }

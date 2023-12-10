@@ -16,6 +16,7 @@
     <string name="to_sewain_app">To Sewain App</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
+    <string name="detail_profile">Detail Profile</string>
     <string name="switch_account">Switch to Shop Account</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="change_password">Change Password</string>
@@ -33,4 +34,7 @@
     <string name="confirm">Confirm</string>
     <string name="dismiss">Dismiss</string>
     <string name="logout_message">Are you sure to Logout?</string>
+    <string name="click_to_change">Click to\nChange</string>
+    <string name="back">Back</string>
+    <string name="username_profile_format">Hello, %s</string>
 </resources>
