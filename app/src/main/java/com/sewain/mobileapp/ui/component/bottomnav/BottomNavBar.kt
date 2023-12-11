@@ -33,6 +33,7 @@ import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
 import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.ui.theme.SteelBlue
@@ -67,7 +68,8 @@ fun HomeBottomNavBar(
             if (currentRoute == Screen.DetailProfile.route ||
                 currentRoute == Screen.ChangePassword.route ||
                 currentRoute == Screen.Adresses.route ||
-                currentRoute == Screen.SocialMedia.route
+                currentRoute == Screen.SocialMedia.route ||
+                currentRoute == Screen.ShopAccount.route
             ) {
                 currentRoute = Screen.Profile.route
             }
@@ -134,6 +136,10 @@ fun HomeBottomNavBar(
             }
             composable(Screen.SocialMedia.route) {
                 SocialMediaScreen(navController)
+            }
+            composable(Screen.ShopAccount.route) {
+                val id = it.arguments?.getString("id") ?: ""
+                ShopAccountScreen(id, navController)
             }
         }
     }

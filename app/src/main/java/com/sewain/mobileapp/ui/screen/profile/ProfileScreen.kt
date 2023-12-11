@@ -139,7 +139,7 @@ fun ProfileScreen(
                 .padding(top = 24.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { },
+                .clickable { navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id)) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -285,7 +285,6 @@ fun ProfileScreen(
                 onDismissRequest = { openDialog.value = false },
                 onConfirmation = {
                     viewModel.logout()
-                    navController.navigate(Screen.Login.route)
                     openDialog.value = false
                 },
                 message = R.string.logout_message,

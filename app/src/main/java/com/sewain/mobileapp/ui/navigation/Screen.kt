@@ -20,6 +20,10 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "profile/socialMedia/$id"
     }
 
+    object ShopAccount : Screen("profile/shopAccount/{id}") {
+        fun createRoute(id: String) = "profile/shopAccount/$id"
+    }
+
     object Login : Screen("login")
     object Register : Screen("register")
 }
