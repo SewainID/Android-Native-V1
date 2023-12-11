@@ -44,4 +44,10 @@
     <string name="adresses_message_2">Your Ultimate Costume Awaits</string>
     <string name="full_address">Full Address</string>
     <string name="number_phone">Number Phone</string>
+    <string name="social_media">Social Media</string>
+    <string name="connect">Hubungkan</string>
+    <string name="facebook_connect">Hubungkan dengan akun Facebook</string>
+    <string name="instagram_connect">Hubungkan dengan akun Instagram</string>
+    <string name="tiktok_connect">Hubungkan dengan akun Tiktok</string>
+    <string name="social_media_message">Dive into a global community of creativity with Sewain Market Place! Connect, share, and celebrate the joy of dressing up with costume enthusiasts from around the world.</string>
 </resources>

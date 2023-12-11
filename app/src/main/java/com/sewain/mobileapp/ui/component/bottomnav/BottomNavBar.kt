@@ -33,6 +33,7 @@ import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.ui.theme.SteelBlue
 
@@ -65,7 +66,8 @@ fun HomeBottomNavBar(
         bottomBar = {
             if (currentRoute == Screen.DetailProfile.route ||
                 currentRoute == Screen.ChangePassword.route ||
-                currentRoute == Screen.Adresses.route
+                currentRoute == Screen.Adresses.route ||
+                currentRoute == Screen.SocialMedia.route
             ) {
                 currentRoute = Screen.Profile.route
             }
@@ -129,6 +131,9 @@ fun HomeBottomNavBar(
             }
             composable(Screen.Adresses.route) {
                 AdressesScreen(navController)
+            }
+            composable(Screen.SocialMedia.route) {
+                SocialMediaScreen(navController)
             }
         }
     }
