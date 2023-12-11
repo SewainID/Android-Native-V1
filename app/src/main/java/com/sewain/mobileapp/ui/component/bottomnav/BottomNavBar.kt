@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
@@ -104,6 +105,10 @@ fun HomeBottomNavBar(sessionModel: SessionModel) {
             }
             composable(Screen.ChangePassword.route) {
                 ChangeScreenPasswordScreen()
+            }
+            composable(Screen.DetailCatalog.route) { backStackEntry ->
+                DetailCatalogScreen(id = backStackEntry.id)
+                // Obtain the product ID and display the detail page
             }
         }
     }

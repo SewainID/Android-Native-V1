@@ -1,5 +1,6 @@
 package com.sewain.mobileapp.ui.screen.detail_catalog
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,25 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import com.sewain.mobileapp.data.remote.response.CatalogItem
-import com.sewain.mobileapp.di.Injection
-import com.sewain.mobileapp.ui.CatalogViewModelFactory
-import com.sewain.mobileapp.ui.component.SearchBar
-import com.sewain.mobileapp.ui.screen.home.CatalogsHome
-import com.sewain.mobileapp.ui.screen.home.HeaderHome
-import com.sewain.mobileapp.ui.screen.home.HomeScreenViewModel
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import com.sewain.mobileapp.utils.rp
 
 @Composable
 fun DetailCatalogScreen(id : String) {
@@ -67,7 +59,7 @@ fun DetailCatalogScreen(id : String) {
                     ,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ){
-                    DetailCatalog()
+                    DetailCatalog(catalog)
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -82,28 +74,32 @@ fun DetailCatalogScreen(id : String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailCatalog(){
+fun DetailCatalog(catalog : CatalogItem){
         Column {
             TopAppBar(
-                title = { Text("Product Details") },
+                title = { Text("") },
                 navigationIcon = {
                     IconButton(onClick = { /* Handle back press */ }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                modifier = Modifier.background(Color.Transparent),
             )
+
             AsyncImage(
-                model = "https://storage.googleapis.com/sewain/etc/profile.png",
+                model = catalog.photoUrl,
                 contentDescription = "Product Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
             )
-            Text(
-                text = "Gojo Satoru",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(8.dp)
-            )
+            catalog.name?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
             // Add rating bar here
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -117,11 +113,19 @@ fun DetailCatalog(){
                 }
                 // Add more sizes as needed
             }
-            Text(
-                text = "Description",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(8.dp)
-            )
+
+            catalog.description?.let {
+                Text(
+                    text = "Description",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
             // Add more detail texts
             Row(
                 modifier = Modifier
@@ -130,7 +134,7 @@ fun DetailCatalog(){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Rp90.000 / 3 Days",
+                    text = "${catalog.price.rp()} / ${catalog.dayRent} Days",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Button(onClick = { /* Handle booking */ }) {
@@ -143,5 +147,5 @@ fun DetailCatalog(){
 @Preview
 @Composable
 fun PreviewDetailCatalog(){
-    DetailCatalog()
+    DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
 }
