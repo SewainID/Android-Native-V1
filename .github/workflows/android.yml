@@ -38,13 +38,14 @@ jobs:
 
     - name: Send Notification to Discord
       env:
-        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        GCP_BUCKET_URL: https://storage.googleapis.com/sewain/apk/debug/app-debug-${COMMIT_ID}.apk
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       run: |
+          COMMIT_ID=$(echo ${{ github.sha }} | cut -c1-7)
+          GCP_BUCKET_URL="https://storage.googleapis.com/sewain/apk/debug/app-debug-${COMMIT_ID}.apk"
           COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}")
           curl -H "Content-Type: application/json" \
-                   -X POST \
-                   -d "{\"content\": \"New APK uploaded: ${GCP_BUCKET_URL}\nCommit: ${COMMIT_MSG}\"}" \
-                   $DISCORD_WEBHOOK_URL
+               -X POST \
+               -d "{\"content\": \"New APK uploaded: ${GCP_BUCKET_URL}\nCommit: ${COMMIT_MSG}\"}" \
+               $DISCORD_WEBHOOK_URL
     
       
