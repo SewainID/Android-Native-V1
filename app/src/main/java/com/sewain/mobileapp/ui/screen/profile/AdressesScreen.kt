@@ -115,6 +115,14 @@ fun AdressesScreen(
             fontSize = 13.sp,
         )
 
+        Text(
+            text = stringResource(R.string.adresses),
+            fontSize = 16.sp,
+            modifier = modifier
+                .padding(start = 4.dp, top = 48.dp)
+                .align(Alignment.Start),
+        )
+
         OutlinedTextField(
             value = inputFullAdress,
             onValueChange = { newInput ->
@@ -122,7 +130,7 @@ fun AdressesScreen(
             },
             modifier = modifier
                 .fillMaxWidth()
-                .padding(top = 72.dp),
+                .padding(top = 4.dp),
             textStyle = TextStyle(
                 color = MidnightBlue,
                 fontSize = 20.sp
@@ -151,7 +159,15 @@ fun AdressesScreen(
                     backgroundColor = RoyalBlue
                 ),
                 focusedIndicatorColor = RoyalBlue,
-            )
+            ),
+        )
+
+        Text(
+            text = stringResource(R.string.phone_number),
+            fontSize = 16.sp,
+            modifier = modifier
+                .padding(start = 4.dp, top = 16.dp)
+                .align(Alignment.Start),
         )
 
         OutlinedTextField(
@@ -161,14 +177,14 @@ fun AdressesScreen(
             },
             modifier = modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 4.dp),
             textStyle = TextStyle(
                 color = MidnightBlue,
                 fontSize = 20.sp
             ),
             placeholder = {
                 Text(
-                    text = stringResource(R.string.number_phone),
+                    text = stringResource(R.string.phone_format),
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )

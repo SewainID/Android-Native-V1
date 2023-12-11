@@ -42,8 +42,9 @@
     <string name="detail_profile_message_2">Your Unique Identity with Our Exclusive Costume Collection</string>
     <string name="adresses_message_1">Discover Endless Style, One Address at a Time –</string>
     <string name="adresses_message_2">Your Ultimate Costume Awaits</string>
-    <string name="full_address">Full Address</string>
-    <string name="number_phone">Number Phone</string>
+    <string name="full_address">Ex. Sydney 2000, Australia</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="phone_format">+62 888 8888 8888</string>
     <string name="social_media">Social Media</string>
     <string name="connect">Hubungkan</string>
     <string name="facebook_connect">Hubungkan dengan akun Facebook</string>
