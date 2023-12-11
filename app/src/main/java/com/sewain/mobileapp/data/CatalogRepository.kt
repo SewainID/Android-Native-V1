@@ -20,13 +20,13 @@ class CatalogRepository private constructor(
 ) {
     private val result = MediatorLiveData<Result<List<CatalogEntity>>>()
 
-    fun getCatalogs(): Flow<PagingData<CatalogEntity>> {
+    fun getCatalogs(searchQuery : String): Flow<PagingData<CatalogEntity>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 10
             ),
-            remoteMediator = StoryRemoteMediator(sewainDatabase, apiService),
+            remoteMediator = StoryRemoteMediator(sewainDatabase, apiService, searchQuery),
             pagingSourceFactory = {
                 sewainDatabase.catalogDao().getAllCatalogs()
             }
