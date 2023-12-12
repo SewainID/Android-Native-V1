@@ -182,15 +182,10 @@ fun DetailProfileScreen(
         }
 
         Text(
-            text = stringResource(R.string.detail_profile_message_1),
-            fontSize = 13.sp,
-            modifier = modifier.padding(top = 36.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.detail_profile_message_2),
+            text = stringResource(R.string.detail_profile_message),
             fontSize = 13.sp,
             textAlign = TextAlign.Center,
+            modifier = modifier.padding(top = 36.dp)
         )
 
         Text(
@@ -356,7 +351,6 @@ fun DetailProfileScreen(
                                 viewModel.uploadImage(imageFile)
                             }
                         }
-
 
                         delay(2000)
 

@@ -29,8 +29,7 @@
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="repeat_new_password">Repeat New Password</string>
-    <string name="password_page_message_1">In order to change your password,</string>
-    <string name="password_page_message_2">you need to confirm current password first.</string>
+    <string name="password_page_message">In order to change your password, you need to confirm current password first.</string>
     <string name="confirm">Confirm</string>
     <string name="dismiss">Dismiss</string>
     <string name="logout_message">Are you sure to Logout?</string>
@@ -38,10 +37,8 @@
     <string name="back">Back</string>
     <string name="adresses">Adresses</string>
     <string name="username_profile_format">Hello, %s</string>
-    <string name="detail_profile_message_1">Discover Yourself, One Costume at a Time: Unveil</string>
-    <string name="detail_profile_message_2">Your Unique Identity with Our Exclusive Costume Collection</string>
-    <string name="adresses_message_1">Discover Endless Style, One Address at a Time –</string>
-    <string name="adresses_message_2">Your Ultimate Costume Awaits</string>
+    <string name="detail_profile_message">Discover Yourself, One Costume at a Time: Unveil Your Unique Identity with Our Exclusive Costume Collection</string>
+    <string name="adresses_message">Discover Endless Style, One Address at a Time\n–Your Ultimate Costume Awaits</string>
     <string name="full_address">Ex. Sydney 2000, Australia</string>
     <string name="phone_number">Phone Number</string>
     <string name="phone_format">+62 888 8888 8888</string>

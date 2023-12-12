@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -105,14 +106,10 @@ fun AdressesScreen(
         )
 
         Text(
-            text = stringResource(R.string.adresses_message_1),
+            text = stringResource(R.string.adresses_message),
             fontSize = 13.sp,
-            modifier = modifier.padding(top = 38.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.adresses_message_2),
-            fontSize = 13.sp,
+            modifier = modifier.padding(top = 38.dp),
+            textAlign = TextAlign.Center
         )
 
         Text(

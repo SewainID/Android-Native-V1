@@ -3,13 +3,18 @@ package com.sewain.mobileapp.ui.screen.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.local.model.SessionModel
+import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
+import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.File
+import java.net.SocketTimeoutException
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private val _imageFile = MutableStateFlow("")
@@ -61,9 +66,22 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
 
     suspend fun updateUser(id: String, name: String, email: String) {
         _loading.value = true
-        val message = repository.updateUserById(id, name, email)
-        _message.value = "Success: ${message.message}"
-        _success.value = true
+        try {
+            //get success message
+            val message = repository.updateUserById(id, name, email)
+            _message.value = "Success: ${message.message}"
+            _success.value = true
+        } catch (e: HttpException) {
+            //get error message
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, UpdateUserByIDErrorResponse::class.java)
+            val errorMessage = errorBody.message
+            _message.value = "Error: $errorMessage"
+            _success.value = false
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+            _success.value = false
+        }
 
     }
 
