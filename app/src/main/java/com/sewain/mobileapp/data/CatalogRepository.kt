@@ -28,7 +28,7 @@ class CatalogRepository private constructor(
             config = PagingConfig(
                 pageSize = 10
             ),
-            remoteMediator = StoryRemoteMediator(sewainDatabase, apiService, searchQuery),
+            remoteMediator = CatalogsRemoteMediator(sewainDatabase, apiService, searchQuery),
             pagingSourceFactory = {
                 sewainDatabase.catalogDao().getAllCatalogs()
             }

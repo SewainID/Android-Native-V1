@@ -1,8 +1,6 @@
 package com.sewain.mobileapp.ui.screen.detail_catalog
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sewain.mobileapp.data.CatalogRepository

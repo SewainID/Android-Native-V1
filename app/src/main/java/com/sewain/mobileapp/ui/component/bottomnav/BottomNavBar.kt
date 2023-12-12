@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.ui.component.bottomnav
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -107,7 +108,8 @@ fun HomeBottomNavBar(sessionModel: SessionModel) {
                 ChangeScreenPasswordScreen()
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
-                DetailCatalogScreen(id = backStackEntry.id)
+                Log.d("Catalogs", backStackEntry.toString())
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
                 // Obtain the product ID and display the detail page
             }
         }

@@ -25,24 +25,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.data.remote.response.CatalogItem
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.CatalogViewModelFactory
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.utils.rp
 
 @Composable
-fun DetailCatalogScreen(id : String) {
-    val catalogViewModel: DetailCatalogViewModel = viewModel()
-
+fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewModel(
+    factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
+)
+) {
     // React to state changes
-    val catalog = catalogViewModel.catalog.value
+    val catalog = viewModel.catalog.value
 
     // Call fetchCatalog when the composable enters the composition
     LaunchedEffect(id) {
-        catalogViewModel.fetchCatalog(id)
+        viewModel.fetchCatalog(id)
     }
 
     SewainAppTheme {
