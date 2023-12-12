@@ -112,7 +112,7 @@ fun ProfileScreen(
         }
 
         Text(
-            text = "Full Name",
+            text = if (viewModel.fullName.value == "null") stringResource(R.string.full_name) else viewModel.fullName.value,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)

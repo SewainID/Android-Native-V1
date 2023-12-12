@@ -20,16 +20,16 @@ fun Snackbar(
 ) {
     SnackbarHost(
         hostState = snackbarHostState,
-//        snackbar = {
-//            Snackbar(
-//                modifier = Modifier.padding(16.dp),
-//                content = {
-//                    Text(
-//                        text = "" // message,
-//                    )
-//                }
-//            )
-//        },
+        snackbar = {
+            Snackbar(
+                modifier = Modifier.padding(16.dp),
+                content = {
+                    Text(
+                        text = "" // message,
+                    )
+                }
+            )
+        },
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(Alignment.Bottom)

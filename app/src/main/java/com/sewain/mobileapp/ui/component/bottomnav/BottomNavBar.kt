@@ -111,6 +111,8 @@ fun HomeBottomNavBar(
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
+
+
             composable(Screen.Home.route) {
                 HomeScreen(navController)
             }

@@ -1,5 +1,7 @@
 package com.sewain.mobileapp.data.remote.retrofit
 
+import com.google.gson.annotations.SerializedName
+import com.sewain.mobileapp.data.remote.model.DetailUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.data.remote.model.User
@@ -38,7 +40,7 @@ interface ApiService {
     @PUT("/api/v1/users/{id}")
     suspend fun updateUserById(
         @Path("id") id: String,
-        @Body user: User
+        @Body user: User,
     ): UpdateUserByIDResponse
 
     @Multipart

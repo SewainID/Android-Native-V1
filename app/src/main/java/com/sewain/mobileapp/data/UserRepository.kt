@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.local.preferences.SessionPreferences
+import com.sewain.mobileapp.data.remote.model.DetailUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.data.remote.model.User
@@ -67,7 +68,7 @@ class UserRepository private constructor(
     suspend fun updateUserById(
         id: String,
         username: String,
-        email: String
+        email: String,
     ): UpdateUserByIDResponse {
         return apiService.updateUserById(id, User(username, email))
     }

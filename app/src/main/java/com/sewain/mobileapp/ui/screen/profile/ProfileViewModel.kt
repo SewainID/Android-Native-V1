@@ -36,6 +36,10 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val email: StateFlow<String>
         get() = _email
 
+    private val _fullName = MutableStateFlow("")
+    val fullName: StateFlow<String>
+        get() = _fullName
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()
@@ -51,6 +55,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             val data = repository.getUserById(id).results
             _username.value = data?.username.toString()
             _email.value = data?.email.toString()
+            _fullName.value = data?.detailUser?.fullName.toString()
         }
     }
 
