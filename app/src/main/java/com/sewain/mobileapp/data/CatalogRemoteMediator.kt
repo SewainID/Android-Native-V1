@@ -1,6 +1,5 @@
 package com.sewain.mobileapp.data
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -12,7 +11,7 @@ import com.sewain.mobileapp.data.local.room.SewainDatabase
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 
 @OptIn(ExperimentalPagingApi::class)
-class StoryRemoteMediator(
+class CatalogsRemoteMediator(
     private val database: SewainDatabase,
     private val apiService: ApiService,
     private val querySearch: String

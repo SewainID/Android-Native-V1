@@ -21,7 +21,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +47,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
-import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.CatalogViewModelFactory
 import com.sewain.mobileapp.ui.component.GridCatalogItem
@@ -80,16 +78,24 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
                     onQueryChange = viewModel::setSearchQuery,
                     modifier = Modifier
                 )
+
 //                BannerHome()
-                CatalogsHome(items)
+                Text(
+                    text = stringResource(R.string.new_arrivals),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(4.dp),
+                )
+                CatalogsHome(items, navController)
             }
         }
     }
 }
 
 @Composable
-fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>) {
+fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>, navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(16.dp),
@@ -98,7 +104,9 @@ fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>) {
         ) {
             items(catalogItems.itemCount) { index ->
                 catalogItems[index]?.let { catalogItem ->
-                    GridCatalogItem(catalogItem)
+                    GridCatalogItem(catalogItem, onClick = {
+                        navController.navigate("detail_catalog/${catalogItem.id}")
+                    })
                 }
             }
         }
@@ -215,5 +223,5 @@ fun CatalogsHomePreview() {
     val pager = Pager(PagingConfig(pageSize = 10)) { fakePagingSource }
     val catalogItems = pager.flow.collectAsLazyPagingItems()
 
-    CatalogsHome(catalogItems = catalogItems)
+    CatalogsHome(catalogItems = catalogItems, navController = rememberNavController())
 }

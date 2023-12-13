@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.ui.component.bottomnav
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
@@ -104,6 +106,11 @@ fun HomeBottomNavBar(sessionModel: SessionModel) {
             }
             composable(Screen.ChangePassword.route) {
                 ChangeScreenPasswordScreen()
+            }
+            composable(Screen.DetailCatalog.route) { backStackEntry ->
+                Log.d("Catalogs", backStackEntry.toString())
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
+                // Obtain the product ID and display the detail page
             }
         }
     }
