@@ -112,7 +112,7 @@ fun RegisterScreen(
             navigateToLogin = navigateToLogin,
             onClickRegister = {
                 scope.launch {
-                    if (inputEmail.isEmpty() ||
+                    if (inputUsername.isEmpty() ||
                         inputEmail.isEmpty() ||
                         inputPassword.isEmpty() ||
                         inputConfirmPassword.isEmpty()
@@ -180,7 +180,7 @@ fun RegisterContent(
             Box(
                 modifier = modifier
                     .padding(top = 50.dp)
-                    .size(108.dp)
+                    .size(125.dp)
                     .clip(CircleShape)
                     .align(Alignment.CenterHorizontally)
                     .background(MaterialTheme.colorScheme.onBackground)
@@ -189,7 +189,7 @@ fun RegisterContent(
                     painter = painterResource(R.drawable.logo_sewain),
                     contentDescription = null,
                     modifier = modifier
-                        .size(70.dp)
+                        .size(100.dp)
                         .align(Alignment.Center),
                 )
             }

@@ -1,7 +1,10 @@
 package com.sewain.mobileapp
 
+import android.util.Log
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,36 +22,38 @@ fun SewainApp(
 ) {
     // Retrieve the session
     val sessionModel = sessionPreferences.getSession().collectAsState(initial = null).value
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Determine the start destination
-    val startDestination =
-        if (sessionModel?.token?.isNotEmpty() == true) {
-        Screen.Home.route
-    } else {
-        Screen.Login.route
-    }
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(Screen.Login.route) {
-            LoginScreen(
-                navigateToRegister = {
-                    navController.popBackStack()
-                    navController.navigate(Screen.Register.route)
-                }
-            )
-        }
-        composable(Screen.Register.route) {
-            RegisterScreen(
-                navigateToLogin = {
-                    navController.popBackStack()
-                    navController.navigate(Screen.Login.route)
-                }
-            )
-        }
-        composable(Screen.Home.route) {
-            HomeBottomNavBar(sessionModel!!)
+    if (sessionModel != null) {
+        // Determine the start destination
+        val startDestination =
+            if (sessionModel.token.isNotEmpty()) {
+                Screen.Home.route
+            } else {
+                Screen.Login.route
+            }
+
+        NavHost(
+            navController = navController,
+            startDestination = startDestination
+        ) {
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState
+                )
+            }
+            composable(Screen.Register.route) {
+                RegisterScreen(
+                    navigateToLogin = {
+                        navController.popBackStack()
+                        navController.navigate(Screen.Login.route)
+                    }
+                )
+            }
+            composable(Screen.Home.route) {
+                HomeBottomNavBar(sessionModel, snackbarHostState)
+            }
         }
     }
 }

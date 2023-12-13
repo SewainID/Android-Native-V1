@@ -1,9 +1,6 @@
 package com.sewain.mobileapp.ui.screen.profile
 
 import android.content.res.Configuration
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,16 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,7 +26,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -40,10 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,16 +63,12 @@ import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailProfileScreen(
+fun ShopAccountScreen(
     id: String,
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
@@ -87,36 +76,18 @@ fun DetailProfileScreen(
 ) {
     viewModel.getUserById(id)
 
-    var inputFullName by remember { mutableStateOf("") }
+    var inputShopName by remember { mutableStateOf("") }
     var inputUsername by remember { mutableStateOf("") }
-    var inputEmail by remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
 
     var loading by remember { mutableStateOf(false) }
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    var hasImage by remember { mutableStateOf(false) }
-
-    val launcherGallery = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            hasImage = uri != null
-            imageUri = uri
-        }
-    )
-
-    val scrollState = rememberScrollState()
-
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(
-                state = scrollState,
-            )
     ) {
         Box(
             modifier = modifier
@@ -134,62 +105,64 @@ fun DetailProfileScreen(
             )
 
             Text(
-                text = stringResource(R.string.detail_profile),
+                text = stringResource(R.string.shop_account),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = modifier.align(Center)
             )
         }
 
-        Box(
-            modifier = modifier
-                .padding(top = 24.dp)
-                .clickable {
-                    launcherGallery.launch("image/*")
-                },
-            contentAlignment = Center
-        ) {
-            // Condition photo profile
-            if (hasImage) {
-                AsyncImage(
-                    model = imageUri,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    alpha = 0.5f,
-                    alignment = Center,
-                    modifier = modifier
-                        .size(150.dp)
-                        .clip(CircleShape),
-                )
-            } else {
-                Image(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    alpha = 0.5f,
-                    modifier = modifier
-                        .size(150.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
-                )
-            }
-
-            Text(
-                text = stringResource(R.string.click_to_change),
-                color = MaterialTheme.colorScheme.onPrimary,
+        // Condition photo profile
+        if (false) {
+            AsyncImage(
+                model = "",
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                alignment = Center,
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .size(150.dp)
+                    .clip(CircleShape),
+            )
+        } else {
+            Image(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                alignment = Center,
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
             )
         }
 
         Text(
-            text = stringResource(R.string.detail_profile_message),
-            fontSize = 13.sp,
-            textAlign = TextAlign.Center,
-            modifier = modifier.padding(top = 36.dp)
+            text = "Full Name",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier.padding(top = 24.dp)
         )
 
         Text(
-            text = stringResource(R.string.full_name),
+            text = viewModel.email.value,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = modifier.padding(top = 4.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.shop_account_message),
+            fontSize = 13.sp,
+            textAlign = TextAlign.Center,
+            modifier = modifier
+                .padding(top = 36.dp),
+        )
+
+        Text(
+            text = stringResource(R.string.shop_name),
             fontSize = 16.sp,
             modifier = modifier
                 .padding(start = 4.dp, top = 24.dp)
@@ -197,9 +170,9 @@ fun DetailProfileScreen(
         )
 
         OutlinedTextField(
-            value = inputFullName,
+            value = inputShopName,
             onValueChange = { newInput ->
-                inputFullName = newInput
+                inputShopName = newInput
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -210,7 +183,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = "Full Name",
+                    text = "Shop Name",
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -257,7 +230,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = viewModel.username.value,
+                    text = "Username",
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -282,84 +255,9 @@ fun DetailProfileScreen(
             )
         )
 
-        Text(
-            text = stringResource(R.string.email),
-            fontSize = 16.sp,
-            modifier = modifier
-                .padding(start = 4.dp, top = 16.dp)
-                .align(Start),
-        )
-
-        OutlinedTextField(
-            value = inputEmail,
-            onValueChange = { newInput ->
-                inputEmail = newInput
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 2.dp),
-            textStyle = TextStyle(
-                color = MidnightBlue,
-                fontSize = 20.sp
-            ),
-            placeholder = {
-                Text(
-                    text = viewModel.email.value,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Outlined.Email,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = RoyalBlue,
-                selectionColors = TextSelectionColors(
-                    handleColor = RoyalBlue,
-                    backgroundColor = RoyalBlue
-                ),
-                focusedIndicatorColor = RoyalBlue,
-            )
-        )
-
         Button(
             onClick = {
-                scope.launch {
-                    if (inputUsername.isEmpty() &&
-                        inputEmail.isEmpty()
-                    ) {
-                        snackbarHostState.showSnackbar(message = "Error: No changes made")
-                    } else {
-                        viewModel.updateUser(
-                            id,
-                            inputUsername,
-                            inputEmail,
-                        ).let {
-                            loading = viewModel.loading.value
-                        }
 
-                        if (hasImage) {
-                            imageUri?.let { uri ->
-                                val imageFile = File(uri.path!!)
-                                viewModel.uploadImage(imageFile)
-                            }
-                        }
-
-                        delay(2000)
-
-                        snackbarHostState.showSnackbar(message = viewModel.message.value)
-                        loading = false
-
-                    }
-                    enabled = true
-                }
             },
             modifier
                 .padding(top = 48.dp)
@@ -400,15 +298,14 @@ fun DetailProfileScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
-fun DetailProfileScreenPreview() {
+fun ShopAccountScreenPreview() {
     SewainAppTheme {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            DetailProfileScreen(
+            ShopAccountScreen(
                 id = "",
                 navController = rememberNavController(),
-                snackbarHostState = remember { SnackbarHostState() }
             )
         }
     }

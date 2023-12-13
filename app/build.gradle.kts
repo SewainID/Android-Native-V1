@@ -91,9 +91,6 @@ dependencies {
     // Kotlin Symbol Processing (KSP) for Room
     ksp("androidx.room:room-compiler:$roomVersion")
 
-    // Cloudy
-    implementation("com.github.skydoves:cloudy:0.1.2")
-
 //    paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")
