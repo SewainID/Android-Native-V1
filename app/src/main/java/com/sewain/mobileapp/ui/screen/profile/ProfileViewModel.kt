@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.ui.screen.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -45,6 +46,10 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val fullName: StateFlow<String>
         get() = _fullName
 
+    private val _imageString = MutableStateFlow("")
+    val imageString: StateFlow<String>
+        get() = _imageString
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()
@@ -86,7 +91,14 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     suspend fun uploadImage(imageFile: File) {
-        val message = repository.uploadImage(imageFile)
-        _imageFile.value = "Success: ${message.attachmentUrl}"
+        _loading.value = true
+        try {
+            val data = repository.uploadImage(imageFile)
+            _imageString.value = data.attachmentUrl.orEmpty()
+            _message.value = "Success: upload image successful."
+        } catch (e: HttpException) {
+            // get error message
+            _message.value = "Error: upload image failure."
+        }
     }
 }

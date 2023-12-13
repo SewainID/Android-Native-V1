@@ -49,7 +49,7 @@ interface ApiService {
     @Multipart
     @POST("/api/v1/attachments")
     suspend fun uploadImage(
-        @Part image: MultipartBody.Part
+        @Part file: MultipartBody.Part
     ): AddAttachmentsResponse
 
     @GET("/api/v1/catalogs/{id}")

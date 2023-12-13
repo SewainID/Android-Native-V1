@@ -2,7 +2,9 @@ package com.sewain.mobileapp.ui.screen.profile
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -70,6 +72,7 @@ import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import com.sewain.mobileapp.utils.uriToFile
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -98,6 +101,8 @@ fun DetailProfileScreen(
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var hasImage by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     val launcherGallery = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -150,7 +155,18 @@ fun DetailProfileScreen(
             contentAlignment = Center
         ) {
             // Condition photo profile
-            if (hasImage) {
+            if (viewModel.imageString.value.isNotEmpty()) {
+                AsyncImage(
+                    model = viewModel.imageString.value,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.5f,
+                    alignment = Center,
+                    modifier = modifier
+                        .size(150.dp)
+                        .clip(CircleShape),
+                )
+            } else if (hasImage) {
                 AsyncImage(
                     model = imageUri,
                     contentDescription = null,
@@ -333,7 +349,8 @@ fun DetailProfileScreen(
             onClick = {
                 scope.launch {
                     if (inputUsername.isEmpty() &&
-                        inputEmail.isEmpty()
+                        inputEmail.isEmpty() &&
+                        !hasImage
                     ) {
                         snackbarHostState.showSnackbar(message = "Error: No changes made")
                     } else {
@@ -341,19 +358,23 @@ fun DetailProfileScreen(
                             id,
                             inputUsername,
                             inputEmail,
-                        ).let {
-                            loading = viewModel.loading.value
+                        )
+
+                        success = viewModel.success.value
+                        loading = viewModel.loading.value
+
+                        delay(2000)
+                        if (success && (inputUsername.isNotEmpty() || inputEmail.isNotEmpty())) {
+                            snackbarHostState.showSnackbar(message = viewModel.message.value)
                         }
 
                         if (hasImage) {
                             imageUri?.let { uri ->
-                                val imageFile = File(uri.path!!)
+                                val imageFile = uriToFile(uri, context)
                                 viewModel.uploadImage(imageFile)
                             }
+                            hasImage = false
                         }
-
-                        delay(2000)
-
                         snackbarHostState.showSnackbar(message = viewModel.message.value)
                         loading = false
 
