@@ -51,5 +51,9 @@
     <string name="shop_account">Shop Account</string>
     <string name="shop_account_message">Improve Your Costume Business! Turn User Accounts Into Stores and Earn More Profits</string>
     <string name="shop_name">Shop Name</string>
+<<<<<<< HEAD
     <string name="login_success">Success: You have successfully logged in!</string>
+=======
+    <string name="new_arrivals">New Arrivals</string>
+>>>>>>> 28e68b2574d83cf3ea491b27915c48840cbd89e0
 </resources>
