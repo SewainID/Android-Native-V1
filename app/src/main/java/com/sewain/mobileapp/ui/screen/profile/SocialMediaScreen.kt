@@ -117,8 +117,6 @@ fun SocialMediaScreen(
                 modifier = modifier.padding(start = 8.dp),
             )
 
-            Spacer(modifier = modifier.width(20.dp))
-
             InputChip(
                 selected = true,
                 onClick = { },
@@ -158,8 +156,6 @@ fun SocialMediaScreen(
                 modifier = modifier.padding(start = 8.dp),
             )
 
-            Spacer(modifier = modifier.width(20.dp))
-
             InputChip(
                 selected = true,
                 onClick = { },
@@ -197,8 +193,6 @@ fun SocialMediaScreen(
                 modifier = modifier.padding(start = 8.dp),
             )
 
-            Spacer(modifier = modifier.width(40.dp))
-
             InputChip(
                 selected = true,
                 onClick = { },
@@ -208,7 +202,7 @@ fun SocialMediaScreen(
                         fontSize = 12.sp,
                     )
                 },
-                modifier = modifier.padding(start = 8.dp),
+                modifier = modifier.padding(start = 28.dp),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Add,

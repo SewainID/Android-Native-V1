@@ -2,6 +2,7 @@ package com.sewain.mobileapp.ui.screen.login
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -60,9 +61,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
+import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import kotlinx.coroutines.delay
@@ -74,14 +78,13 @@ fun LoginScreen(
     viewModel: LoginViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
-    navigateToRegister: () -> Unit,
-    navigateToHome: () -> Unit,
+    navController: NavController,
+    snackbarHostState: SnackbarHostState,
 ) {
     var inputEmail by remember { mutableStateOf("") }
     var inputPassword by remember { mutableStateOf("") }
     val passwordHidden by rememberSaveable { mutableStateOf(true) }
 
-    val snackbarHost by remember { mutableStateOf((SnackbarHostState())) }
     val scope = rememberCoroutineScope()
 
     var loading by remember { mutableStateOf(false) }
@@ -89,7 +92,7 @@ fun LoginScreen(
     var enabled by remember { mutableStateOf(true) }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHost) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         LoginContent(
             modifier = modifier.padding(padding),
@@ -102,11 +105,14 @@ fun LoginScreen(
                 inputPassword = newInputPassword
             },
             passwordHidden = passwordHidden,
-            navigateToRegister = navigateToRegister,
+            navigateToRegister = {
+                navController.popBackStack()
+                navController.navigate(Screen.Register.route)
+            },
             onClickLogin = {
                 scope.launch {
                     if (inputEmail.isEmpty() || inputPassword.isEmpty()) {
-                        snackbarHost.showSnackbar(
+                        snackbarHostState.showSnackbar(
                             message = "Error: Incomplete Registration",
                             duration = SnackbarDuration.Short
                         )
@@ -119,14 +125,10 @@ fun LoginScreen(
 
                             delay(2000)
 
-                            snackbarHost.showSnackbar(
+                            snackbarHostState.showSnackbar(
                                 message = viewModel.signInMessage.value,
                                 duration = SnackbarDuration.Short
                             )
-
-                            if (success) {
-                                navigateToHome()
-                            }
                         }
                         loading = false
                         enabled = true
@@ -377,8 +379,8 @@ fun LoginContent(
 fun PreviewLoginScreen() {
     SewainAppTheme {
         LoginScreen(
-            navigateToRegister = { },
-            navigateToHome = { }
+            navController = rememberNavController(),
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }

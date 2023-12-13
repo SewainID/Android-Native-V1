@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
@@ -37,11 +40,13 @@ import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
 import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.ui.theme.SteelBlue
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeBottomNavBar(
-    sessionModel: SessionModel
+    sessionModel: SessionModel,
+    snackbarHostState: SnackbarHostState,
 ) {
 //initializing the default selected item
     var navigationSelectedItem by remember {
@@ -57,8 +62,6 @@ fun HomeBottomNavBar(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var currentRoute = navBackStackEntry?.destination?.route
-
-    val snackbarHostState = remember { SnackbarHostState() }
 
 //scaffold to hold our bottom navigation Bar
     Scaffold(
@@ -111,8 +114,6 @@ fun HomeBottomNavBar(
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
-
-
             composable(Screen.Home.route) {
                 HomeScreen(navController)
             }
@@ -162,6 +163,9 @@ fun HomeBottomNavBar(
 @Composable
 fun PreviewBottomNavigationBar() {
     SewainAppTheme {
-        HomeBottomNavBar(sessionModel = SessionModel("", ""))
+        HomeBottomNavBar(
+            sessionModel = SessionModel("", ""),
+            snackbarHostState = remember { SnackbarHostState() },
+        )
     }
 }
