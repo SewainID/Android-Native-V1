@@ -8,9 +8,11 @@ import androidx.paging.PagingData
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
 import com.sewain.mobileapp.data.local.room.CatalogDao
 import com.sewain.mobileapp.data.local.room.SewainDatabase
+import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 import com.sewain.mobileapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
 class CatalogRepository private constructor(
     private val apiService: ApiService,
@@ -20,17 +22,21 @@ class CatalogRepository private constructor(
 ) {
     private val result = MediatorLiveData<Result<List<CatalogEntity>>>()
 
-    fun getCatalogs(): Flow<PagingData<CatalogEntity>> {
+    fun getCatalogs(searchQuery : String): Flow<PagingData<CatalogEntity>> {
         @OptIn(ExperimentalPagingApi::class)
         return Pager(
             config = PagingConfig(
                 pageSize = 10
             ),
-            remoteMediator = StoryRemoteMediator(sewainDatabase, apiService),
+            remoteMediator = CatalogsRemoteMediator(sewainDatabase, apiService, searchQuery),
             pagingSourceFactory = {
                 sewainDatabase.catalogDao().getAllCatalogs()
             }
         ).flow
+    }
+
+    suspend fun getCatalogById(catalogId: String): Response<CatalogItem> {
+        return apiService.getCatalogById(catalogId)
     }
 
 

@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
@@ -142,6 +143,11 @@ fun HomeBottomNavBar(
             composable(Screen.ShopAccount.route) {
                 val id = it.arguments?.getString("id") ?: ""
                 ShopAccountScreen(id, navController)
+            }
+            composable(Screen.DetailCatalog.route) { backStackEntry ->
+                Log.d("Catalogs", backStackEntry.toString())
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
+                // Obtain the product ID and display the detail page
             }
         }
     }
