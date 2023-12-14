@@ -226,7 +226,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = viewModel.fullName.value,
+                    text = if (viewModel.fullName.value == "null") stringResource(R.string.full_name) else viewModel.fullName.value,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )

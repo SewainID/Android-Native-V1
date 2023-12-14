@@ -140,7 +140,7 @@ fun ShopAccountScreen(
         }
 
         Text(
-            text = "Full Name",
+            text = viewModel.fullName.value,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)

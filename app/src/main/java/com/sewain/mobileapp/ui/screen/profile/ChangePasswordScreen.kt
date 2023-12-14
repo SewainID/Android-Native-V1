@@ -83,7 +83,6 @@ fun ChangeScreenPasswordScreen(
     val scope = rememberCoroutineScope()
 
     var loading by remember { mutableStateOf(false) }
-    var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
     Column(
@@ -268,7 +267,6 @@ fun ChangeScreenPasswordScreen(
                             inputRepeatNewPassword
                         )
 
-                        success = viewModel.success.value
                         loading = viewModel.loading.value
 
                         delay(2000)
