@@ -1,7 +1,6 @@
 package com.sewain.mobileapp.data.local.model
 
 data class SessionModel(
-    val username: String,
-    val email: String,
+    val id: String,
     val token: String,
 )

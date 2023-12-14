@@ -8,10 +8,13 @@ data class RegisterResponse(
 	val message: String? = null,
 
 	@field:SerializedName("results")
-	val results: ResultsRegister? = null
+	val results: RegisterResults? = null
 )
 
-data class ResultsRegister(
+data class RegisterResults(
+
+	@field:SerializedName("id")
+	val id: String? = null,
 
 	@field:SerializedName("email")
 	val email: String? = null,
