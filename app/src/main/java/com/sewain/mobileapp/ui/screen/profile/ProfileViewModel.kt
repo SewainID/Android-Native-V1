@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
+import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.Flow
@@ -120,6 +121,25 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _message.value = "Error: $errorMessage"
         } catch (e: SocketTimeoutException) {
             _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
+
+    suspend fun createDetailUser(id: String, fullName: String) {
+        _loading.value = true
+        try {
+            //get success message
+            val message = repository.createDetailUser(id, fullName)
+            _message.value = "Success: ${message.message}"
+        } catch (e: HttpException) {
+            //get error message
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, CreateDetailUserResponse::class.java)
+            val errorMessage = errorBody.message
+            _message.value = "Error: $errorMessage"
+            _success.value = false
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+            _success.value = false
         }
     }
 }

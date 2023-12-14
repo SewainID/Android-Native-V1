@@ -10,6 +10,7 @@ import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
+import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
@@ -62,4 +63,9 @@ interface ApiService {
         @Path("id") id: String,
         @Body changePassword: ChangePassword,
     ): ChangePasswordResponse
+
+    @POST("/api/v1/details-users")
+    suspend fun createDetailUser(
+        @Body detailUser: DetailUser,
+    ): CreateDetailUserResponse
 }

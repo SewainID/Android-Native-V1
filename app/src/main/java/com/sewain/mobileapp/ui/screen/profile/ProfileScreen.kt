@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -54,6 +55,7 @@ import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.LightBlueGray
 import com.sewain.mobileapp.ui.theme.SalmonPink
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
