@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.local.model.SessionModel
+import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.Flow
@@ -69,11 +70,11 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    suspend fun updateUser(id: String, name: String, email: String) {
+    suspend fun updateUser(id: String, fullName: String, username: String, email: String) {
         _loading.value = true
         try {
             //get success message
-            val message = repository.updateUserById(id, name, email)
+            val message = repository.updateUserById(id, fullName, username, email)
             _message.value = "Success: ${message.message}"
             _success.value = true
         } catch (e: HttpException) {
@@ -99,6 +100,26 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         } catch (e: HttpException) {
             // get error message
             _message.value = "Error: upload image failure."
+        }
+    }
+
+    suspend fun changePassword(
+        id: String,
+        currentPassword: String,
+        newPassword: String,
+        confirmPassword: String,
+    ) {
+        _loading.value = true
+        try {
+            val data = repository.changePassword(id, currentPassword, newPassword, confirmPassword)
+            _message.value = "Success: ${data.message}"
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ChangePasswordResponse::class.java)
+            val errorMessage = errorBody.message
+            _message.value = "Error: $errorMessage"
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
         }
     }
 }

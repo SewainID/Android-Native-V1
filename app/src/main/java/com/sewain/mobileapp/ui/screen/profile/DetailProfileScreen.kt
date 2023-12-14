@@ -226,7 +226,7 @@ fun DetailProfileScreen(
             ),
             placeholder = {
                 Text(
-                    text = "Full Name",
+                    text = viewModel.fullName.value,
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -348,7 +348,8 @@ fun DetailProfileScreen(
         Button(
             onClick = {
                 scope.launch {
-                    if (inputUsername.isEmpty() &&
+                    if (inputFullName.isEmpty() &&
+                        inputUsername.isEmpty() &&
                         inputEmail.isEmpty() &&
                         !hasImage
                     ) {
@@ -356,6 +357,7 @@ fun DetailProfileScreen(
                     } else {
                         viewModel.updateUser(
                             id,
+                            inputFullName,
                             inputUsername,
                             inputEmail,
                         )

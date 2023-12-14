@@ -2,10 +2,13 @@ package com.sewain.mobileapp.data
 
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.local.preferences.SessionPreferences
+import com.sewain.mobileapp.data.remote.model.ChangePassword
+import com.sewain.mobileapp.data.remote.model.DetailUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
+import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
@@ -61,10 +64,20 @@ class UserRepository private constructor(
 
     suspend fun updateUserById(
         id: String,
+        fullName: String,
         username: String,
         email: String,
     ): UpdateUserByIDResponse {
-        return apiService.updateUserById(id, User(username, email))
+        return apiService.updateUserById(id, User(username, email, DetailUser(fullName)))
+    }
+
+    suspend fun changePassword(
+        id: String,
+        currentPassword: String,
+        newPassword: String,
+        confirmPassword: String,
+    ): ChangePasswordResponse {
+        return apiService.changePassword(id, ChangePassword(currentPassword, newPassword, confirmPassword))
     }
 
     companion object {

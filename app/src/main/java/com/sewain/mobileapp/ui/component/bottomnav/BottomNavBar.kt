@@ -133,7 +133,8 @@ fun HomeBottomNavBar(
                 DetailProfileScreen(id, navController, snackbarHostState)
             }
             composable(Screen.ChangePassword.route) {
-                ChangeScreenPasswordScreen(navController)
+                val id = it.arguments?.getString("id") ?: ""
+                ChangeScreenPasswordScreen(id, navController, snackbarHostState)
             }
             composable(Screen.Adresses.route) {
                 AdressesScreen(navController)

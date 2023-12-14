@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -48,25 +51,36 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangeScreenPasswordScreen(
+    id: String,
     navController: NavController,
-    modifier: Modifier = Modifier
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = viewModel(
+        factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
+    ),
 ) {
     // State for input
     var inputCurrentPassword by remember { mutableStateOf("") }
     var inputNewPassword by remember { mutableStateOf("") }
     var inputRepeatNewPassword by remember { mutableStateOf("") }
     val passwordHidden by rememberSaveable { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
 
     var loading by remember { mutableStateOf(false) }
     var success by remember { mutableStateOf(false) }
@@ -238,7 +252,33 @@ fun ChangeScreenPasswordScreen(
         )
 
         Button(
-            onClick = { },
+            onClick = {
+                scope.launch {
+                    if (
+                        inputCurrentPassword.isEmpty() &&
+                        inputNewPassword.isEmpty() &&
+                        inputRepeatNewPassword.isEmpty()
+                    ) {
+                        snackbarHostState.showSnackbar(message = "Error: No changes made")
+                    } else {
+                        viewModel.changePassword(
+                            id,
+                            inputCurrentPassword,
+                            inputNewPassword,
+                            inputRepeatNewPassword
+                        )
+
+                        success = viewModel.success.value
+                        loading = viewModel.loading.value
+
+                        delay(2000)
+
+                        snackbarHostState.showSnackbar(message = viewModel.message.value)
+                        loading = false
+                    }
+                    enabled = true
+                }
+            },
             modifier
                 .padding(top = 48.dp)
                 .fillMaxWidth()
@@ -251,6 +291,7 @@ fun ChangeScreenPasswordScreen(
                 CircularProgressIndicator(
                     color = MaterialTheme.colorScheme.primary
                 )
+                enabled = false
             } else {
                 Text(
                     text = stringResource(R.string.change_password),
@@ -282,7 +323,9 @@ fun ChangeScreenPasswordScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             ChangeScreenPasswordScreen(
+                id = "",
                 navController = rememberNavController(),
+                snackbarHostState = remember { SnackbarHostState() },
             )
         }
     }
