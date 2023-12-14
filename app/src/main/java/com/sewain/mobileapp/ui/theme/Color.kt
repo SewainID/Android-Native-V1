@@ -18,3 +18,12 @@ val SalmonPink = Color(0xFFFB7185)
 val SteelBlue = Color(0xFF94A3B8)
 val RoyalBlue = Color(0xFF6366F1)
 val MidnightBlue = Color(0xFF0F172A)
+
+
+// Define colors for the light theme
+val LightThemeButtonColor = Color(0xFF000000) // example green color
+val LightThemeTextColor = Color.White
+
+// Define colors for the dark theme
+val DarkThemeButtonColor = Color(0xFFFFFFFF) // example teal color
+val DarkThemeTextColor = Color.Black

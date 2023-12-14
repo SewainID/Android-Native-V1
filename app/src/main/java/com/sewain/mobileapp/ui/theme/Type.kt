@@ -1,5 +1,6 @@
 package com.sewain.mobileapp.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -37,7 +38,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 57.sp,
         lineHeight = 64.sp,
-        letterSpacing = (-0.25).sp
+        letterSpacing = (-0.25).sp,
     ),
     displayMedium = TextStyle(
         fontFamily = Poppins,
