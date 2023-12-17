@@ -20,10 +20,6 @@ import java.io.File
 import java.net.SocketTimeoutException
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _imageFile = MutableStateFlow("")
-    val imageFile: StateFlow<String>
-        get() = _imageFile
-
     private val _message = MutableStateFlow("")
     val message: StateFlow<String>
         get() = _message
@@ -68,6 +64,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _username.value = data?.username.toString()
             _email.value = data?.email.toString()
             _fullName.value = data?.detailUser?.fullName.toString()
+            _imageString.value = data?.detailUser?.photoUrl.toString()
         }
     }
 

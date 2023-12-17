@@ -155,7 +155,7 @@ fun DetailProfileScreen(
             contentAlignment = Center
         ) {
             // Condition photo profile
-            if (viewModel.imageString.value.isNotEmpty()) {
+            if (viewModel.imageString.value != "null") {
                 AsyncImage(
                     model = viewModel.imageString.value,
                     contentDescription = null,

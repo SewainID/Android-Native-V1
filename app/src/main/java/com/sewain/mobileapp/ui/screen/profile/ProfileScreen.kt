@@ -87,9 +87,9 @@ fun ProfileScreen(
         )
 
         // Condition photo profile
-        if (false) {
+        if (viewModel.imageString.value != "null") {
             AsyncImage(
-                model = "",
+                model = viewModel.fullName.value,
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
@@ -114,7 +114,11 @@ fun ProfileScreen(
         }
 
         Text(
-            text = if (viewModel.fullName.value == "null") stringResource(R.string.full_name) else viewModel.fullName.value,
+            text = if (viewModel.fullName.value == "null") {
+                stringResource(R.string.full_name)
+            } else {
+                viewModel.fullName.value
+            },
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)
