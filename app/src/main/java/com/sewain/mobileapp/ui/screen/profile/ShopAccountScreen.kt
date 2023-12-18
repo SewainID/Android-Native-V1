@@ -4,19 +4,20 @@ import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
@@ -37,7 +38,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.Start
@@ -86,6 +86,8 @@ fun ShopAccountScreen(
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -99,7 +101,7 @@ fun ShopAccountScreen(
                 },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
                         modifier = modifier
                             .padding(start = 8.dp)
@@ -117,8 +119,12 @@ fun ShopAccountScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .verticalScroll(
+                    state = scrollState
+                )
         ) {
-            HorizontalDivider()
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
             // Condition photo profile
             if (false) {
@@ -192,7 +198,7 @@ fun ShopAccountScreen(
                 placeholder = {
                     Text(
                         text = "Shop Name",
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.secondary
                     )
                 },
@@ -205,8 +211,10 @@ fun ShopAccountScreen(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = RoyalBlue,
                     selectionColors = TextSelectionColors(
                         handleColor = RoyalBlue,
@@ -239,7 +247,7 @@ fun ShopAccountScreen(
                 placeholder = {
                     Text(
                         text = "Username",
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.secondary
                     )
                 },
@@ -252,8 +260,10 @@ fun ShopAccountScreen(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = RoyalBlue,
                     selectionColors = TextSelectionColors(
                         handleColor = RoyalBlue,

@@ -2,7 +2,6 @@ package com.sewain.mobileapp.ui.screen.profile
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,22 +14,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -58,252 +60,280 @@ import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.LightBlueGray
 import com.sewain.mobileapp.ui.theme.SalmonPink
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    modifier: Modifier = Modifier,
     navController: NavController,
     sessionModel: SessionModel,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
-    modifier: Modifier = Modifier,
 ) {
     val openDialog = remember { mutableStateOf(false) }
 
     viewModel.getUserById(sessionModel.id)
 
-    val username = if (sessionModel.isShop) viewModel.usernameShop.value else viewModel.username.value
+    val username =
+        if (sessionModel.isShop) viewModel.usernameShop.value else viewModel.username.value
 
-    Column(
-        horizontalAlignment = CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.profile),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        )
+    val scrollState = rememberScrollState()
 
-        // Condition photo profile
-        if (viewModel.imageString.value != "null") {
-            AsyncImage(
-                model = viewModel.fullName.value,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                modifier = modifier
-                    .padding(top = 24.dp)
-                    .size(150.dp)
-                    .clip(CircleShape),
-            )
-        } else {
-            Image(
-                imageVector = Icons.Filled.AccountCircle,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                modifier = modifier
-                    .padding(top = 24.dp)
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.profile),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = modifier.fillMaxWidth()
+                    )
+                }
             )
         }
+    ) { innerPadding ->
 
-        Text(
-            text = if (viewModel.fullName.value == "null") {
-                stringResource(R.string.full_name)
-            } else if (viewModel.shopName.value == "null") {
-                stringResource(R.string.shop_name)
+        Column(
+            horizontalAlignment = CenterHorizontally,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(
+                    state = scrollState
+                )
+        ) {
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary)
+
+            // Condition photo profile
+            if (viewModel.imageString.value != "null") {
+                AsyncImage(
+                    model = viewModel.fullName.value,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    modifier = modifier
+                        .padding(top = 24.dp)
+                        .size(150.dp)
+                        .clip(CircleShape),
+                )
             } else {
-                if (sessionModel.isShop) viewModel.shopName.value else viewModel.fullName.value
-            },
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = modifier.padding(top = 24.dp)
-        )
+                Image(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    modifier = modifier
+                        .padding(top = 24.dp)
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                )
+            }
 
-        Text(
-            text = stringResource(R.string.username_profile_format, username),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = modifier.padding(top = 4.dp)
-        )
-
-        Text(
-            text = viewModel.email.value,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = modifier.padding(top = 4.dp)
-        )
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .height(50.dp)
-                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable {
-                    if (sessionModel.isShop) {
-                        viewModel.setSession(sessionModel.id, sessionModel.token, false)
-                    } else {
-                        viewModel.setSession(sessionModel.id, sessionModel.token, true)
-                    }
-
-                    if (viewModel.shopId.value == "null") {
-                        navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
-                    }
-                },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
             Text(
-                text = if (sessionModel.isShop) {
-                    stringResource(R.string.switch_account_user)
+                text = if (viewModel.fullName.value == "null") {
+                    stringResource(R.string.full_name)
+                } else if (viewModel.shopName.value == "null") {
+                    stringResource(R.string.shop_name)
                 } else {
-                    stringResource(R.string.switch_account_shop)
+                    if (sessionModel.isShop) viewModel.shopName.value else viewModel.fullName.value
                 },
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.secondary
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = modifier.padding(top = 24.dp)
             )
 
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-                .height(50.dp)
-                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.DetailProfile.createRoute(sessionModel.id)) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
             Text(
-                text = stringResource(R.string.edit_profile),
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.secondary
+                text = stringResource(R.string.username_profile_format, username),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = modifier.padding(top = 4.dp)
             )
 
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-                .height(50.dp)
-                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.ChangePassword.createRoute(sessionModel.id)) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
             Text(
-                text = stringResource(R.string.change_password),
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.secondary
+                text = viewModel.email.value,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = modifier.padding(top = 4.dp)
             )
 
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                    .clickable {
+                        if (sessionModel.isShop) {
+                            viewModel.setSession(sessionModel.id, sessionModel.token, false)
+                        } else {
+                            viewModel.setSession(sessionModel.id, sessionModel.token, true)
+                        }
+
+                        if (viewModel.shopId.value == "null") {
+                            navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
+                        }
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = if (sessionModel.isShop) {
+                        stringResource(R.string.switch_account_user)
+                    } else {
+                        stringResource(R.string.switch_account_shop)
+                    },
+                    modifier = modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                    .clickable {
+                        navController.navigate(
+                            Screen.DetailProfile.createRoute(
+                                sessionModel.id
+                            )
+                        )
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.edit_profile),
+                    modifier = modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                    .clickable {
+                        navController.navigate(
+                            Screen.ChangePassword.createRoute(
+                                sessionModel.id
+                            )
+                        )
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.change_password),
+                    modifier = modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                    .clickable { navController.navigate(Screen.Adresses.createRoute(sessionModel.id)) },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.add_addresses),
+                    modifier = modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
+                    .clickable { navController.navigate(Screen.SocialMedia.createRoute(sessionModel.id)) },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.add_social_media),
+                    modifier = modifier.padding(start = 16.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp)
+                    .height(50.dp)
+                    .border(1.dp, SalmonPink, RoundedCornerShape(8.dp))
+                    .clickable { openDialog.value = true },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.logout),
+                    modifier = modifier.padding(start = 16.dp),
+                    color = SalmonPink
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = modifier.padding(end = 16.dp),
+                    tint = SalmonPink
+                )
+            }
+
         }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-                .height(50.dp)
-                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.Adresses.createRoute(sessionModel.id)) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.add_addresses),
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.secondary
-            )
-
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-                .height(50.dp)
-                .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.SocialMedia.createRoute(sessionModel.id)) },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.add_social_media),
-                modifier = modifier.padding(start = 16.dp),
-                color = MaterialTheme.colorScheme.secondary
-            )
-
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = MaterialTheme.colorScheme.secondary
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp)
-                .height(50.dp)
-                .border(1.dp, SalmonPink, RoundedCornerShape(8.dp))
-                .clickable { openDialog.value = true },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(R.string.logout),
-                modifier = modifier.padding(start = 16.dp),
-                color = SalmonPink
-            )
-
-            Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = modifier.padding(end = 16.dp),
-                tint = SalmonPink
-            )
-        }
-
     }
 
     when {

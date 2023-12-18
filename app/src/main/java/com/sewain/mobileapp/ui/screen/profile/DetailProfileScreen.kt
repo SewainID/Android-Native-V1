@@ -12,19 +12,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
@@ -32,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -56,11 +54,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,13 +80,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailProfileScreen(
+    modifier: Modifier = Modifier,
     id: String,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
-    modifier: Modifier = Modifier,
 ) {
     viewModel.getUserById(id)
 
@@ -131,7 +127,7 @@ fun DetailProfileScreen(
                 },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
                         modifier = modifier
                             .padding(start = 8.dp)
@@ -152,6 +148,9 @@ fun DetailProfileScreen(
                     state = scrollState,
                 )
         ) {
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary)
+
             Box(
                 modifier = modifier
                     .padding(top = 24.dp)
@@ -246,8 +245,10 @@ fun DetailProfileScreen(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = RoyalBlue,
                     selectionColors = TextSelectionColors(
                         handleColor = RoyalBlue,
@@ -293,8 +294,10 @@ fun DetailProfileScreen(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = RoyalBlue,
                     selectionColors = TextSelectionColors(
                         handleColor = RoyalBlue,
@@ -340,8 +343,10 @@ fun DetailProfileScreen(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = RoyalBlue,
                     selectionColors = TextSelectionColors(
                         handleColor = RoyalBlue,

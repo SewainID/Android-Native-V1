@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,8 +22,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -45,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -142,7 +139,6 @@ fun LoginScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginContent(
     modifier: Modifier,
@@ -233,8 +229,10 @@ fun LoginContent(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,
@@ -275,8 +273,10 @@ fun LoginContent(
                 visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,
@@ -330,7 +330,7 @@ fun LoginContent(
                     .padding(top = 32.dp),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Divider(
+                HorizontalDivider(
                     modifier = modifier
                         .width(150.dp)
                         .padding(start = 16.dp)
@@ -343,7 +343,7 @@ fun LoginContent(
                     text = stringResource(R.string.or)
                 )
 
-                Divider(
+                HorizontalDivider(
                     modifier = modifier
                         .width(150.dp)
                         .padding(end = 16.dp)

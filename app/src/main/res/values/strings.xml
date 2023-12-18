@@ -44,10 +44,9 @@
     <string name="phone_number">Phone Number</string>
     <string name="phone_format">+62 888 8888 8888</string>
     <string name="social_media">Social Media</string>
-    <string name="connect">Hubungkan</string>
-    <string name="facebook_connect">Hubungkan dengan akun Facebook</string>
-    <string name="instagram_connect">Hubungkan dengan akun Instagram</string>
-    <string name="tiktok_connect">Hubungkan dengan akun Tiktok</string>
+    <string name="facebook_account">Facebook Account</string>
+    <string name="instagram_account">Instagram Account</string>
+    <string name="tiktok_account">Tiktok Account</string>
     <string name="social_media_message">Dive into a global community of creativity with Sewain Market Place! Connect, share, and celebrate the joy of dressing up with costume enthusiasts from around the world.</string>
     <string name="shop_account">Shop Account</string>
     <string name="shop_account_message">Improve Your Costume Business! Turn User Accounts Into Stores and Earn More Profits</string>
@@ -56,4 +55,5 @@
     <string name="new_arrivals">New Arrivals</string>
     <string name="switch_shop_account_message">Are you sure to switching to Shop Account?</string>
     <string name="switch_user_account_message">Are you sure to switching to User Account?</string>
+    <string name="set_map">Set Map</string>
 </resources>
