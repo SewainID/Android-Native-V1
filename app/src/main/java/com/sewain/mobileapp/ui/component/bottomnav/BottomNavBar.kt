@@ -171,7 +171,7 @@ fun HomeBottomNavBar(
 fun PreviewBottomNavigationBar() {
     SewainAppTheme {
         HomeBottomNavBar(
-            sessionModel = SessionModel("", ""),
+            sessionModel = SessionModel("", "", false),
             snackbarHostState = remember { SnackbarHostState() },
         )
     }

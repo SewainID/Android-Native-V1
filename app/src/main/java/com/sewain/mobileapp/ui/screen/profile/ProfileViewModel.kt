@@ -54,8 +54,10 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun getSession(): Flow<SessionModel> {
-        return repository.getSession()
+    fun setSession(id: String, token: String, isShop: Boolean) {
+        viewModelScope.launch {
+            repository.saveSession(id, token, isShop)
+        }
     }
 
     fun getUserById(id: String) {

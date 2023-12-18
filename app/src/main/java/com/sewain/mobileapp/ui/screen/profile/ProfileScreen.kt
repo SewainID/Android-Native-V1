@@ -145,12 +145,17 @@ fun ProfileScreen(
                 .padding(top = 24.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id)) },
+                .clickable {
+                    viewModel.setSession(sessionModel.id, sessionModel.token, true)
+//                    navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.switch_account),
+                text = if (sessionModel.isShop) stringResource(R.string.switch_account_shop) else stringResource(
+                    R.string.switch_account_user
+                ),
                 modifier = modifier.padding(start = 16.dp),
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -321,7 +326,7 @@ fun PreviewProfileScreen() {
         ) {
             ProfileScreen(
                 navController = rememberNavController(),
-                sessionModel = SessionModel("", "")
+                sessionModel = SessionModel("", "", false)
             )
         }
     }

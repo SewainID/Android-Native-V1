@@ -28,8 +28,8 @@ class UserRepository private constructor(
     private val apiService: ApiService
 ) {
 
-    suspend fun saveSession(id: String, token: String) {
-        userPreference.saveSession(SessionModel(id, token))
+    suspend fun saveSession(id: String, token: String, isShop: Boolean) {
+        userPreference.saveSession(SessionModel(id, token, isShop))
     }
 
     fun getSession(): Flow<SessionModel> {
