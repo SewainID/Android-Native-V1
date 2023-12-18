@@ -23,12 +23,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,206 +86,211 @@ fun ShopAccountScreen(
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
 
-    Column(
-        horizontalAlignment = CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Box(
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.shop_account),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = modifier.padding(start = 24.dp)
+                    )
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        modifier = modifier
+                            .padding(start = 8.dp)
+                            .clickable {
+                                navController.navigateUp()
+                            }
+                    )
+                }
+            )
+        }
+    ) { innerPadding ->
+        // Main UI
+        Column(
+            horizontalAlignment = CenterHorizontally,
             modifier = modifier
-                .fillMaxWidth()
-                .height(50.dp),
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-                modifier = modifier
-                    .size(50.dp)
-                    .clickable {
-                        navController.navigateUp()
-                    }
+            HorizontalDivider()
+
+            // Condition photo profile
+            if (false) {
+                AsyncImage(
+                    model = "",
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    alignment = Center,
+                    modifier = modifier
+                        .padding(top = 24.dp)
+                        .size(150.dp)
+                        .clip(CircleShape),
+                )
+            } else {
+                Image(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    alignment = Center,
+                    modifier = modifier
+                        .padding(top = 24.dp)
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                )
+            }
+
+            Text(
+                text = if (viewModel.shopName.value == "null") stringResource(R.string.shop_name) else viewModel.shopName.value,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = modifier.padding(top = 24.dp)
             )
 
             Text(
-                text = stringResource(R.string.shop_account),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = modifier.align(Center)
+                text = viewModel.email.value,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = modifier.padding(top = 4.dp)
             )
-        }
 
-        // Condition photo profile
-        if (false) {
-            AsyncImage(
-                model = "",
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                alignment = Center,
+            Text(
+                text = stringResource(R.string.shop_account_message),
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
                 modifier = modifier
-                    .padding(top = 24.dp)
-                    .size(150.dp)
-                    .clip(CircleShape),
+                    .padding(top = 36.dp, start = 16.dp, end = 16.dp),
             )
-        } else {
-            Image(
-                imageVector = Icons.Filled.AccountCircle,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                alignment = Center,
+
+            Text(
+                text = stringResource(R.string.shop_name),
+                fontSize = 16.sp,
                 modifier = modifier
-                    .padding(top = 24.dp)
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                    .padding(start = 20.dp, top = 24.dp, end = 16.dp)
+                    .align(Start),
             )
-        }
 
-        Text(
-            text = viewModel.fullName.value,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = modifier.padding(top = 24.dp)
-        )
-
-        Text(
-            text = viewModel.email.value,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = modifier.padding(top = 4.dp)
-        )
-
-        Text(
-            text = stringResource(R.string.shop_account_message),
-            fontSize = 13.sp,
-            textAlign = TextAlign.Center,
-            modifier = modifier
-                .padding(top = 36.dp),
-        )
-
-        Text(
-            text = stringResource(R.string.shop_name),
-            fontSize = 16.sp,
-            modifier = modifier
-                .padding(start = 4.dp, top = 24.dp)
-                .align(Start),
-        )
-
-        OutlinedTextField(
-            value = inputShopName,
-            onValueChange = { newInput ->
-                inputShopName = newInput
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 2.dp),
-            textStyle = TextStyle(
-                color = MidnightBlue,
-                fontSize = 20.sp
-            ),
-            placeholder = {
-                Text(
-                    text = "Shop Name",
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.AccountBox,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = RoyalBlue,
-                selectionColors = TextSelectionColors(
-                    handleColor = RoyalBlue,
-                    backgroundColor = RoyalBlue
+            OutlinedTextField(
+                value = inputShopName,
+                onValueChange = { newInput ->
+                    inputShopName = newInput
+                },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 2.dp, start = 16.dp, end = 16.dp),
+                textStyle = TextStyle(
+                    color = MidnightBlue,
+                    fontSize = 20.sp
                 ),
-                focusedIndicatorColor = RoyalBlue,
+                placeholder = {
+                    Text(
+                        text = "Shop Name",
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountBox,
+                        contentDescription = null,
+                        tint = Gray700
+                    )
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    cursorColor = RoyalBlue,
+                    selectionColors = TextSelectionColors(
+                        handleColor = RoyalBlue,
+                        backgroundColor = RoyalBlue
+                    ),
+                    focusedIndicatorColor = RoyalBlue,
+                )
             )
-        )
 
-        Text(
-            text = stringResource(R.string.username),
-            fontSize = 16.sp,
-            modifier = modifier
-                .padding(start = 4.dp, top = 16.dp)
-                .align(Start),
-        )
+            Text(
+                text = stringResource(R.string.username),
+                fontSize = 16.sp,
+                modifier = modifier
+                    .padding(start = 20.dp, top = 16.dp, end = 16.dp)
+                    .align(Start),
+            )
 
-        OutlinedTextField(
-            value = inputUsername,
-            onValueChange = { newInput ->
-                inputUsername = newInput
-            },
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 2.dp),
-            textStyle = TextStyle(
-                color = MidnightBlue,
-                fontSize = 20.sp
-            ),
-            placeholder = {
-                Text(
-                    text = "Username",
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Outlined.Person,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = RoyalBlue,
-                selectionColors = TextSelectionColors(
-                    handleColor = RoyalBlue,
-                    backgroundColor = RoyalBlue
+            OutlinedTextField(
+                value = inputUsername,
+                onValueChange = { newInput ->
+                    inputUsername = newInput
+                },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 2.dp, start = 16.dp, end = 16.dp),
+                textStyle = TextStyle(
+                    color = MidnightBlue,
+                    fontSize = 20.sp
                 ),
-                focusedIndicatorColor = RoyalBlue,
+                placeholder = {
+                    Text(
+                        text = "Username",
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Outlined.Person,
+                        contentDescription = null,
+                        tint = Gray700
+                    )
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    cursorColor = RoyalBlue,
+                    selectionColors = TextSelectionColors(
+                        handleColor = RoyalBlue,
+                        backgroundColor = RoyalBlue
+                    ),
+                    focusedIndicatorColor = RoyalBlue,
+                )
             )
-        )
 
-        Button(
-            onClick = {
+            Button(
+                onClick = {
 
-            },
-            modifier
-                .padding(top = 48.dp)
-                .fillMaxWidth()
-                .height(50.dp),
-            enabled = enabled,
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            if (loading) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary
-                )
-                enabled = false
-            } else {
-                Text(
-                    text = stringResource(R.string.save),
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                },
+                modifier
+                    .padding(top = 48.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+                    .height(50.dp),
+                enabled = enabled,
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    enabled = false
+                } else {
+                    Text(
+                        text = stringResource(R.string.save),
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
+
         }
-
     }
-
 }
 
 @Preview(

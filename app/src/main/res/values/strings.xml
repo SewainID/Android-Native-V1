@@ -54,4 +54,6 @@
     <string name="shop_name">Shop Name</string>
     <string name="login_success">Success: You have successfully logged in!</string>
     <string name="new_arrivals">New Arrivals</string>
+    <string name="switch_shop_account_message">Are you sure to switching to Shop Account?</string>
+    <string name="switch_user_account_message">Are you sure to switching to User Account?</string>
 </resources>

@@ -118,8 +118,6 @@ fun DetailProfileScreen(
 
     val scrollState = rememberScrollState()
 
-    val focusManager = LocalFocusManager.current
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -246,10 +244,6 @@ fun DetailProfileScreen(
                         tint = Gray700
                     )
                 },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
-                ),
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.textFieldColors(
