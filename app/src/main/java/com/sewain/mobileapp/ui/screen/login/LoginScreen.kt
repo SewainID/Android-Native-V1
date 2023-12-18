@@ -2,7 +2,6 @@ package com.sewain.mobileapp.ui.screen.login
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -155,10 +154,8 @@ fun LoginContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+    // Main UI
+    Column(modifier = modifier.fillMaxSize()) {
         Box(
             modifier = modifier
                 .padding(top = 50.dp)
