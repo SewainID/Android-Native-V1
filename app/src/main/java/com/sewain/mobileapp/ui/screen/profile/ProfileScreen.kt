@@ -2,6 +2,7 @@ package com.sewain.mobileapp.ui.screen.profile
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,8 +26,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -54,6 +58,7 @@ import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.LightBlueGray
 import com.sewain.mobileapp.ui.theme.SalmonPink
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileScreen(
@@ -67,6 +72,8 @@ fun ProfileScreen(
     val openDialog = remember { mutableStateOf(false) }
 
     viewModel.getUserById(sessionModel.id)
+
+    val username = if (sessionModel.isShop) viewModel.usernameShop.value else viewModel.username.value
 
     Column(
         horizontalAlignment = CenterHorizontally,
@@ -85,9 +92,9 @@ fun ProfileScreen(
         )
 
         // Condition photo profile
-        if (false) {
+        if (viewModel.imageString.value != "null") {
             AsyncImage(
-                model = "",
+                model = viewModel.fullName.value,
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
@@ -112,14 +119,20 @@ fun ProfileScreen(
         }
 
         Text(
-            text = if (viewModel.fullName.value == "null") stringResource(R.string.full_name) else viewModel.fullName.value,
+            text = if (viewModel.fullName.value == "null") {
+                stringResource(R.string.full_name)
+            } else if (viewModel.shopName.value == "null") {
+                stringResource(R.string.shop_name)
+            } else {
+                if (sessionModel.isShop) viewModel.shopName.value else viewModel.fullName.value
+            },
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = modifier.padding(top = 24.dp)
         )
 
         Text(
-            text = stringResource(R.string.username_profile_format, viewModel.username.value),
+            text = stringResource(R.string.username_profile_format, username),
             fontSize = 12.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.secondary,
@@ -139,12 +152,26 @@ fun ProfileScreen(
                 .padding(top = 24.dp)
                 .height(50.dp)
                 .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
-                .clickable { navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id)) },
+                .clickable {
+                    if (sessionModel.isShop) {
+                        viewModel.setSession(sessionModel.id, sessionModel.token, false)
+                    } else {
+                        viewModel.setSession(sessionModel.id, sessionModel.token, true)
+                    }
+
+                    if (viewModel.shopId.value == "null") {
+                        navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
+                    }
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = stringResource(R.string.switch_account),
+                text = if (sessionModel.isShop) {
+                    stringResource(R.string.switch_account_user)
+                } else {
+                    stringResource(R.string.switch_account_shop)
+                },
                 modifier = modifier.padding(start = 16.dp),
                 color = MaterialTheme.colorScheme.secondary
             )
@@ -315,7 +342,7 @@ fun PreviewProfileScreen() {
         ) {
             ProfileScreen(
                 navController = rememberNavController(),
-                sessionModel = SessionModel("", "")
+                sessionModel = SessionModel("", "", false)
             )
         }
     }

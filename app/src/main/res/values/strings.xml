@@ -17,7 +17,8 @@
     <string name="search">Search</string>
     <string name="profile">Profile</string>
     <string name="detail_profile">Detail Profile</string>
-    <string name="switch_account">Switch to Shop Account</string>
+    <string name="switch_account_shop">Switch to Shop Account</string>
+    <string name="switch_account_user">Switch to User Account</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="change_password">Change Password</string>
     <string name="add_addresses">Add Addresses</string>
@@ -53,4 +54,6 @@
     <string name="shop_name">Shop Name</string>
     <string name="login_success">Success: You have successfully logged in!</string>
     <string name="new_arrivals">New Arrivals</string>
+    <string name="switch_shop_account_message">Are you sure to switching to Shop Account?</string>
+    <string name="switch_user_account_message">Are you sure to switching to User Account?</string>
 </resources>

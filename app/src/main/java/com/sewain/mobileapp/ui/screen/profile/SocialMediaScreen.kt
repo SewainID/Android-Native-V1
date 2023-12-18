@@ -107,14 +107,14 @@ fun SocialMediaScreen(
             Icon(
                 painter = painterResource(R.drawable.facebook),
                 contentDescription = null,
-                modifier = modifier.size(36.dp),
+                modifier = modifier.size(32.dp),
             )
 
             Text(
                 text = stringResource(R.string.facebook_connect),
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
-                modifier = modifier.padding(start = 8.dp),
+                modifier = modifier.padding(start = 4.dp),
             )
 
             InputChip(
@@ -127,7 +127,7 @@ fun SocialMediaScreen(
                     )
                 },
                 modifier = modifier
-                    .padding(start = 8.dp),
+                    .padding(start = 12.dp),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -146,14 +146,14 @@ fun SocialMediaScreen(
             Icon(
                 painter = painterResource(R.drawable.instagram),
                 contentDescription = null,
-                modifier = modifier.size(36.dp),
+                modifier = modifier.size(32.dp),
             )
 
             Text(
                 text = stringResource(R.string.instagram_connect),
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
-                modifier = modifier.padding(start = 8.dp),
+                modifier = modifier.padding(start = 4.dp),
             )
 
             InputChip(
@@ -183,14 +183,14 @@ fun SocialMediaScreen(
             Icon(
                 painter = painterResource(R.drawable.tiktok),
                 contentDescription = null,
-                modifier = modifier.size(36.dp),
+                modifier = modifier.size(32.dp),
             )
 
             Text(
                 text = stringResource(R.string.tiktok_connect),
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
-                modifier = modifier.padding(start = 8.dp),
+                modifier = modifier.padding(start = 4.dp),
             )
 
             InputChip(
@@ -202,7 +202,7 @@ fun SocialMediaScreen(
                         fontSize = 12.sp,
                     )
                 },
-                modifier = modifier.padding(start = 28.dp),
+                modifier = modifier.padding(start = 32.dp),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Add,

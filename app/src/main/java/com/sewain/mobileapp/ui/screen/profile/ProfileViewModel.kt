@@ -1,11 +1,14 @@
 package com.sewain.mobileapp.ui.screen.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.local.model.SessionModel
+import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
+import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +20,6 @@ import java.io.File
 import java.net.SocketTimeoutException
 
 class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _imageFile = MutableStateFlow("")
-    val imageFile: StateFlow<String>
-        get() = _imageFile
-
     private val _message = MutableStateFlow("")
     val message: StateFlow<String>
         get() = _message
@@ -45,14 +44,32 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val fullName: StateFlow<String>
         get() = _fullName
 
+    private val _imageString = MutableStateFlow("")
+    val imageString: StateFlow<String>
+        get() = _imageString
+
+    private val _usernameShop = MutableStateFlow("")
+    val usernameShop: StateFlow<String>
+        get() = _usernameShop
+
+    private val _shopName = MutableStateFlow("")
+    val shopName: StateFlow<String>
+        get() = _shopName
+
+    private val _shopId = MutableStateFlow("")
+    val shopId: StateFlow<String>
+        get() = _shopId
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()
         }
     }
 
-    fun getSession(): Flow<SessionModel> {
-        return repository.getSession()
+    fun setSession(id: String, token: String, isShop: Boolean) {
+        viewModelScope.launch {
+            repository.saveSession(id, token, isShop)
+        }
     }
 
     fun getUserById(id: String) {
@@ -61,14 +78,18 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _username.value = data?.username.toString()
             _email.value = data?.email.toString()
             _fullName.value = data?.detailUser?.fullName.toString()
+            _imageString.value = data?.detailUser?.photoUrl.toString()
+            _shopId.value = data?.detailUser?.detailShop?.id.toString()
+            _shopName.value = data?.detailUser?.detailShop?.name.toString()
+            _usernameShop.value = data?.detailUser?.detailShop?.username.toString()
         }
     }
 
-    suspend fun updateUser(id: String, name: String, email: String) {
+    suspend fun updateUser(id: String, fullName: String, username: String, email: String) {
         _loading.value = true
         try {
             //get success message
-            val message = repository.updateUserById(id, name, email)
+            val message = repository.updateUserById(id, fullName, username, email)
             _message.value = "Success: ${message.message}"
             _success.value = true
         } catch (e: HttpException) {
@@ -86,7 +107,53 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     suspend fun uploadImage(imageFile: File) {
-        val message = repository.uploadImage(imageFile)
-        _imageFile.value = "Success: ${message.attachmentUrl}"
+        _loading.value = true
+        try {
+            val data = repository.uploadImage(imageFile)
+            _imageString.value = data.attachmentUrl.orEmpty()
+            _message.value = "Success: upload image successful."
+        } catch (e: HttpException) {
+            // get error message
+            _message.value = "Error: upload image failure."
+        }
+    }
+
+    suspend fun changePassword(
+        id: String,
+        currentPassword: String,
+        newPassword: String,
+        confirmPassword: String,
+    ) {
+        _loading.value = true
+        try {
+            val data = repository.changePassword(id, currentPassword, newPassword, confirmPassword)
+            _message.value = "Success: ${data.message}"
+        } catch (e: HttpException) {
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, ChangePasswordResponse::class.java)
+            val errorMessage = errorBody.message
+            _message.value = "Error: $errorMessage"
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
+
+    suspend fun createDetailUser(id: String, fullName: String) {
+        _loading.value = true
+        try {
+            //get success message
+            val message = repository.createDetailUser(id, fullName)
+            _message.value = "Success: ${message.message}"
+        } catch (e: HttpException) {
+            //get error message
+            val jsonInString = e.response()?.errorBody()?.string()
+            val errorBody = Gson().fromJson(jsonInString, CreateDetailUserResponse::class.java)
+            val errorMessage = errorBody.message
+            _message.value = "Error: $errorMessage"
+            _success.value = false
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+            _success.value = false
+        }
     }
 }

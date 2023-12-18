@@ -1,6 +1,7 @@
 package com.sewain.mobileapp.data.remote.retrofit
 
 import com.google.gson.annotations.SerializedName
+import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.DetailUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
@@ -8,6 +9,8 @@ import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.response.CatalogsResponse
+import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
+import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
@@ -49,9 +52,20 @@ interface ApiService {
     @Multipart
     @POST("/api/v1/attachments")
     suspend fun uploadImage(
-        @Part image: MultipartBody.Part
+        @Part file: MultipartBody.Part
     ): AddAttachmentsResponse
 
     @GET("/api/v1/catalogs/{id}")
     suspend fun getCatalogById(@Path("id") catalogId: String): Response<CatalogItem>
+
+    @PUT("/api/v1/users/{id}/update-password")
+    suspend fun changePassword(
+        @Path("id") id: String,
+        @Body changePassword: ChangePassword,
+    ): ChangePasswordResponse
+
+    @POST("/api/v1/details-users")
+    suspend fun createDetailUser(
+        @Body detailUser: DetailUser,
+    ): CreateDetailUserResponse
 }

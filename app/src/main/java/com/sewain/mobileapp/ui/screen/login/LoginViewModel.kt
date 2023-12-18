@@ -29,7 +29,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             val data = repository.loginUser(email, password)
             _signInMessage.value = "Success: ${data.message}"
             _signInSuccess.value = true
-            repository.saveSession(data.results?.id!!, data.results.token!!)
+            repository.saveSession(data.results?.id!!, data.results.token!!, false)
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()
