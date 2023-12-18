@@ -172,11 +172,15 @@ fun RegisterContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.blob_element),
+            contentDescription = null,
+            modifier = modifier.size(600.dp),
+        )
 
-        Column(modifier = modifier.fillMaxSize()) {
+        // Main UI
+        Column {
             Box(
                 modifier = modifier
                     .padding(top = 50.dp)
