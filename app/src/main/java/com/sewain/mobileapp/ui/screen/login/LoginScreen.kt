@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -159,7 +160,8 @@ fun LoginContent(
         Image(
             painter = painterResource(R.drawable.blob_element),
             contentDescription = null,
-            modifier = modifier.size(600.dp),
+            modifier = modifier.size(625.dp),
+            alignment = TopCenter,
         )
 
         // Main UI

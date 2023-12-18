@@ -176,7 +176,8 @@ fun RegisterContent(
         Image(
             painter = painterResource(R.drawable.blob_element),
             contentDescription = null,
-            modifier = modifier.size(600.dp),
+            modifier = modifier.size(625.dp),
+            alignment = Alignment.TopCenter,
         )
 
         // Main UI
