@@ -36,6 +36,7 @@
     <string name="logout_message">Are you sure to Logout?</string>
     <string name="click_to_change">Click to\nChange</string>
     <string name="back">Back</string>
+    <string name="add">Add</string>
     <string name="adresses">Adresses</string>
     <string name="username_profile_format">Hello, %s</string>
     <string name="detail_profile_message">Discover Yourself, One Costume at a Time: Unveil Your Unique Identity with Our Exclusive Costume Collection</string>
@@ -57,4 +58,21 @@
     <string name="switch_user_account_message">Are you sure to switching to User Account?</string>
     <string name="set_map">Set Map</string>
     <string name="username_shop">usernameShop</string>
+    <string name="create_catalog">Create Catalog</string>
+    <string name="create_catalog_message">Bring Your Creativity!\nAdd the Latest Costume Catalog to Your Store in a Moment</string>
+    <string name="photo_costume">Photo Costume</string>
+    <string name="catalog_name">Catalog Name</string>
+    <string name="catalog_name_placeholder">Ex. Anya Forger, Gojo Satoru</string>
+    <string name="description">Description</string>
+    <string name="description_placeholder">Ex. Style like the strongest sorcerer in…</string>
+    <string name="size">Size</string>
+    <string name="size_placeholder">Ex. Small, Medium, Large, Extra Large</string>
+    <string name="price">Price</string>
+    <string name="price_placeholder">Ex. Rp 80.000 -> 80000</string>
+    <string name="status">Status</string>
+    <string name="status_placeholder">Ex. On - Hold , Available, Unavailable</string>
+    <string name="day_rental">Day Rental</string>
+    <string name="day_maintenance">Day Maintenance</string>
+    <string name="day_placeholder">Ex. 1, 2, 3, 4 etc.</string>
+    <string name="add_catalog">Add Catalog</string>
 </resources>
