@@ -27,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.create_catalog.CreateCatalogScreen
 import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
@@ -111,7 +112,7 @@ fun HomeBottomNavBar(
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController = navController, sessionModel = sessionModel)
             }
             composable(Screen.ListTransaction.route) {
                 //call our composable screens here
@@ -149,6 +150,9 @@ fun HomeBottomNavBar(
             }
             composable(Screen.Maps.route) {
                 MapsScreen()
+            }
+            composable(Screen.CreateCatalog.route) {
+                CreateCatalogScreen(navController = navController)
             }
         }
     }

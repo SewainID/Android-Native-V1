@@ -27,6 +27,7 @@ sealed class Screen(val route: String) {
     }
 
     object Maps : Screen("maps")
+    object CreateCatalog : Screen("create_catalog")
 
     object Login : Screen("login")
     object Register : Screen("register")
