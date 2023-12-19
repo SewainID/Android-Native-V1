@@ -32,6 +32,7 @@ import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.MapsScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
 import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
@@ -145,6 +146,9 @@ fun HomeBottomNavBar(
                 Log.d("Catalogs", backStackEntry.toString())
                 DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
                 // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Maps.route) {
+                MapsScreen()
             }
         }
     }

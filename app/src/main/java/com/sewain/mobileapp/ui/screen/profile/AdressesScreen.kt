@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
@@ -226,7 +227,9 @@ fun AdressesScreen(
             )
 
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(Screen.Maps.route)
+                },
                 modifier
                     .padding(top = 8.dp, start = 16.dp, end = 16.dp)
                     .align(Start),

@@ -96,6 +96,9 @@ dependencies {
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")
     implementation("androidx.room:room-paging:$roomVersion")
 
+    // maps
+    implementation("com.google.maps.android:android-maps-utils:3.8.0")
+
     // testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
