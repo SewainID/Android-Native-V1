@@ -70,12 +70,13 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShopAccountScreen(
+    modifier: Modifier = Modifier,
     id: String,
+    token: String,
     navController: NavController,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
-    modifier: Modifier = Modifier,
 ) {
     viewModel.getUserById(id)
 
@@ -106,6 +107,7 @@ fun ShopAccountScreen(
                         modifier = modifier
                             .padding(start = 8.dp)
                             .clickable {
+                                viewModel.setSession(id, token, false)
                                 navController.navigateUp()
                             }
                     )
@@ -323,6 +325,7 @@ fun ShopAccountScreenPreview() {
         ) {
             ShopAccountScreen(
                 id = "",
+                token = "",
                 navController = rememberNavController(),
             )
         }

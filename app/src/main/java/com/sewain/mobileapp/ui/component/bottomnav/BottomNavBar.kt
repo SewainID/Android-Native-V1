@@ -141,7 +141,8 @@ fun HomeBottomNavBar(
             }
             composable(Screen.ShopAccount.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                ShopAccountScreen(id, navController)
+                val token = it.arguments?.getString("token") ?: ""
+                ShopAccountScreen(id = id, token = token, navController = navController)
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
                 Log.d("Catalogs", backStackEntry.toString())

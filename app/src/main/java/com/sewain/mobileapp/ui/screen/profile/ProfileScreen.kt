@@ -185,8 +185,8 @@ fun ProfileScreen(
                             viewModel.setSession(sessionModel.id, sessionModel.token, true)
                         }
 
-                        if (!sessionModel.isShop && viewModel.shopId.value == "null") {
-                            navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
+                        if (!sessionModel.isShop && viewModel.shopName.value == "null") {
+                            navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id, sessionModel.token))
                         }
                     },
                 verticalAlignment = Alignment.CenterVertically,
