@@ -134,7 +134,8 @@ fun HomeBottomNavBar(
                 AdressesScreen(navController)
             }
             composable(Screen.SocialMedia.route) {
-                SocialMediaScreen(navController)
+                val id = it.arguments?.getString("id") ?: ""
+                SocialMediaScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
             }
             composable(Screen.ShopAccount.route) {
                 val id = it.arguments?.getString("id") ?: ""

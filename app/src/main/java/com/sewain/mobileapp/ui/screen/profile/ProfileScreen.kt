@@ -76,7 +76,14 @@ fun ProfileScreen(
     viewModel.getUserById(sessionModel.id)
 
     val username =
-        if (sessionModel.isShop) viewModel.usernameShop.value else viewModel.username.value
+        if (sessionModel.isShop && viewModel.usernameShop.value == "null") {
+            stringResource(R.string.username_shop)
+        } else if(sessionModel.isShop) {
+            viewModel.usernameShop.value
+        } else {
+            viewModel.username.value
+        }
+
 
     val scrollState = rememberScrollState()
 
@@ -89,7 +96,9 @@ fun ProfileScreen(
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        modifier = modifier.fillMaxWidth()
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
                     )
                 }
             )
@@ -136,9 +145,9 @@ fun ProfileScreen(
             }
 
             Text(
-                text = if (viewModel.fullName.value == "null") {
+                text = if (viewModel.fullName.value == "null" && !sessionModel.isShop) {
                     stringResource(R.string.full_name)
-                } else if (viewModel.shopName.value == "null") {
+                } else if (viewModel.shopName.value == "null" && sessionModel.isShop) {
                     stringResource(R.string.shop_name)
                 } else {
                     if (sessionModel.isShop) viewModel.shopName.value else viewModel.fullName.value
@@ -176,7 +185,7 @@ fun ProfileScreen(
                             viewModel.setSession(sessionModel.id, sessionModel.token, true)
                         }
 
-                        if (viewModel.shopId.value == "null") {
+                        if (!sessionModel.isShop && viewModel.shopId.value == "null") {
                             navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id))
                         }
                     },

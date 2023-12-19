@@ -127,9 +127,9 @@ fun ShopAccountScreen(
             HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
             // Condition photo profile
-            if (false) {
+            if (viewModel.imageString.value != "null") {
                 AsyncImage(
-                    model = "",
+                    model = viewModel.imageString.value,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
                     alignment = Center,

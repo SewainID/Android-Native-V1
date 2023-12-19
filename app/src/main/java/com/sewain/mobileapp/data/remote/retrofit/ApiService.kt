@@ -1,19 +1,18 @@
 package com.sewain.mobileapp.data.remote.retrofit
 
-import com.google.gson.annotations.SerializedName
 import com.sewain.mobileapp.data.remote.model.ChangePassword
-import com.sewain.mobileapp.data.remote.model.DetailUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.model.SocialMedia
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
-import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
+import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -64,8 +63,9 @@ interface ApiService {
         @Body changePassword: ChangePassword,
     ): ChangePasswordResponse
 
-    @POST("/api/v1/details-users")
-    suspend fun createDetailUser(
-        @Body detailUser: DetailUser,
-    ): CreateDetailUserResponse
+    @PUT("/api/v1/social-media/{id}")
+    suspend fun updateSocialMedia(
+        @Path("id") id: String,
+        @Body socialMedia: SocialMedia,
+    ): UpdateSocialMediaResponse
 }

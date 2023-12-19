@@ -366,11 +366,20 @@ fun DetailProfileScreen(
                         ) {
                             snackbarHostState.showSnackbar(message = "Error: No changes made")
                         } else {
+                            if (hasImage) {
+                                imageUri?.let { uri ->
+                                    val imageFile = uriToFile(uri, context)
+                                    viewModel.uploadImage(imageFile)
+                                }
+                                hasImage = false
+                            }
+
                             viewModel.updateUser(
                                 id,
                                 inputFullName,
                                 inputUsername,
                                 inputEmail,
+                                viewModel.imageString.value,
                             )
 
                             success = viewModel.success.value
@@ -379,14 +388,6 @@ fun DetailProfileScreen(
                             delay(2000)
                             if (success && (inputUsername.isNotEmpty() || inputEmail.isNotEmpty())) {
                                 snackbarHostState.showSnackbar(message = viewModel.message.value)
-                            }
-
-                            if (hasImage) {
-                                imageUri?.let { uri ->
-                                    val imageFile = uriToFile(uri, context)
-                                    viewModel.uploadImage(imageFile)
-                                }
-                                hasImage = false
                             }
                             snackbarHostState.showSnackbar(message = viewModel.message.value)
                             loading = false

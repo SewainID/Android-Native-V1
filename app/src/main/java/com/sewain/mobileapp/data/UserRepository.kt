@@ -3,16 +3,17 @@ package com.sewain.mobileapp.data
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.local.preferences.SessionPreferences
 import com.sewain.mobileapp.data.remote.model.ChangePassword
-import com.sewain.mobileapp.data.remote.model.DetailUser
+import com.sewain.mobileapp.data.remote.model.DetailsUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.model.SocialMedia
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
-import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
+import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 import com.sewain.mobileapp.utils.AppExecutors
@@ -68,8 +69,9 @@ class UserRepository private constructor(
         fullName: String,
         username: String,
         email: String,
+        photoUrl: String,
     ): UpdateUserByIDResponse {
-        return apiService.updateUserById(id, User(username, email, DetailUser(fullName = fullName)))
+        return apiService.updateUserById(id, User(username, email, DetailsUser(fullName = fullName, photoUrl = photoUrl)))
     }
 
     suspend fun changePassword(
@@ -81,11 +83,13 @@ class UserRepository private constructor(
         return apiService.changePassword(id, ChangePassword(currentPassword, newPassword, confirmPassword))
     }
 
-    suspend fun createDetailUser(
-        userId: String,
-        fullName: String,
-    ): CreateDetailUserResponse {
-        return apiService.createDetailUser(DetailUser(userId, fullName))
+    suspend fun updateSocialMedia(
+        id: String,
+        facebook: String,
+        instagram: String,
+        tiktok: String,
+    ): UpdateSocialMediaResponse {
+        return apiService.updateSocialMedia(id, SocialMedia(facebook, instagram, tiktok))
     }
 
     companion object {

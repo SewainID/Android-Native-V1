@@ -1,17 +1,13 @@
 package com.sewain.mobileapp.ui.screen.profile
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
-import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
-import com.sewain.mobileapp.data.remote.response.CreateDetailUserResponse
-import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
+import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaErrorResponse
+import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -60,6 +56,22 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val shopId: StateFlow<String>
         get() = _shopId
 
+    private val _facebook = MutableStateFlow("")
+    val facebook: StateFlow<String>
+        get() = _facebook
+
+    private val _instagram = MutableStateFlow("")
+    val instagram: StateFlow<String>
+        get() = _instagram
+
+    private val _tiktok = MutableStateFlow("")
+    val tiktok: StateFlow<String>
+        get() = _tiktok
+
+    private val _socialMediaId = MutableStateFlow("")
+    val socialMediaId: StateFlow<String>
+        get() = _socialMediaId
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()
@@ -74,22 +86,26 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getUserById(id: String) {
         viewModelScope.launch {
-            val data = repository.getUserById(id).results
+            val data = repository.getUserById(id).userResults
             _username.value = data?.username.toString()
             _email.value = data?.email.toString()
-            _fullName.value = data?.detailUser?.fullName.toString()
-            _imageString.value = data?.detailUser?.photoUrl.toString()
-            _shopId.value = data?.detailUser?.detailShop?.id.toString()
-            _shopName.value = data?.detailUser?.detailShop?.name.toString()
-            _usernameShop.value = data?.detailUser?.detailShop?.username.toString()
+            _fullName.value = data?.detailsUser?.fullName.toString()
+            _imageString.value = data?.detailsUser?.photoUrl.toString()
+            _shopId.value = data?.detailsUser?.detailShop?.id.toString()
+            _shopName.value = data?.detailsUser?.detailShop?.name.toString()
+            _usernameShop.value = data?.detailsUser?.detailShop?.username.toString()
+            _socialMediaId.value = data?.detailsUser?.socialMediaUser?.id.toString()
+            _facebook.value = data?.detailsUser?.socialMediaUser?.facebookUsername.toString()
+            _instagram.value = data?.detailsUser?.socialMediaUser?.instagramUsername.toString()
+            _tiktok.value = data?.detailsUser?.socialMediaUser?.tiktokUsername.toString()
         }
     }
 
-    suspend fun updateUser(id: String, fullName: String, username: String, email: String) {
+    suspend fun updateUser(id: String, fullName: String, username: String, email: String, photoUrl: String) {
         _loading.value = true
         try {
             //get success message
-            val message = repository.updateUserById(id, fullName, username, email)
+            val message = repository.updateUserById(id, fullName, username, email, photoUrl)
             _message.value = "Success: ${message.message}"
             _success.value = true
         } catch (e: HttpException) {
@@ -138,22 +154,26 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    suspend fun createDetailUser(id: String, fullName: String) {
+    suspend fun updateSocialMedia(
+        id: String,
+        facebook: String,
+        instagram: String,
+        tiktok: String,
+    ) {
         _loading.value = true
         try {
-            //get success message
-            val message = repository.createDetailUser(id, fullName)
-            _message.value = "Success: ${message.message}"
+            val data = repository.updateSocialMedia(id, facebook, instagram, tiktok)
+            _message.value = "Success: ${data.message}"
+            _facebook.value = data.results?.facebookUsername.toString()
+            _instagram.value = data.results?.instagramUsername.toString()
+            _tiktok.value = data.results?.tiktokUsername.toString()
         } catch (e: HttpException) {
-            //get error message
             val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, CreateDetailUserResponse::class.java)
+            val errorBody = Gson().fromJson(jsonInString, UpdateSocialMediaErrorResponse::class.java)
             val errorMessage = errorBody.message
             _message.value = "Error: $errorMessage"
-            _success.value = false
         } catch (e: SocketTimeoutException) {
             _message.value = "Error: Timeout! ${e.message}"
-            _success.value = false
         }
     }
 }
