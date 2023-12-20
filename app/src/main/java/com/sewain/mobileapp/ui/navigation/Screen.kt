@@ -26,7 +26,7 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String, token: String) = "profile/shopAccount/$id/$token"
     }
 
-    object Maps : Screen("maps")
+    object Maps : Screen("profile/address/maps")
     object CreateCatalog : Screen("create_catalog")
 
     object Login : Screen("login")

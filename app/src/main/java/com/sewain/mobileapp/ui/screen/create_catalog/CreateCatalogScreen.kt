@@ -473,7 +473,7 @@ fun CreateCatalogScreen(
     uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
-fun AddressesScreenPreview() {
+fun CreateCatalogScreenPreview() {
     SewainAppTheme {
         Surface(
             color = MaterialTheme.colorScheme.background
