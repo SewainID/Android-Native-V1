@@ -75,4 +75,5 @@
     <string name="day_maintenance">Day Maintenance</string>
     <string name="day_placeholder">Ex. 1, 2, 3, 4 etc.</string>
     <string name="add_catalog">Add Catalog</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
