@@ -78,7 +78,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
                     onQueryChange = viewModel::setSearchQuery,
                     modifier = Modifier
                 )
-
 //                BannerHome()
                 Text(
                     text = stringResource(R.string.new_arrivals),

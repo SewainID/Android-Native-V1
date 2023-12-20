@@ -3,7 +3,7 @@ package com.sewain.mobileapp.ui.navigation
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object DetailCatalog : Screen("detail_catalog/{id}")
-
+    object Checkout : Screen("checkout/{id}")
     object ListTransaction : Screen("list_transaction")
     object Notification : Screen("notification")
     object Profile : Screen("profile")

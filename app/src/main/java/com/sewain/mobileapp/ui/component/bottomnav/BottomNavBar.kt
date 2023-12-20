@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.checkout.CheckoutScreen
 import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
@@ -146,8 +147,11 @@ fun HomeBottomNavBar(
                 ShopAccountScreen(id, navController)
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
-                Log.d("Catalogs", backStackEntry.toString())
-                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "", navController)
+                // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Checkout.route) { backStackEntry ->
+                CheckoutScreen(id = backStackEntry.arguments?.getString("id") ?: "")
                 // Obtain the product ID and display the detail page
             }
         }
