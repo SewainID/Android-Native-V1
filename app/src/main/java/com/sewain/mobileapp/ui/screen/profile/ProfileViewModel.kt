@@ -1,12 +1,14 @@
 package com.sewain.mobileapp.ui.screen.profile
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaErrorResponse
-import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -71,6 +73,14 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private val _socialMediaId = MutableStateFlow("")
     val socialMediaId: StateFlow<String>
         get() = _socialMediaId
+
+    private val _longitude = MutableStateFlow(0.00)
+    val longitude: StateFlow<Double>
+        get() = _longitude
+
+    private val _latitude = MutableStateFlow(0.00)
+    val latitude: StateFlow<Double>
+        get() = _latitude
 
     fun logout() {
         viewModelScope.launch {
@@ -174,6 +184,24 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _message.value = "Error: $errorMessage"
         } catch (e: SocketTimeoutException) {
             _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
+
+    fun getDeviceLocation(
+        fusedLocationProviderClient: FusedLocationProviderClient
+    ) {
+        try {
+            val locationResult = fusedLocationProviderClient.lastLocation
+            locationResult.addOnSuccessListener { location ->
+                if (location != null) {
+                    Log.d("Test", "Latitude : ${location.latitude}")
+                    Log.d("Test", "Longitude : ${location.longitude}")
+                    _latitude.value = location.latitude
+                    _longitude.value = location.longitude
+                }
+            }
+        } catch (e: SecurityException) {
+            // Show error or something
         }
     }
 }

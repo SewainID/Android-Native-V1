@@ -151,7 +151,9 @@ fun HomeBottomNavBar(
                 // Obtain the product ID and display the detail page
             }
             composable(Screen.Maps.route) {
-                MapsScreen(navController = navController)
+                MapsScreen(
+                    navController = navController,
+                )
             }
             composable(Screen.CreateCatalog.route) {
                 CreateCatalogScreen(navController = navController)
