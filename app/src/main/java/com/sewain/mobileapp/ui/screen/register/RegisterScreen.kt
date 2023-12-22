@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -65,7 +64,6 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
@@ -154,7 +152,6 @@ fun RegisterScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterContent(
     modifier: Modifier,
@@ -172,11 +169,16 @@ fun RegisterContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.blob_element),
+            contentDescription = null,
+            modifier = modifier.size(625.dp),
+            alignment = Alignment.TopCenter,
+        )
 
-        Column(modifier = modifier.fillMaxSize()) {
+        // Main UI
+        Column {
             Box(
                 modifier = modifier
                     .padding(top = 50.dp)
@@ -244,8 +246,10 @@ fun RegisterContent(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,
@@ -285,8 +289,10 @@ fun RegisterContent(
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,
@@ -327,8 +333,10 @@ fun RegisterContent(
                 visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,
@@ -369,8 +377,10 @@ fun RegisterContent(
                 visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
                         handleColor = Gray700,

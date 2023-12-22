@@ -22,9 +22,12 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "profile/socialMedia/$id"
     }
 
-    object ShopAccount : Screen("profile/shopAccount/{id}") {
-        fun createRoute(id: String) = "profile/shopAccount/$id"
+    object ShopAccount : Screen("profile/shopAccount/{id}/{token}") {
+        fun createRoute(id: String, token: String) = "profile/shopAccount/$id/$token"
     }
+
+    object Maps : Screen("maps")
+    object CreateCatalog : Screen("create_catalog")
 
     object Login : Screen("login")
     object Register : Screen("register")

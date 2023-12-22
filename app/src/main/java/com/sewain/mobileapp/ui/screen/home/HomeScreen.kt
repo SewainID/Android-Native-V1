@@ -14,14 +14,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -47,6 +52,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
+import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.CatalogViewModelFactory
 import com.sewain.mobileapp.ui.component.GridCatalogItem
@@ -55,9 +61,13 @@ import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = viewModel(
-    factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
-),) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: HomeScreenViewModel = viewModel(
+        factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
+    ),
+    sessionModel: SessionModel,
+) {
     val items = viewModel.catalogs.collectAsLazyPagingItems()
     val query = viewModel.searchQuery.collectAsState()
 
@@ -68,10 +78,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
         ) {
             Column(
                 modifier = Modifier
-                    .padding(15.dp)
-                ,
+                    .padding(15.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ){
+            ) {
                 HeaderHome(navController)
                 SearchBar(
                     query = query.value,
@@ -85,6 +94,30 @@ fun HomeScreen(navController: NavController, viewModel: HomeScreenViewModel = vi
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(4.dp),
                 )
+
+                if (sessionModel.isShop) {
+                    Button(
+                        onClick = {
+                            navController.navigate(Screen.CreateCatalog.route)
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(8.dp),
+                        modifier = Modifier
+                            .align(End)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.add_catalog),
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+
+                        Text(
+                            text = stringResource(R.string.add_catalog),
+                        )
+                    }
+                }
+
                 CatalogsHome(items, navController)
             }
         }
@@ -117,6 +150,7 @@ fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>, navController: Na
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
+
             is LoadState.Error, is LoadState.NotLoading -> {
                 if (catalogItems.itemCount == 0) {
                     Button(
@@ -127,20 +161,22 @@ fun CatalogsHome(catalogItems: LazyPagingItems<CatalogEntity>, navController: Na
                     }
                 }
             }
-            else -> { /* Do nothing for other states */ }
+
+            else -> { /* Do nothing for other states */
+            }
         }
     }
 }
 
 @Composable
-fun HeaderHome(navController: NavController){
+fun HeaderHome(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Column{
+    ) {
+        Column {
             Text(
                 text = stringResource(R.string.welcome),
                 fontSize = 24.sp,
@@ -176,13 +212,13 @@ fun HeaderHome(navController: NavController){
 }
 
 @Composable
-fun BannerHome(){
+fun BannerHome() {
 
 }
 
 @Preview
 @Composable
-fun PreviewHeaderHome(){
+fun PreviewHeaderHome() {
     HeaderHome(rememberNavController())
 }
 
@@ -200,7 +236,10 @@ fun PreviewHeaderHome(){
 )
 @Composable
 fun PreviewBottomNavigationBar() {
-    HomeScreen(rememberNavController())
+    HomeScreen(
+        navController = rememberNavController(),
+        sessionModel = SessionModel("", "", false)
+    )
 }
 
 class FakeCatalogPagingSource : PagingSource<Int, CatalogEntity>() {

@@ -2,7 +2,6 @@ package com.sewain.mobileapp.ui.screen.login
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +22,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -45,7 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -141,7 +139,6 @@ fun LoginScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginContent(
     modifier: Modifier,
@@ -155,211 +152,222 @@ fun LoginContent(
     loading: Boolean,
     enabled: Boolean,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        Box(
-            modifier = modifier
-                .padding(top = 50.dp)
-                .size(125.dp)
-                .clip(CircleShape)
-                .align(CenterHorizontally)
-                .background(MaterialTheme.colorScheme.primary)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.logo_sewain),
-                contentDescription = null,
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.blob_element),
+            contentDescription = null,
+            modifier = modifier.size(625.dp),
+            alignment = TopCenter,
+        )
+
+        // Main UI
+        Column {
+            Box(
                 modifier = modifier
-                    .size(100.dp)
-                    .align(Alignment.Center),
-            )
-        }
-
-        Text(
-            text = stringResource(R.string.sign_in),
-            modifier = modifier
-                .padding(top = 32.dp)
-                .align(CenterHorizontally),
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = 48.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-
-        Text(
-            text = stringResource(R.string.sign_in_message),
-            modifier = modifier
-                .align(CenterHorizontally),
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = 21.sp,
-            fontWeight = FontWeight.Normal
-        )
-
-        OutlinedTextField(
-            value = inputEmail,
-            onValueChange = onInputEmail,
-            modifier = modifier
-                .padding(
-                    top = 48.dp,
-                    start = 8.dp,
-                    end = 8.dp
-                )
-                .size(360.dp, 58.dp)
-                .align(CenterHorizontally),
-            textStyle = TextStyle(
-                color = Gray700,
-                fontSize = 18.sp
-            ),
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.email),
-                    fontSize = 18.sp,
-                    color = Gray700
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Outlined.Email,
+                    .padding(top = 50.dp)
+                    .size(125.dp)
+                    .clip(CircleShape)
+                    .align(CenterHorizontally)
+                    .background(MaterialTheme.colorScheme.primary)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.logo_sewain),
                     contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = Color.Black,
-                selectionColors = TextSelectionColors(
-                    handleColor = Gray700,
-                    backgroundColor = Gray700
-                ),
-            )
-        )
-
-        OutlinedTextField(
-            value = inputPassword,
-            onValueChange = onInputPassword,
-            modifier = modifier
-                .padding(
-                    top = 13.dp,
-                    start = 8.dp,
-                    end = 8.dp
-                )
-                .size(360.dp, 58.dp)
-                .align(CenterHorizontally),
-            textStyle = TextStyle(
-                color = Gray700,
-                fontSize = 18.sp
-            ),
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.password),
-                    fontSize = 18.sp,
-                    color = Gray700
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Outlined.Lock,
-                    contentDescription = null,
-                    tint = Gray700
-                )
-            },
-            visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
-            singleLine = true,
-            shape = RoundedCornerShape(10.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.White,
-                cursorColor = Color.Black,
-                selectionColors = TextSelectionColors(
-                    handleColor = Gray700,
-                    backgroundColor = Gray700
-                ),
-            )
-        )
-
-        TextButton(
-            onClick = { },
-            modifier = modifier
-                .padding(end = 8.dp)
-                .align(End)
-        ) {
-            Text(
-                stringResource(R.string.forgot_password),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-
-        Button(
-            onClick = { onClickLogin() },
-            modifier
-                .padding(
-                    top = 16.dp,
-                    start = 8.dp,
-                    end = 8.dp
-                )
-                .size(360.dp, 58.dp)
-                .align(CenterHorizontally),
-            enabled = enabled,
-            shape = RoundedCornerShape(10.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            if (loading) {
-                CircularProgressIndicator(
-                    color = MaterialTheme.colorScheme.primary
-                )
-            } else {
-                Text(
-                    text = stringResource(R.string.sign_in),
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    modifier = modifier
+                        .size(100.dp)
+                        .align(Alignment.Center),
                 )
             }
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp),
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Divider(
-                modifier = modifier
-                    .width(150.dp)
-                    .padding(start = 16.dp)
-                    .align(CenterVertically),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary
-            )
 
             Text(
-                text = stringResource(R.string.or)
-            )
-
-            Divider(
+                text = stringResource(R.string.sign_in),
                 modifier = modifier
-                    .width(150.dp)
-                    .padding(end = 16.dp)
-                    .align(CenterVertically),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-
-        TextButton(
-            onClick = { navigateToRegister() },
-            modifier = modifier
-                .padding(top = 16.dp)
-                .align(CenterHorizontally)
-        ) {
-            Text(
-                stringResource(R.string.create_new_account),
+                    .padding(top = 32.dp)
+                    .align(CenterHorizontally),
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = 18.sp,
+                fontSize = 48.sp,
                 fontWeight = FontWeight.SemiBold
             )
-        }
 
+            Text(
+                text = stringResource(R.string.sign_in_message),
+                modifier = modifier
+                    .align(CenterHorizontally),
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = 21.sp,
+                fontWeight = FontWeight.Normal
+            )
+
+            OutlinedTextField(
+                value = inputEmail,
+                onValueChange = onInputEmail,
+                modifier = modifier
+                    .padding(
+                        top = 48.dp,
+                        start = 8.dp,
+                        end = 8.dp
+                    )
+                    .size(360.dp, 58.dp)
+                    .align(CenterHorizontally),
+                textStyle = TextStyle(
+                    color = Gray700,
+                    fontSize = 18.sp
+                ),
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.email),
+                        fontSize = 18.sp,
+                        color = Gray700
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Outlined.Email,
+                        contentDescription = null,
+                        tint = Gray700
+                    )
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(10.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    cursorColor = Color.Black,
+                    selectionColors = TextSelectionColors(
+                        handleColor = Gray700,
+                        backgroundColor = Gray700
+                    ),
+                )
+            )
+
+            OutlinedTextField(
+                value = inputPassword,
+                onValueChange = onInputPassword,
+                modifier = modifier
+                    .padding(
+                        top = 13.dp,
+                        start = 8.dp,
+                        end = 8.dp
+                    )
+                    .size(360.dp, 58.dp)
+                    .align(CenterHorizontally),
+                textStyle = TextStyle(
+                    color = Gray700,
+                    fontSize = 18.sp
+                ),
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.password),
+                        fontSize = 18.sp,
+                        color = Gray700
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Outlined.Lock,
+                        contentDescription = null,
+                        tint = Gray700
+                    )
+                },
+                visualTransformation = if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
+                singleLine = true,
+                shape = RoundedCornerShape(10.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    cursorColor = Color.Black,
+                    selectionColors = TextSelectionColors(
+                        handleColor = Gray700,
+                        backgroundColor = Gray700
+                    ),
+                )
+            )
+
+//            TextButton(
+//                onClick = { },
+//                modifier = modifier
+//                    .padding(end = 8.dp)
+//                    .align(End)
+//            ) {
+//                Text(
+//                    stringResource(R.string.forgot_password),
+//                    color = MaterialTheme.colorScheme.primary
+//                )
+//            }
+
+            Button(
+                onClick = { onClickLogin() },
+                modifier
+                    .padding(
+                        top = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp
+                    )
+                    .size(360.dp, 58.dp)
+                    .align(CenterHorizontally),
+                enabled = enabled,
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.sign_in),
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                HorizontalDivider(
+                    modifier = modifier
+                        .width(150.dp)
+                        .padding(start = 16.dp)
+                        .align(CenterVertically),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    text = stringResource(R.string.or)
+                )
+
+                HorizontalDivider(
+                    modifier = modifier
+                        .width(150.dp)
+                        .padding(end = 16.dp)
+                        .align(CenterVertically),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            TextButton(
+                onClick = { navigateToRegister() },
+                modifier = modifier
+                    .padding(top = 16.dp)
+                    .align(CenterHorizontally)
+            ) {
+                Text(
+                    stringResource(R.string.create_new_account),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+        }
     }
 }
 

@@ -17,10 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -28,15 +26,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sewain.mobileapp.R
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.create_catalog.CreateCatalogScreen
 import com.sewain.mobileapp.ui.screen.checkout.CheckoutScreen
 import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
 import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
 import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.MapsScreen
 import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
 import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
 import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
@@ -117,7 +116,7 @@ fun HomeBottomNavBar(
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController = navController, sessionModel = sessionModel)
             }
             composable(Screen.ListTransaction.route) {
                 //call our composable screens here
@@ -127,24 +126,27 @@ fun HomeBottomNavBar(
             }
             composable(Screen.Profile.route) {
                 //call our composable screens here
-                ProfileScreen(navController, sessionModel)
+                ProfileScreen(navController = navController, sessionModel = sessionModel)
             }
             composable(Screen.DetailProfile.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                DetailProfileScreen(id, navController, snackbarHostState)
+                DetailProfileScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
             }
             composable(Screen.ChangePassword.route) {
-                ChangeScreenPasswordScreen(navController)
+                val id = it.arguments?.getString("id") ?: ""
+                ChangeScreenPasswordScreen(id, navController, snackbarHostState)
             }
             composable(Screen.Adresses.route) {
                 AdressesScreen(navController)
             }
             composable(Screen.SocialMedia.route) {
-                SocialMediaScreen(navController)
+                val id = it.arguments?.getString("id") ?: ""
+                SocialMediaScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
             }
             composable(Screen.ShopAccount.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                ShopAccountScreen(id, navController)
+                val token = it.arguments?.getString("token") ?: ""
+                ShopAccountScreen(id = id, token = token, navController = navController)
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
                 DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "", navController)
@@ -153,6 +155,12 @@ fun HomeBottomNavBar(
             composable(Screen.Checkout.route) { backStackEntry ->
                 CheckoutScreen(id = backStackEntry.arguments?.getString("id") ?: "")
                 // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Maps.route) {
+                MapsScreen()
+            }
+            composable(Screen.CreateCatalog.route) {
+                CreateCatalogScreen(navController = navController)
             }
         }
     }
@@ -174,7 +182,7 @@ fun HomeBottomNavBar(
 fun PreviewBottomNavigationBar() {
     SewainAppTheme {
         HomeBottomNavBar(
-            sessionModel = SessionModel("", ""),
+            sessionModel = SessionModel("", "", false),
             snackbarHostState = remember { SnackbarHostState() },
         )
     }
