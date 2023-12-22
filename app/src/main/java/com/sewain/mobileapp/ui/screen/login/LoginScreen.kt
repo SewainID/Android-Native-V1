@@ -66,6 +66,7 @@ import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.Gray700
+import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -235,9 +236,10 @@ fun LoginContent(
                     disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
-                        handleColor = Gray700,
-                        backgroundColor = Gray700
+                        handleColor = RoyalBlue,
+                        backgroundColor = RoyalBlue
                     ),
+                    focusedIndicatorColor = RoyalBlue,
                 )
             )
 
@@ -279,9 +281,10 @@ fun LoginContent(
                     disabledContainerColor = Color.White,
                     cursorColor = Color.Black,
                     selectionColors = TextSelectionColors(
-                        handleColor = Gray700,
-                        backgroundColor = Gray700
+                        handleColor = RoyalBlue,
+                        backgroundColor = RoyalBlue
                     ),
+                    focusedIndicatorColor = RoyalBlue,
                 )
             )
 

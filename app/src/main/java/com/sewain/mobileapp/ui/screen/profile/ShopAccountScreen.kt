@@ -29,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -37,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -60,20 +62,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.di.Injection
 import com.sewain.mobileapp.ui.ViewModelFactory
+import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.Gray700
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShopAccountScreen(
     modifier: Modifier = Modifier,
     id: String,
-    token: String,
     navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    sessionModel: SessionModel,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory(Injection.provideUserRepository(LocalContext.current))
     ),
@@ -86,6 +93,8 @@ fun ShopAccountScreen(
     var loading by remember { mutableStateOf(false) }
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
+
+    val scope = rememberCoroutineScope()
 
     val scrollState = rememberScrollState()
 
@@ -107,7 +116,9 @@ fun ShopAccountScreen(
                         modifier = modifier
                             .padding(start = 8.dp)
                             .clickable {
-                                viewModel.setSession(id, token, false)
+                                if (!sessionModel.isShop) {
+                                    viewModel.setSession(id, sessionModel.token, false)
+                                }
                                 navController.navigateUp()
                             }
                     )
@@ -199,7 +210,7 @@ fun ShopAccountScreen(
                 ),
                 placeholder = {
                     Text(
-                        text = "Shop Name",
+                        text = if (viewModel.shopName.value == "null") stringResource(R.string.shop_name) else viewModel.shopName.value,
                         fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.secondary
                     )
@@ -248,7 +259,7 @@ fun ShopAccountScreen(
                 ),
                 placeholder = {
                     Text(
-                        text = "Username",
+                        text = if (viewModel.usernameShop.value == "null") stringResource(R.string.username_shop) else viewModel.usernameShop.value,
                         fontSize = 15.sp,
                         color = MaterialTheme.colorScheme.secondary
                     )
@@ -277,7 +288,41 @@ fun ShopAccountScreen(
 
             Button(
                 onClick = {
+                    scope.launch {
+                        if (
+                            inputShopName.isEmpty() &&
+                            inputUsername.isEmpty()
+                        ) {
+                            snackbarHostState.showSnackbar(message = "Error: No changes made")
+                        } else {
+                            if (
+                                inputShopName.isEmpty()
+                            ) {
+                                inputShopName = viewModel.shopName.value
+                            } else if (inputUsername.isEmpty()) {
+                                inputUsername = viewModel.usernameShop.value
+                            }
 
+                            viewModel.updateDetailShop(
+                                viewModel.shopId.value,
+                                inputShopName,
+                                inputUsername
+                            )
+
+                            loading = viewModel.loading.value
+                            success = viewModel.success.value
+
+                            delay(2000)
+                            snackbarHostState.showSnackbar(message = viewModel.message.value)
+
+                            if (success && !sessionModel.isShop) {
+                                navController.navigate(Screen.Profile.route)
+                            }
+
+                            loading = false
+                            enabled = true
+                        }
+                    }
                 },
                 modifier
                     .padding(top = 48.dp, start = 16.dp, end = 16.dp)
@@ -325,8 +370,9 @@ fun ShopAccountScreenPreview() {
         ) {
             ShopAccountScreen(
                 id = "",
-                token = "",
                 navController = rememberNavController(),
+                snackbarHostState = remember { SnackbarHostState() },
+                sessionModel = SessionModel("", "", false)
             )
         }
     }

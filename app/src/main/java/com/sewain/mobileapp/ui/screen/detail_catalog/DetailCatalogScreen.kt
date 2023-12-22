@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.di.Injection
@@ -71,7 +72,7 @@ fun DetailCatalogScreen(id : String, navController: NavController , viewModel: D
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ){
-                    DetailCatalog(catalog, goToCheckout)
+                    DetailCatalog(catalog, navController, goToCheckout)
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -87,7 +88,7 @@ fun DetailCatalogScreen(id : String, navController: NavController , viewModel: D
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailCatalog(catalog : CatalogItem, onClick : () -> Unit = {}) {
+fun DetailCatalog(catalog : CatalogItem,navController: NavController, onClick : () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
@@ -136,7 +137,7 @@ fun DetailCatalog(catalog : CatalogItem, onClick : () -> Unit = {}) {
     }}
     // IconButton at the top
     IconButton(
-        onClick = { /* Handle back press */ },
+        onClick = { navController.navigateUp() },
         modifier = Modifier
             .align(Alignment.TopStart)
     ) {
@@ -175,7 +176,7 @@ fun PreviewDetailCatalog(){
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
+        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"), rememberNavController())
     }
 }
 }
@@ -199,7 +200,8 @@ fun PreviewDarkDetailCatalog(){
                     photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46",
                     description = "anjay gojo",
                     size = "M"
-                )
+                ),
+                rememberNavController()
             )
         }
     }

@@ -131,7 +131,11 @@ fun HomeBottomNavBar(
             }
             composable(Screen.DetailProfile.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                DetailProfileScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
+                DetailProfileScreen(
+                    id = id,
+                    navController = navController,
+                    snackbarHostState = snackbarHostState
+                )
             }
             composable(Screen.ChangePassword.route) {
                 val id = it.arguments?.getString("id") ?: ""
@@ -142,14 +146,23 @@ fun HomeBottomNavBar(
             }
             composable(Screen.SocialMedia.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                SocialMediaScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
+                SocialMediaScreen(
+                    id = id,
+                    navController = navController,
+                    snackbarHostState = snackbarHostState
+                )
             }
             composable(Screen.ShopAccount.route) {
                 val id = it.arguments?.getString("id") ?: ""
-                val token = it.arguments?.getString("token") ?: ""
-                ShopAccountScreen(id = id, token = token, navController = navController)
+                ShopAccountScreen(
+                    id = id,
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    sessionModel = sessionModel
+                )
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
+                DetailCatalogScreen(navController = navController, id = backStackEntry.arguments?.getString("id") ?: "")
                 DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "", navController)
                 // Obtain the product ID and display the detail page
             }
