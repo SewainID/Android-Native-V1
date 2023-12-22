@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.di.Injection
@@ -46,7 +48,7 @@ import com.sewain.mobileapp.utils.rp
 @Composable
 fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewModel(
     factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
-)
+), navController: NavController
 ) {
     // React to state changes
     val catalog = viewModel.catalog.value
@@ -68,7 +70,7 @@ fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewMod
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ){
-                    DetailCatalog(catalog)
+                    DetailCatalog(catalog, navController)
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +85,7 @@ fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewMod
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailCatalog(catalog : CatalogItem) {
+fun DetailCatalog(catalog : CatalogItem, navController: NavController) {
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.onPrimary).fillMaxSize()) {
         LazyColumn {
             item {
@@ -132,7 +134,7 @@ fun DetailCatalog(catalog : CatalogItem) {
     }}
     // IconButton at the top
     IconButton(
-        onClick = { /* Handle back press */ },
+        onClick = { navController.navigateUp() },
         modifier = Modifier
             .align(Alignment.TopStart)
     ) {
@@ -168,7 +170,7 @@ fun DetailCatalog(catalog : CatalogItem) {
 @Composable
 fun PreviewDetailCatalog(){
     SewainAppTheme {
-        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
+        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"), navController = rememberNavController())
     }
 }
 
@@ -178,6 +180,6 @@ fun PreviewDetailCatalog(){
 @Composable
 fun PreviewDarkDetailCatalog(){
     SewainAppTheme {
-        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
+        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"), navController = rememberNavController())
     }
 }

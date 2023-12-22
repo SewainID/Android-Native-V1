@@ -3,6 +3,7 @@ package com.sewain.mobileapp.data.remote.retrofit
 import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.model.Shop
 import com.sewain.mobileapp.data.remote.model.SocialMedia
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
@@ -12,6 +13,7 @@ import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
+import com.sewain.mobileapp.data.remote.response.UpdateDetailShopResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
 import okhttp3.MultipartBody
@@ -68,4 +70,10 @@ interface ApiService {
         @Path("id") id: String,
         @Body socialMedia: SocialMedia,
     ): UpdateSocialMediaResponse
+
+    @PUT("/api/v1/detail-shops/{id}")
+    suspend fun updateDetailShop(
+        @Path("id") id: String,
+        @Body shop: Shop,
+    ): UpdateDetailShopResponse
 }

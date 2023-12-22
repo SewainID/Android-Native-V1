@@ -78,7 +78,7 @@ fun ProfileScreen(
     val username =
         if (sessionModel.isShop && viewModel.usernameShop.value == "null") {
             stringResource(R.string.username_shop)
-        } else if(sessionModel.isShop) {
+        } else if (sessionModel.isShop) {
             viewModel.usernameShop.value
         } else {
             viewModel.username.value
@@ -186,7 +186,11 @@ fun ProfileScreen(
                         }
 
                         if (!sessionModel.isShop && viewModel.shopName.value == "null") {
-                            navController.navigate(Screen.ShopAccount.createRoute(sessionModel.id, sessionModel.token))
+                            navController.navigate(
+                                Screen.ShopAccount.createRoute(
+                                    sessionModel.id
+                                )
+                            )
                         }
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -217,17 +221,25 @@ fun ProfileScreen(
                     .height(50.dp)
                     .border(1.dp, LightBlueGray, RoundedCornerShape(8.dp))
                     .clickable {
-                        navController.navigate(
-                            Screen.DetailProfile.createRoute(
-                                sessionModel.id
+                        if (sessionModel.isShop) {
+                            navController.navigate(
+                                Screen.ShopAccount.createRoute(
+                                    sessionModel.id
+                                )
                             )
-                        )
+                        } else {
+                            navController.navigate(
+                                Screen.DetailProfile.createRoute(
+                                    sessionModel.id
+                                )
+                            )
+                        }
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.edit_profile),
+                    text = if(sessionModel.isShop) stringResource(R.string.edit_shop) else stringResource(R.string.edit_profile),
                     modifier = modifier.padding(start = 16.dp),
                     color = MaterialTheme.colorScheme.secondary
                 )

@@ -199,4 +199,21 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             // Show error or something
         }
     }
+
+    suspend fun updateDetailShop(
+        id: String,
+        name: String,
+        username: String
+    ) {
+        _loading.value = true
+        try {
+            val data = repository.updateDetailShop(id, name, username)
+            _success.value = true
+            _message.value = "Success: ${data.message}"
+        } catch (e: HttpException) {
+            _message.value = "Error: ${e.message}"
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
 }

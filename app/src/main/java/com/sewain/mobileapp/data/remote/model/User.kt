@@ -7,6 +7,6 @@ data class User(
 
     val email: String,
 
-    @field:SerializedName("detail_user")
+    @field:SerializedName("DetailsUser")
     val detailUser: DetailsUser,
 )

@@ -6,6 +6,7 @@ import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.DetailsUser
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
+import com.sewain.mobileapp.data.remote.model.Shop
 import com.sewain.mobileapp.data.remote.model.SocialMedia
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
@@ -13,6 +14,7 @@ import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
+import com.sewain.mobileapp.data.remote.response.UpdateDetailShopResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
@@ -90,6 +92,14 @@ class UserRepository private constructor(
         tiktok: String,
     ): UpdateSocialMediaResponse {
         return apiService.updateSocialMedia(id, SocialMedia(facebook, instagram, tiktok))
+    }
+
+    suspend fun updateDetailShop(
+        id: String,
+        name: String,
+        username: String,
+    ): UpdateDetailShopResponse {
+        return apiService.updateDetailShop(id, Shop(name, username))
     }
 
     companion object {
