@@ -1,6 +1,9 @@
 package com.sewain.mobileapp.ui.screen.profile
 
+import android.content.Context
+import android.location.Location
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -74,13 +77,8 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val socialMediaId: StateFlow<String>
         get() = _socialMediaId
 
-    private val _longitude = MutableStateFlow(0.00)
-    val longitude: StateFlow<Double>
-        get() = _longitude
-
-    private val _latitude = MutableStateFlow(0.00)
-    val latitude: StateFlow<Double>
-        get() = _latitude
+    private val _locationState = mutableStateOf<Location?>(null)
+    val locationState: State<Location?> = _locationState
 
     fun logout() {
         viewModelScope.launch {
@@ -194,10 +192,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             val locationResult = fusedLocationProviderClient.lastLocation
             locationResult.addOnSuccessListener { location ->
                 if (location != null) {
-                    Log.d("Test", "Latitude : ${location.latitude}")
-                    Log.d("Test", "Longitude : ${location.longitude}")
-                    _latitude.value = location.latitude
-                    _longitude.value = location.longitude
+                    _locationState.value = location
                 }
             }
         } catch (e: SecurityException) {

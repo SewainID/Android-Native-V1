@@ -76,4 +76,5 @@
     <string name="day_placeholder">Ex. 1, 2, 3, 4 etc.</string>
     <string name="add_catalog">Add Catalog</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps_permission">Are you want to activated GPS Features?</string>
 </resources>
