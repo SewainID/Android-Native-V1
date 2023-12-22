@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -102,9 +101,16 @@ dependencies {
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")
     implementation("androidx.room:room-paging:$roomVersion")
 
-    // maps
+    // Google maps
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    // Google maps for compose
     implementation("com.google.maps.android:maps-compose:4.3.0")
-    implementation("com.google.maps.android:maps-compose-utils:4.3.0")
+
+    // KTX for the Maps SDK for Android
+    implementation("com.google.maps.android:maps-ktx:5.0.0")
+    // KTX for the Maps SDK for Android Utility Library
+    implementation("com.google.maps.android:maps-utils-ktx:5.0.0")
 
     // testing
     testImplementation("junit:junit:4.13.2")

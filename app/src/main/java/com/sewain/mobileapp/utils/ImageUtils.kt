@@ -27,22 +27,4 @@ fun uriToFile(selectedImageUri: Uri, context: Context): File {
     outputStream.close()
     inputStream.close()
     return myFile
-
-//    val contentResolver = context.contentResolver
-//    val file = File(context.cacheDir, contentResolver.getFileName(selectedImageUri))
-//    val inputStream = contentResolver.openInputStream(selectedImageUri)
-//    val outputStream = FileOutputStream(file)
-//    inputStream?.copyTo(outputStream)
-//    return file
 }
-
-//@SuppressLint("Range")
-//fun ContentResolver.getFileName(uri: Uri): String {
-//    var name = ""
-//    val cursor = this.query(uri, null, null, null, null)
-//    cursor?.use {
-//        it.moveToFirst()
-//        name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-//    }
-//    return name
-//}

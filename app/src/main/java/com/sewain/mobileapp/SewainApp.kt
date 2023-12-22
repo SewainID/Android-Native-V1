@@ -1,6 +1,5 @@
 package com.sewain.mobileapp
 
-import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -52,7 +51,10 @@ fun SewainApp(
                 )
             }
             composable(Screen.Home.route) {
-                HomeBottomNavBar(sessionModel, snackbarHostState)
+                HomeBottomNavBar(
+                    sessionModel = sessionModel,
+                    snackbarHostState = snackbarHostState,
+                )
             }
         }
     }

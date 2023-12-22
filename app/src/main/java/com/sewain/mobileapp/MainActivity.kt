@@ -15,14 +15,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sessionPreferences = SessionPreferences.getInstance(this.datastore)
-
         setContent {
             SewainAppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SewainApp(sessionPreferences)
+                    SewainApp(
+                        sessionPreferences = sessionPreferences,
+                    )
                 }
             }
         }

@@ -73,7 +73,8 @@ fun HomeBottomNavBar(
                 currentRoute == Screen.ChangePassword.route ||
                 currentRoute == Screen.Adresses.route ||
                 currentRoute == Screen.SocialMedia.route ||
-                currentRoute == Screen.ShopAccount.route
+                currentRoute == Screen.ShopAccount.route ||
+                currentRoute == Screen.Maps.route
             ) {
                 currentRoute = Screen.Profile.route
             }
@@ -157,7 +158,9 @@ fun HomeBottomNavBar(
                 // Obtain the product ID and display the detail page
             }
             composable(Screen.Maps.route) {
-                MapsScreen()
+                MapsScreen(
+                    navController = navController,
+                )
             }
             composable(Screen.CreateCatalog.route) {
                 CreateCatalogScreen(navController = navController)
