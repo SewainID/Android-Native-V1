@@ -21,6 +21,8 @@ android {
         }
 
         buildConfigField("String", "BASE_URL", "${project.findProperty("BASE_URL")}")
+        manifestPlaceholders["MAPS_API_KEY"] = System.getenv("MAPS_API_KEY") ?: "defaultKey"
+
     }
 
     buildTypes {
@@ -120,4 +122,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // env
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
 }
