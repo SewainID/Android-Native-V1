@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -28,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.screen.create_catalog.CreateCatalogScreen
+import com.sewain.mobileapp.ui.screen.checkout.CheckoutScreen
 import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
 import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
@@ -39,7 +41,9 @@ import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
 import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.ui.theme.SteelBlue
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeBottomNavBar(
     sessionModel: SessionModel,
@@ -145,8 +149,11 @@ fun HomeBottomNavBar(
                 ShopAccountScreen(id = id, token = token, navController = navController)
             }
             composable(Screen.DetailCatalog.route) { backStackEntry ->
-                Log.d("Catalogs", backStackEntry.toString())
-                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "")
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "", navController)
+                // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Checkout.route) { backStackEntry ->
+                CheckoutScreen(id = backStackEntry.arguments?.getString("id") ?: "")
                 // Obtain the product ID and display the detail page
             }
             composable(Screen.Maps.route) {

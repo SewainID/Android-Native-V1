@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.di.Injection
@@ -44,7 +45,7 @@ import com.sewain.mobileapp.ui.theme.SewainAppTheme
 import com.sewain.mobileapp.utils.rp
 
 @Composable
-fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewModel(
+fun DetailCatalogScreen(id : String, navController: NavController , viewModel: DetailCatalogViewModel = viewModel(
     factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
 )
 ) {
@@ -56,19 +57,21 @@ fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewMod
         viewModel.fetchCatalog(id)
     }
 
+    val goToCheckout = {
+        navController.navigate("checkout/${id}")
+    }
+
     SewainAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-
-            }
             if (catalog != null) {
                 Column(
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ){
-                    DetailCatalog(catalog)
+                    DetailCatalog(catalog, goToCheckout)
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -77,14 +80,15 @@ fun DetailCatalogScreen(id : String, viewModel: DetailCatalogViewModel = viewMod
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailCatalog(catalog : CatalogItem) {
-    Box(modifier = Modifier.background(MaterialTheme.colorScheme.onPrimary).fillMaxSize()) {
+fun DetailCatalog(catalog : CatalogItem, onClick : () -> Unit = {}) {
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
         AsyncImage(
@@ -141,7 +145,6 @@ fun DetailCatalog(catalog : CatalogItem) {
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .background(MaterialTheme.colorScheme.onPrimary)
                 .fillMaxWidth()
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -159,7 +162,7 @@ fun DetailCatalog(catalog : CatalogItem) {
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            CustomButton(text = "Book Now", onClick = { /* Handle booking */ })
+            CustomButton(text = "Book Now", onClick = onClick)
         }
 }
 }
@@ -168,8 +171,13 @@ fun DetailCatalog(catalog : CatalogItem) {
 @Composable
 fun PreviewDetailCatalog(){
     SewainAppTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
         DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
     }
+}
 }
 
 @Preview(showBackground = true,
@@ -178,6 +186,21 @@ fun PreviewDetailCatalog(){
 @Composable
 fun PreviewDarkDetailCatalog(){
     SewainAppTheme {
-        DetailCatalog(CatalogItem(id = "1", price = 10000.0, name = "gojo", dayRent = 3, photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46", description = "anjay gojo", size = "M"))
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            DetailCatalog(
+                CatalogItem(
+                    id = "1",
+                    price = 10000.0,
+                    name = "gojo",
+                    dayRent = 3,
+                    photoUrl = "https://down-id.img.susercontent.com/file/bc2dc2f92c402aa078b5409470625b46",
+                    description = "anjay gojo",
+                    size = "M"
+                )
+            )
+        }
     }
 }

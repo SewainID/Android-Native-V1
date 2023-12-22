@@ -17,6 +17,7 @@ import com.sewain.mobileapp.R
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    trailingIcon: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     SearchBar(
@@ -38,7 +39,8 @@ fun SearchBar(
         shape = MaterialTheme.shapes.large,
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 48.dp)
+            .heightIn(min = 48.dp),
+        trailingIcon = trailingIcon
     ) {
     }
 }

@@ -11,6 +11,7 @@ import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
+import com.sewain.mobileapp.data.remote.response.PredictionResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
@@ -36,7 +37,8 @@ interface ApiService {
     suspend fun getCatalogs(
         @Query("page") page: Int = 1,
         @Query("per_page") size: Int = 20,
-        @Query("search") search: String? = null
+        @Query("search") search: String? = null,
+        @Query("shop_id") shop_id: String? = null
     ): CatalogsResponse
 
     @GET("/api/v1/users/{id}")
@@ -68,4 +70,10 @@ interface ApiService {
         @Path("id") id: String,
         @Body socialMedia: SocialMedia,
     ): UpdateSocialMediaResponse
+
+    @Multipart
+    @POST("/api/v1/ml/prediction")
+    suspend fun predictionImage(
+        @Part image: MultipartBody.Part
+    ): PredictionResponse
 }

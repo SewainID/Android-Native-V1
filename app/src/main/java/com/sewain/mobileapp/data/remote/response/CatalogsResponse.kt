@@ -47,7 +47,22 @@ data class CatalogItem(
 	val photoUrl: String? = null,
 
 	@field:SerializedName("status")
-	val status: String? = null
+	val status: String? = null,
+
+	@field:SerializedName("shop")
+	val shop: ShopCatalog? = null
+) : Parcelable
+
+@Parcelize
+data class ShopCatalog(
+	@field:SerializedName("username")
+	val username: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null
 ) : Parcelable
 
 @Parcelize
