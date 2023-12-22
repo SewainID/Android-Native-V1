@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics-android:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("androidx.compose.material:material-icons-extended")
 
     // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

@@ -1,6 +1,9 @@
 package com.sewain.mobileapp.ui.screen.home
 
 import android.content.res.Configuration
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,13 +20,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.End
@@ -59,6 +65,7 @@ import com.sewain.mobileapp.ui.component.GridCatalogItem
 import com.sewain.mobileapp.ui.component.SearchBar
 import com.sewain.mobileapp.ui.navigation.Screen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import com.sewain.mobileapp.utils.uriToFile
 
 @Composable
 fun HomeScreen(
@@ -70,7 +77,18 @@ fun HomeScreen(
 ) {
     val items = viewModel.catalogs.collectAsLazyPagingItems()
     val query = viewModel.searchQuery.collectAsState()
+    val context = LocalContext.current
 
+    // Register the activity result launcher
+    val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        // Handle the picked image URI
+        uri?.let { val imageFile = uriToFile(uri, context)
+            viewModel.processImagePrediction(imageFile) }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initImagePickerLauncher(imagePickerLauncher)
+    }
     SewainAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -82,11 +100,27 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 HeaderHome(navController)
-                SearchBar(
-                    query = query.value,
-                    onQueryChange = viewModel::setSearchQuery,
-                    modifier = Modifier
-                )
+                    SearchBar(
+                        query = query.value,
+                        onQueryChange = viewModel::setSearchQuery,
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            if (!viewModel.loading.value) {
+                                IconButton(
+                                    onClick = { viewModel.pickImageFromGallery() },
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                ) {
+                                    Icon(Icons.Filled.CameraAlt, contentDescription = "Pick Image")
+                                }
+                            } else {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                )
+                            }
+                        }
+                    )
 //                BannerHome()
                 Text(
                     text = stringResource(R.string.new_arrivals),

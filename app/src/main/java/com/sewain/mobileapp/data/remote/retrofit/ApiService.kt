@@ -11,6 +11,7 @@ import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.GetUserbyIDResponse
 import com.sewain.mobileapp.data.remote.response.LoginResponse
+import com.sewain.mobileapp.data.remote.response.PredictionResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
 import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
@@ -69,4 +70,10 @@ interface ApiService {
         @Path("id") id: String,
         @Body socialMedia: SocialMedia,
     ): UpdateSocialMediaResponse
+
+    @Multipart
+    @POST("/api/v1/ml/prediction")
+    suspend fun predictionImage(
+        @Part image: MultipartBody.Part
+    ): PredictionResponse
 }

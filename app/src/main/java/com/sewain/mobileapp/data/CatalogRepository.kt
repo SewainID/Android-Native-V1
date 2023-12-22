@@ -8,11 +8,17 @@ import androidx.paging.PagingData
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
 import com.sewain.mobileapp.data.local.room.CatalogDao
 import com.sewain.mobileapp.data.local.room.SewainDatabase
+import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
+import com.sewain.mobileapp.data.remote.response.PredictionResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 import com.sewain.mobileapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
+import java.io.File
 
 class CatalogRepository private constructor(
     private val apiService: ApiService,
@@ -39,6 +45,18 @@ class CatalogRepository private constructor(
         return apiService.getCatalogById(catalogId)
     }
 
+    suspend fun predictionImage(imageFile: File): PredictionResponse {
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val image = MultipartBody.Part.createFormData(
+            "image",
+            imageFile.name,
+            requestImageFile
+        )
+
+        return apiService.predictionImage(image)
+    }
+
+
 
 //    fun addCatalog(imageFile: File, description: String) = liveData {
 //        emit(Result.Loading)
@@ -61,6 +79,8 @@ class CatalogRepository private constructor(
 //        }
 //
 //    }
+
+
 
     companion object {
         @Volatile
