@@ -14,7 +14,8 @@ import com.sewain.mobileapp.data.remote.retrofit.ApiService
 class CatalogsRemoteMediator(
     private val database: SewainDatabase,
     private val apiService: ApiService,
-    private val querySearch: String
+    private val querySearch: String,
+    private val shopId: String? = null,
 ) : RemoteMediator<Int, CatalogEntity>() {
 
     private companion object {
@@ -50,7 +51,7 @@ class CatalogsRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getCatalogs(page, state.config.pageSize, querySearch)
+            val responseData = apiService.getCatalogs(page, state.config.pageSize, querySearch, shopId)
             val endOfPaginationReached = responseData.results.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {

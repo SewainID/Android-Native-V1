@@ -84,9 +84,13 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(id : String, viewModel: CheckoutViewModel = viewModel(
-    factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
-)
+fun CheckoutScreen(
+    id: String, viewModel: CheckoutViewModel = viewModel(
+        factory = CatalogViewModelFactory(
+            Injection.provideCatalogRepository(LocalContext.current),
+            Injection.provideUserRepository(LocalContext.current)
+        )
+    )
 ) {
     // React to state changes
     val catalog = viewModel.catalog.value
@@ -153,19 +157,44 @@ fun CheckoutScreen(id : String, viewModel: CheckoutViewModel = viewModel(
                 },
             ) { innerPadding ->
                 Column(
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier
+                        .padding(innerPadding)
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                ){
+                ) {
                     AddressContainer()
-                    Spacer(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp).height(1.dp).background(MaterialTheme.colorScheme.primary))
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
                     ProductCard(catalog, stateDatePicker, showDatePicker)
                     CustomDateRangePicker(stateDatePicker, showDatePicker)
-                    Spacer(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp).height(1.dp).background(MaterialTheme.colorScheme.primary))
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
                     DeliveryOption()
-                    Spacer(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp).height(1.dp).background(MaterialTheme.colorScheme.primary))
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
                     TotalSection(totalAmount.value)
-                    Spacer(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp).height(1.dp).background(MaterialTheme.colorScheme.primary))
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
                     GoToPaymentButton()
                 }
             }
@@ -174,21 +203,28 @@ fun CheckoutScreen(id : String, viewModel: CheckoutViewModel = viewModel(
 }
 
 @Composable
-fun AddressContainer(){
-    Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp)){
+fun AddressContainer() {
+    Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp)) {
         Text(
             text = "Alamat Pengiriman",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .shadow(elevation = 16.dp, shape = RoundedCornerShape(15.dp)) // Add shadow with specified elevation
-            .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(15.dp))
-            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(15.dp))
-            .padding(8.dp)
-        ){
-            Row(){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(
+                    elevation = 16.dp,
+                    shape = RoundedCornerShape(15.dp)
+                ) // Add shadow with specified elevation
+                .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(15.dp))
+                .border(
+                    BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .padding(8.dp)
+        ) {
+            Row() {
                 Text(
                     text = "Nama Penerima : ",
                     style = MaterialTheme.typography.titleSmall,
@@ -200,7 +236,7 @@ fun AddressContainer(){
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            Row(){
+            Row() {
                 Text(
                     text = "Alamat Lengkap : ",
                     style = MaterialTheme.typography.titleSmall,
@@ -212,7 +248,7 @@ fun AddressContainer(){
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            Row(){
+            Row() {
                 Text(
                     text = "No Telpon : ",
                     style = MaterialTheme.typography.titleSmall,
@@ -230,7 +266,11 @@ fun AddressContainer(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductCard(catalog : CatalogItem?, stateDatePicker : DateRangePickerState, showDatePicker: MutableState<Boolean>){
+fun ProductCard(
+    catalog: CatalogItem?,
+    stateDatePicker: DateRangePickerState,
+    showDatePicker: MutableState<Boolean>
+) {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     val startDate = stateDatePicker.selectedStartDateMillis?.let { millis ->
@@ -240,59 +280,71 @@ fun ProductCard(catalog : CatalogItem?, stateDatePicker : DateRangePickerState, 
     val endDate = stateDatePicker.selectedEndDateMillis?.let { millis ->
         dateFormat.format(Date(millis))
     } ?: "Not set"
-    Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp)){
+    Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp)) {
         Text(
             text = catalog?.shop?.name ?: "",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .shadow(elevation = 16.dp, shape = RoundedCornerShape(15.dp)) // Add shadow with specified elevation
-            .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(15.dp))
-            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(15.dp))
-            .padding(8.dp)
-        ){
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = catalog?.photoUrl, contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(4.dp))
-            )
-            Column (modifier = Modifier.padding(8.dp)){
-                Text(text = catalog?.name ?: "", style = MaterialTheme.typography.titleMedium,)
-                Text(text = catalog?.size ?: "", style = MaterialTheme.typography.bodySmall,)
-                Text(
-                    text = "${catalog?.price?.rp() ?: 0} / ${catalog?.dayRent ?: 0} Days",
-                    style = MaterialTheme.typography.bodySmall,
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(
+                    elevation = 16.dp,
+                    shape = RoundedCornerShape(15.dp)
+                ) // Add shadow with specified elevation
+                .background(MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(15.dp))
+                .border(
+                    BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+                    shape = RoundedCornerShape(15.dp)
                 )
-                Row(
-                    modifier = Modifier.fillMaxWidth(), // Ensure the row fills the maximum width
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween // This will space out the children
-                ){
+                .padding(8.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AsyncImage(
+                    model = catalog?.photoUrl, contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                )
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(text = catalog?.name ?: "", style = MaterialTheme.typography.titleMedium)
+                    Text(text = catalog?.size ?: "", style = MaterialTheme.typography.bodySmall)
                     Text(
-                        text = "$startDate - $endDate",
+                        text = "${catalog?.price?.rp() ?: 0} / ${catalog?.dayRent ?: 0} Days",
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
                     )
-                    IconButton(onClick = { showDatePicker.value = true}) {
-                        Icon(Icons.Filled.DateRange, contentDescription = "Localized description")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(), // Ensure the row fills the maximum width
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween // This will space out the children
+                    ) {
+                        Text(
+                            text = "$startDate - $endDate",
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        IconButton(onClick = { showDatePicker.value = true }) {
+                            Icon(
+                                Icons.Filled.DateRange,
+                                contentDescription = "Localized description"
+                            )
+                        }
                     }
-                }
 
+                }
             }
         }
     }
 }
-}
 
 @Composable
 fun DeliveryOption() {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)) {
         Text(
             text = "Opsi Pengiriman",
             fontWeight = FontWeight.Bold,
@@ -308,12 +360,16 @@ fun DeliveryOption() {
                 onClick = { /* Handle delivery option selection */ }
             )
             Column {
-                Text(text = "Reguler",
+                Text(
+                    text = "Reguler",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary)
-                Text(text = "Akan diterima pada tanggal 1 - 2 Jan",
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "Akan diterima pada tanggal 1 - 2 Jan",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary)
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
         // Add more spacing or dividers as needed
@@ -328,16 +384,21 @@ fun PromoCodeSection() {
 
 @Composable
 fun TotalSection(totalAmount: Double) {
-    Row (horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         Text(
             text = "Total :",
             style = MaterialTheme.typography.titleMedium,
         )
         Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = totalAmount.rp(),
-                style = MaterialTheme.typography.titleMedium,
-            )
+        Text(
+            text = totalAmount.rp(),
+            style = MaterialTheme.typography.titleMedium,
+        )
     }
 }
 
@@ -345,22 +406,25 @@ fun TotalSection(totalAmount: Double) {
 fun GoToPaymentButton() {
     CustomButton(
         text = "Go To Payment",
-        onClick = {  },
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp))
+        onClick = { },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
     )
 }
 
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PreviewCheckoutScreen(){
+fun PreviewCheckoutScreen() {
     CheckoutScreen(id = "1")
 }
 
-@Preview(showBackground = true,
+@Preview(
+    showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun PreviewDarkCheckoutScreen(){
+fun PreviewDarkCheckoutScreen() {
     CheckoutScreen(id = "1")
 }

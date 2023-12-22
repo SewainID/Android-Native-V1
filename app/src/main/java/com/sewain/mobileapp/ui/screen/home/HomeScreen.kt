@@ -71,20 +71,30 @@ import com.sewain.mobileapp.utils.uriToFile
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeScreenViewModel = viewModel(
-        factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
+        factory = CatalogViewModelFactory(
+            Injection.provideCatalogRepository(LocalContext.current),
+            Injection.provideUserRepository(
+                LocalContext.current
+            )
+        )
     ),
     sessionModel: SessionModel,
 ) {
+    viewModel.getUserById(sessionModel.id)
+
     val items = viewModel.catalogs.collectAsLazyPagingItems()
     val query = viewModel.searchQuery.collectAsState()
     val context = LocalContext.current
 
     // Register the activity result launcher
-    val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        // Handle the picked image URI
-        uri?.let { val imageFile = uriToFile(uri, context)
-            viewModel.processImagePrediction(imageFile) }
-    }
+    val imagePickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            // Handle the picked image URI
+            uri?.let {
+                val imageFile = uriToFile(uri, context)
+                viewModel.processImagePrediction(imageFile)
+            }
+        }
 
     LaunchedEffect(Unit) {
         viewModel.initImagePickerLauncher(imagePickerLauncher)
@@ -100,27 +110,27 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 HeaderHome(navController)
-                    SearchBar(
-                        query = query.value,
-                        onQueryChange = viewModel::setSearchQuery,
-                        modifier = Modifier.fillMaxWidth(),
-                        trailingIcon = {
-                            if (!viewModel.loading.value) {
-                                IconButton(
-                                    onClick = { viewModel.pickImageFromGallery() },
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                ) {
-                                    Icon(Icons.Filled.CameraAlt, contentDescription = "Pick Image")
-                                }
-                            } else {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .size(48.dp)
-                                )
+                SearchBar(
+                    query = query.value,
+                    onQueryChange = viewModel::setSearchQuery,
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        if (!viewModel.loading.value) {
+                            IconButton(
+                                onClick = { viewModel.pickImageFromGallery() },
+                                modifier = Modifier
+                                    .size(48.dp)
+                            ) {
+                                Icon(Icons.Filled.CameraAlt, contentDescription = "Pick Image")
                             }
+                        } else {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .size(48.dp)
+                            )
                         }
-                    )
+                    }
+                )
 //                BannerHome()
                 Text(
                     text = stringResource(R.string.new_arrivals),
@@ -130,6 +140,7 @@ fun HomeScreen(
                 )
 
                 if (sessionModel.isShop) {
+                    viewModel.setShopId(viewModel.data.value)
                     Button(
                         onClick = {
                             navController.navigate(Screen.CreateCatalog.route)
@@ -150,6 +161,8 @@ fun HomeScreen(
                             text = stringResource(R.string.add_catalog),
                         )
                     }
+                } else {
+                    viewModel.setShopId(null)
                 }
 
                 CatalogsHome(items, navController)

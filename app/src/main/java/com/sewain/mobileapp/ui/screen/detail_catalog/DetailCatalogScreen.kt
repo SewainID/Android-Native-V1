@@ -47,7 +47,8 @@ import com.sewain.mobileapp.utils.rp
 
 @Composable
 fun DetailCatalogScreen(id : String, navController: NavController , viewModel: DetailCatalogViewModel = viewModel(
-    factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current))
+    factory = CatalogViewModelFactory(Injection.provideCatalogRepository(LocalContext.current),
+        Injection.provideUserRepository(LocalContext.current))
 )
 ) {
     // React to state changes
