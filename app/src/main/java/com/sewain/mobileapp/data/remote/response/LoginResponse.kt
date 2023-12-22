@@ -8,10 +8,13 @@ data class LoginResponse(
 	val message: String? = null,
 
 	@field:SerializedName("results")
-	val results: ResultsLogin? = null
+	val results: LoginResults? = null
 )
 
-data class ResultsLogin(
+data class LoginResults(
+
+	@field:SerializedName("id")
+	val id: String? = null,
 
 	@field:SerializedName("email")
 	val email: String? = null,

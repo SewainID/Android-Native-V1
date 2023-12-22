@@ -1,13 +1,8 @@
 package com.sewain.mobileapp.ui.screen.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import com.google.gson.Gson
-import com.sewain.mobileapp.data.SewainRepository
 import com.sewain.mobileapp.data.UserRepository
-import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +29,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             val data = repository.loginUser(email, password)
             _signInMessage.value = "Success: ${data.message}"
             _signInSuccess.value = true
-            repository.saveSession(data.results?.token!!, data.results.username!!, true)
+            repository.saveSession(data.results?.id!!, data.results.token!!, false)
         } catch (e: HttpException) {
             //get error message
             val jsonInString = e.response()?.errorBody()?.string()
@@ -46,9 +41,5 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             _signInMessage.value = "Error: Timeout! ${e.message}"
             _signInSuccess.value = false
         }
-    }
-
-    fun getSession(): LiveData<SessionModel> {
-        return repository.getSession().asLiveData()
     }
 }

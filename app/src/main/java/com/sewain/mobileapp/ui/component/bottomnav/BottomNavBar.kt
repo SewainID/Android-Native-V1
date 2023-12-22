@@ -1,36 +1,54 @@
 package com.sewain.mobileapp.ui.component.bottomnav
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.create_catalog.CreateCatalogScreen
+import com.sewain.mobileapp.ui.screen.checkout.CheckoutScreen
+import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogScreen
 import com.sewain.mobileapp.ui.screen.home.HomeScreen
-import com.sewain.mobileapp.ui.screen.login.LoginScreen
+import com.sewain.mobileapp.ui.screen.profile.AdressesScreen
+import com.sewain.mobileapp.ui.screen.profile.ChangeScreenPasswordScreen
+import com.sewain.mobileapp.ui.screen.profile.DetailProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.MapsScreen
+import com.sewain.mobileapp.ui.screen.profile.ProfileScreen
+import com.sewain.mobileapp.ui.screen.profile.ShopAccountScreen
+import com.sewain.mobileapp.ui.screen.profile.SocialMediaScreen
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import com.sewain.mobileapp.ui.theme.SteelBlue
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeBottomNavBar() {
+fun HomeBottomNavBar(
+    sessionModel: SessionModel,
+    snackbarHostState: SnackbarHostState,
+) {
 //initializing the default selected item
     var navigationSelectedItem by remember {
         mutableIntStateOf(0)
@@ -40,19 +58,33 @@ fun HomeBottomNavBar() {
      * by using the rememberNavController()
      * we can get the instance of the navController
      */
+
     val navController = rememberNavController()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    var currentRoute = navBackStackEntry?.destination?.route
 
 //scaffold to hold our bottom navigation Bar
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
+            if (currentRoute == Screen.DetailProfile.route ||
+                currentRoute == Screen.ChangePassword.route ||
+                currentRoute == Screen.Adresses.route ||
+                currentRoute == Screen.SocialMedia.route ||
+                currentRoute == Screen.ShopAccount.route
+            ) {
+                currentRoute = Screen.Profile.route
+            }
+
             NavigationBar {
                 //getting the list of bottom navigation items for our data class
-                BottomNavItem().bottomNavigationItems().forEachIndexed {index,navigationItem ->
+                BottomNavItem().bottomNavigationItems().forEachIndexed { index, navigationItem ->
 
                     //iterating all items with their respective indexes
                     NavigationBarItem(
-                        selected = index == navigationSelectedItem,
+                        selected = navigationItem.route == currentRoute,
                         label = {
                             Text(navigationItem.label)
                         },
@@ -71,7 +103,8 @@ fun HomeBottomNavBar() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(indicatorColor = SteelBlue)
                     )
                 }
             }
@@ -80,9 +113,10 @@ fun HomeBottomNavBar() {
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(paddingValues = paddingValues)) {
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
             composable(Screen.Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController = navController, sessionModel = sessionModel)
             }
             composable(Screen.ListTransaction.route) {
                 //call our composable screens here
@@ -92,6 +126,41 @@ fun HomeBottomNavBar() {
             }
             composable(Screen.Profile.route) {
                 //call our composable screens here
+                ProfileScreen(navController = navController, sessionModel = sessionModel)
+            }
+            composable(Screen.DetailProfile.route) {
+                val id = it.arguments?.getString("id") ?: ""
+                DetailProfileScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
+            }
+            composable(Screen.ChangePassword.route) {
+                val id = it.arguments?.getString("id") ?: ""
+                ChangeScreenPasswordScreen(id, navController, snackbarHostState)
+            }
+            composable(Screen.Adresses.route) {
+                AdressesScreen(navController)
+            }
+            composable(Screen.SocialMedia.route) {
+                val id = it.arguments?.getString("id") ?: ""
+                SocialMediaScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
+            }
+            composable(Screen.ShopAccount.route) {
+                val id = it.arguments?.getString("id") ?: ""
+                val token = it.arguments?.getString("token") ?: ""
+                ShopAccountScreen(id = id, token = token, navController = navController)
+            }
+            composable(Screen.DetailCatalog.route) { backStackEntry ->
+                DetailCatalogScreen(id = backStackEntry.arguments?.getString("id") ?: "", navController)
+                // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Checkout.route) { backStackEntry ->
+                CheckoutScreen(id = backStackEntry.arguments?.getString("id") ?: "")
+                // Obtain the product ID and display the detail page
+            }
+            composable(Screen.Maps.route) {
+                MapsScreen()
+            }
+            composable(Screen.CreateCatalog.route) {
+                CreateCatalogScreen(navController = navController)
             }
         }
     }
@@ -111,5 +180,10 @@ fun HomeBottomNavBar() {
 )
 @Composable
 fun PreviewBottomNavigationBar() {
-    HomeBottomNavBar()
+    SewainAppTheme {
+        HomeBottomNavBar(
+            sessionModel = SessionModel("", "", false),
+            snackbarHostState = remember { SnackbarHostState() },
+        )
+    }
 }

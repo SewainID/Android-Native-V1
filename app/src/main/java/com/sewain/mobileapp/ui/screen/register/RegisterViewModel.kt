@@ -1,20 +1,11 @@
 package com.sewain.mobileapp.ui.screen.register
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.remote.response.RegisterErrorResponse
-import com.sewain.mobileapp.data.remote.response.RegisterResponse
-import com.sewain.mobileapp.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 

@@ -1,13 +1,11 @@
 package com.sewain.mobileapp.ui.component.bottomnav
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.sewain.mobileapp.R
 import com.sewain.mobileapp.ui.navigation.Screen
 
 //initializing the data class with default parameters
@@ -27,7 +25,7 @@ data class BottomNavItem(
             ),
             BottomNavItem(
                 label = "Transaction",
-                icon = Icons.Filled.List,
+                icon = Icons.AutoMirrored.Filled.List,
                 route = Screen.ListTransaction.route
             ),
             BottomNavItem(

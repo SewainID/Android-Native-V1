@@ -14,25 +14,25 @@ import kotlinx.coroutines.flow.map
 val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
 class SessionPreferences private constructor(private val datastore: DataStore<Preferences>) {
-    private val USERNAME_KEY = stringPreferencesKey("username")
+    private val ID_KEY = stringPreferencesKey("id")
     private val TOKEN_KEY = stringPreferencesKey("token")
-    private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
+    private val IS_SHOP_KEY = booleanPreferencesKey("is_shop")
 
     fun getSession(): Flow<SessionModel> {
         return datastore.data.map { data ->
             SessionModel(
-                data[USERNAME_KEY] ?: "",
+                data[ID_KEY] ?: "",
                 data[TOKEN_KEY] ?: "",
-                data[IS_LOGIN_KEY] ?: false
+                data[IS_SHOP_KEY] ?: false,
             )
         }
     }
 
     suspend fun saveSession(sessionModel: SessionModel) {
         datastore.edit { data ->
-            data[USERNAME_KEY] = sessionModel.username
+            data[ID_KEY] = sessionModel.id
             data[TOKEN_KEY] = sessionModel.token
-            data[IS_LOGIN_KEY] = sessionModel.isLogin
+            data[IS_SHOP_KEY] = sessionModel.isShop
         }
     }
 
