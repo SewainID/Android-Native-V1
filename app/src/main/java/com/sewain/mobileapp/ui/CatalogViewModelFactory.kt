@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sewain.mobileapp.data.CatalogRepository
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.ui.screen.checkout.CheckoutViewModel
+import com.sewain.mobileapp.ui.screen.create_catalog.CreateCatalogViewModel
 import com.sewain.mobileapp.ui.screen.detail_catalog.DetailCatalogViewModel
 import com.sewain.mobileapp.ui.screen.home.HomeScreenViewModel
 
@@ -20,6 +21,9 @@ class CatalogViewModelFactory(private val repository: CatalogRepository, private
         }
         if (modelClass.isAssignableFrom(CheckoutViewModel::class.java)) {
             return CheckoutViewModel(repository) as T
+        }
+        if (modelClass.isAssignableFrom(CreateCatalogViewModel::class.java)) {
+            return CreateCatalogViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

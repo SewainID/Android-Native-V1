@@ -1,5 +1,6 @@
 package com.sewain.mobileapp.data.remote.retrofit
 
+import com.sewain.mobileapp.data.remote.model.Catalog
 import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.Login
 import com.sewain.mobileapp.data.remote.model.Register
@@ -7,6 +8,7 @@ import com.sewain.mobileapp.data.remote.model.Shop
 import com.sewain.mobileapp.data.remote.model.SocialMedia
 import com.sewain.mobileapp.data.remote.model.User
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
+import com.sewain.mobileapp.data.remote.response.AddCatalogResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.response.CatalogsResponse
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
@@ -84,4 +86,9 @@ interface ApiService {
     suspend fun predictionImage(
         @Part image: MultipartBody.Part
     ): PredictionResponse
+
+    @POST("/api/v1/catalogs")
+    suspend fun addCatalog(
+        @Body catalog: Catalog
+    ): AddCatalogResponse
 }

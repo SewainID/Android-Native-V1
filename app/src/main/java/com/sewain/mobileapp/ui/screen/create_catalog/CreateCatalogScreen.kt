@@ -26,6 +26,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -34,11 +36,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,18 +51,35 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sewain.mobileapp.R
+import com.sewain.mobileapp.data.remote.model.Catalog
+import com.sewain.mobileapp.di.Injection
+import com.sewain.mobileapp.ui.CatalogViewModelFactory
+import com.sewain.mobileapp.ui.ViewModelFactory
+import com.sewain.mobileapp.ui.navigation.Screen
+import com.sewain.mobileapp.ui.screen.login.LoginViewModel
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateCatalogScreen(
     modifier: Modifier = Modifier,
+    shopId: String,
     navController: NavController,
+    snackbarHostState: SnackbarHostState,
+    viewModel: CreateCatalogViewModel = viewModel(
+        factory = CatalogViewModelFactory(
+            Injection.provideCatalogRepository(LocalContext.current),
+            Injection.provideUserRepository(LocalContext.current),
+        )
+    ),
 ) {
     var inputCatalogName by remember { mutableStateOf("") }
     var inputDescription by remember { mutableStateOf("") }
@@ -73,6 +94,8 @@ fun CreateCatalogScreen(
     var enabled by remember { mutableStateOf(true) }
 
     val scrollState = rememberScrollState()
+
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -127,7 +150,7 @@ fun CreateCatalogScreen(
             )
 
             IconButton(
-                onClick = {  },
+                onClick = { },
                 colors = IconButtonDefaults.filledIconButtonColors(MaterialTheme.colorScheme.primary),
                 modifier = modifier.clip(CircleShape)
             ) {
@@ -433,7 +456,44 @@ fun CreateCatalogScreen(
 
             Button(
                 onClick = {
+                    scope.launch {
+                        if (inputCatalogName.isEmpty() ||
+                            inputDescription.isEmpty() ||
+                            inputSize.isEmpty() ||
+                            inputStatus.isEmpty() ||
+                            inputDayRental.isEmpty() ||
+                            inputDayMaintenance.isEmpty()
+                        ) {
+                            snackbarHostState.showSnackbar(message = "Incomplete Catalog field")
+                        } else {
+                            val catalog = Catalog(
+                                name = inputCatalogName,
+                                description = inputDescription,
+                                size = inputSize,
+                                price = inputPrice.toInt(),
+                                status = inputStatus,
+                                dayRent = inputDayRental.toInt(),
+                                dayMaintenance = inputDayMaintenance.toInt(),
+                                // Change the photo url soon
+                                photoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqoe0TbXL7WegcQlYuz-Ma1XIF2xuGeT_PAlRNl_YFzXt_sAnXkzupifcCB4y4rtRIVw&usqp=CAU",
+                                shopId = shopId
+                            )
 
+                            viewModel.addCatalog(catalog)
+
+                            success = viewModel.success.value
+                            loading = viewModel.loading.value
+
+                            delay(2000)
+                            snackbarHostState.showSnackbar(message = viewModel.message.value)
+                            loading = false
+                            enabled = true
+
+                            if (success) {
+                                navController.navigate(Screen.Home.route)
+                            }
+                        }
+                    }
                 },
                 modifier
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
@@ -441,7 +501,8 @@ fun CreateCatalogScreen(
                     .height(50.dp),
                 enabled = enabled,
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors =
+                ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 if (loading) {
                     CircularProgressIndicator(
@@ -479,7 +540,9 @@ fun CreateCatalogScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             CreateCatalogScreen(
-                navController = rememberNavController()
+                shopId = "",
+                navController = rememberNavController(),
+                snackbarHostState = remember { SnackbarHostState() }
             )
         }
     }

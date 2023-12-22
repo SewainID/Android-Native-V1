@@ -8,7 +8,9 @@ import androidx.paging.PagingData
 import com.sewain.mobileapp.data.local.entity.CatalogEntity
 import com.sewain.mobileapp.data.local.room.CatalogDao
 import com.sewain.mobileapp.data.local.room.SewainDatabase
+import com.sewain.mobileapp.data.remote.model.Catalog
 import com.sewain.mobileapp.data.remote.response.AddAttachmentsResponse
+import com.sewain.mobileapp.data.remote.response.AddCatalogResponse
 import com.sewain.mobileapp.data.remote.response.CatalogItem
 import com.sewain.mobileapp.data.remote.response.PredictionResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
@@ -56,6 +58,9 @@ class CatalogRepository private constructor(
         return apiService.predictionImage(image)
     }
 
+    suspend fun addCatalog(catalog: Catalog): AddCatalogResponse {
+        return apiService.addCatalog(catalog)
+    }
 
 
 //    fun addCatalog(imageFile: File, description: String) = liveData {

@@ -143,7 +143,7 @@ fun HomeScreen(
                     viewModel.setShopId(viewModel.data.value)
                     Button(
                         onClick = {
-                            navController.navigate(Screen.CreateCatalog.route)
+                            navController.navigate(Screen.CreateCatalog.createRoute(viewModel.data.value))
                         },
                         shape = RoundedCornerShape(8.dp),
                         contentPadding = PaddingValues(8.dp),

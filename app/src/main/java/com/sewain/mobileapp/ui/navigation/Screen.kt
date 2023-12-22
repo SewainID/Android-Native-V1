@@ -27,7 +27,9 @@ sealed class Screen(val route: String) {
     }
 
     object Maps : Screen("profile/address/maps")
-    object CreateCatalog : Screen("create_catalog")
+    object CreateCatalog : Screen("create_catalog/{shop_id}") {
+        fun createRoute(shopId: String?) = "create_catalog/$shopId"
+    }
 
     object Login : Screen("login")
     object Register : Screen("register")

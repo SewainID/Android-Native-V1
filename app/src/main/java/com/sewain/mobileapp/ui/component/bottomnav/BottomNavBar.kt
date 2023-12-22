@@ -176,7 +176,8 @@ fun HomeBottomNavBar(
                 )
             }
             composable(Screen.CreateCatalog.route) {
-                CreateCatalogScreen(navController = navController)
+                val shopId = it.arguments?.getString("shop_id") ?: ""
+                CreateCatalogScreen(shopId = shopId, snackbarHostState = snackbarHostState, navController = navController)
             }
         }
     }
