@@ -2,16 +2,16 @@ package com.sewain.mobileapp.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GetUserbyIDResponse(
+data class UpdateUserbyIDResponse(
 
 	@field:SerializedName("message")
 	val message: String? = null,
 
 	@field:SerializedName("results")
-	val userResults: UserResults? = null
+	val results: Results? = null
 )
 
-data class SocialMediaUserUpdate(
+data class SocialMediaUser(
 
 	@field:SerializedName("facebook_username")
 	val facebookUsername: String? = null,
@@ -26,7 +26,7 @@ data class SocialMediaUserUpdate(
 	val instagramUsername: String? = null
 )
 
-data class UserResults(
+data class Results(
 
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
@@ -35,7 +35,7 @@ data class UserResults(
 	val createdAt: String? = null,
 
 	@field:SerializedName("DetailsUser")
-	val detailsUser: DetailsUserUpdate? = null,
+	val detailsUser: DetailsUser? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,
@@ -47,7 +47,43 @@ data class UserResults(
 	val username: String? = null
 )
 
-data class AddressUserUpdate(
+data class DetailsUser(
+
+	@field:SerializedName("full_name")
+	val fullName: String? = null,
+
+	@field:SerializedName("social_media_id")
+	val socialMediaId: String? = null,
+
+	@field:SerializedName("address_user_id")
+	val addressUserId: String? = null,
+
+	@field:SerializedName("address_user")
+	val addressUser: AddressUser? = null,
+
+	@field:SerializedName("detail_shop_id")
+	val detailShopId: String? = null,
+
+	@field:SerializedName("users_id")
+	val usersId: String? = null,
+
+	@field:SerializedName("detail_shop")
+	val detailShop: DetailShop? = null,
+
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("photo_url")
+	val photoUrl: String? = null,
+
+	@field:SerializedName("social_media_user")
+	val socialMediaUser: SocialMediaUser? = null,
+
+	@field:SerializedName("number_phone")
+	val numberPhone: String? = null
+)
+
+data class AddressUser(
 
 	@field:SerializedName("latitude")
 	val latitude: String? = null,
@@ -68,43 +104,7 @@ data class AddressUserUpdate(
 	val longitude: String? = null
 )
 
-data class DetailsUserUpdate(
-
-	@field:SerializedName("full_name")
-	val fullName: String? = null,
-
-	@field:SerializedName("social_media_id")
-	val socialMediaId: String? = null,
-
-	@field:SerializedName("address_user_id")
-	val addressUserId: String? = null,
-
-	@field:SerializedName("address_user")
-	val addressUser: AddressUserUpdate? = null,
-
-	@field:SerializedName("detail_shop_id")
-	val detailShopId: String? = null,
-
-	@field:SerializedName("users_id")
-	val usersId: String? = null,
-
-	@field:SerializedName("detail_shop")
-	val detailShop: DetailShopUpdate? = null,
-
-	@field:SerializedName("id")
-	val id: String? = null,
-
-	@field:SerializedName("photo_url")
-	val photoUrl: String? = null,
-
-	@field:SerializedName("social_media_user")
-	val socialMediaUser: SocialMediaUserUpdate? = null,
-
-	@field:SerializedName("number_phone")
-	val numberPhone: String? = null
-)
-
-data class DetailShopUpdate(
+data class DetailShop(
 
 	@field:SerializedName("name")
 	val name: String? = null,

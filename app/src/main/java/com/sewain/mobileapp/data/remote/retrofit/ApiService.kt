@@ -18,7 +18,7 @@ import com.sewain.mobileapp.data.remote.response.PredictionResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import com.sewain.mobileapp.data.remote.response.UpdateDetailShopResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
-import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
+import com.sewain.mobileapp.data.remote.response.UpdateUserbyIDResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -52,7 +52,7 @@ interface ApiService {
     suspend fun updateUserById(
         @Path("id") id: String,
         @Body user: User,
-    ): UpdateUserByIDResponse
+    ): UpdateUserbyIDResponse
 
     @Multipart
     @POST("/api/v1/attachments")

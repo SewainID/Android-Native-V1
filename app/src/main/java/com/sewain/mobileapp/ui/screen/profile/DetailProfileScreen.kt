@@ -160,18 +160,7 @@ fun DetailProfileScreen(
                 contentAlignment = Center
             ) {
                 // Condition photo profile
-                if (viewModel.imageString.value != "null") {
-                    AsyncImage(
-                        model = viewModel.imageString.value,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        alpha = 0.5f,
-                        alignment = Center,
-                        modifier = modifier
-                            .size(150.dp)
-                            .clip(CircleShape),
-                    )
-                } else if (hasImage) {
+                if (hasImage) {
                     AsyncImage(
                         model = imageUri,
                         contentDescription = null,
@@ -364,8 +353,20 @@ fun DetailProfileScreen(
                             inputEmail.isEmpty() &&
                             !hasImage
                         ) {
-                            snackbarHostState.showSnackbar(message = "Error: No changes made")
+                            snackbarHostState.showSnackbar(message = "Error: Incomplete Edit Profile")
                         } else {
+                            loading = true
+
+                            if (inputFullName.isEmpty()) {
+                                inputFullName = viewModel.fullName.value
+                            }
+                            if (inputEmail.isEmpty()) {
+                                inputEmail = viewModel.email.value
+                            }
+                            if (inputUsername.isEmpty()) {
+                                inputUsername = viewModel.username.value
+                            }
+
                             if (hasImage) {
                                 imageUri?.let { uri ->
                                     val imageFile = uriToFile(uri, context)
@@ -383,12 +384,8 @@ fun DetailProfileScreen(
                             )
 
                             success = viewModel.success.value
-                            loading = viewModel.loading.value
 
                             delay(2000)
-                            if (success && (inputUsername.isNotEmpty() || inputEmail.isNotEmpty())) {
-                                snackbarHostState.showSnackbar(message = viewModel.message.value)
-                            }
                             snackbarHostState.showSnackbar(message = viewModel.message.value)
                             loading = false
 

@@ -16,7 +16,7 @@ import com.sewain.mobileapp.data.remote.response.LoginResponse
 import com.sewain.mobileapp.data.remote.response.RegisterResponse
 import com.sewain.mobileapp.data.remote.response.UpdateDetailShopResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaResponse
-import com.sewain.mobileapp.data.remote.response.UpdateUserByIDResponse
+import com.sewain.mobileapp.data.remote.response.UpdateUserbyIDResponse
 import com.sewain.mobileapp.data.remote.retrofit.ApiService
 import com.sewain.mobileapp.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
@@ -72,7 +72,7 @@ class UserRepository private constructor(
         username: String,
         email: String,
         photoUrl: String,
-    ): UpdateUserByIDResponse {
+    ): UpdateUserbyIDResponse {
         return apiService.updateUserById(id, User(username, email, DetailsUser(fullName = fullName, photoUrl = photoUrl)))
     }
 

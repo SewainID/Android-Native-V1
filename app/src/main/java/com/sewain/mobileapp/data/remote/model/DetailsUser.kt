@@ -6,9 +6,6 @@ data class DetailsUser(
     @field:SerializedName("full_name")
     val fullName: String? = null,
 
-    @field:SerializedName("number_phone")
-    val numberPhone: String? = null,
-
     @field:SerializedName("photo_url")
     val photoUrl: String? = null,
 )

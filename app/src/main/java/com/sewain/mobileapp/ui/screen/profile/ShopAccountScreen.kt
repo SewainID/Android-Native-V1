@@ -144,7 +144,7 @@ fun ShopAccountScreen(
                 AsyncImage(
                     model = viewModel.imageString.value,
                     contentDescription = null,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Center,
                     modifier = modifier
                         .padding(top = 24.dp)

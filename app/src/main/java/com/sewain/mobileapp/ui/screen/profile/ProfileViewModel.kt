@@ -10,7 +10,6 @@ import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaErrorResponse
-import com.sewain.mobileapp.data.remote.response.UpdateUserByIDErrorResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -116,10 +115,7 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _success.value = true
         } catch (e: HttpException) {
             //get error message
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, UpdateUserByIDErrorResponse::class.java)
-            val errorMessage = errorBody.message
-            _message.value = "Error: $errorMessage"
+            _message.value = "Error: ${e.message}"
             _success.value = false
         } catch (e: SocketTimeoutException) {
             _message.value = "Error: Timeout! ${e.message}"

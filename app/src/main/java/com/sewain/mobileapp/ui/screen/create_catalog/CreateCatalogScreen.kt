@@ -485,7 +485,7 @@ fun CreateCatalogScreen(
                         ) {
                             snackbarHostState.showSnackbar(message = "Incomplete Catalog field")
                         } else {
-                            loading = viewModel.loading.value
+                            loading = true
 
                             imageUri?.let { uri ->
                                 val imageFile = uriToFile(uri, context)

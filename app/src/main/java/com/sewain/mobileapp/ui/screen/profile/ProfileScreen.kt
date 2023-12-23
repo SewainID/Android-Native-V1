@@ -120,9 +120,9 @@ fun ProfileScreen(
             // Condition photo profile
             if (viewModel.imageString.value != "null") {
                 AsyncImage(
-                    model = viewModel.fullName.value,
+                    model = viewModel.imageString.value,
                     contentDescription = null,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     modifier = modifier
                         .padding(top = 24.dp)
@@ -133,7 +133,7 @@ fun ProfileScreen(
                 Image(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = null,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     modifier = modifier
                         .padding(top = 24.dp)
