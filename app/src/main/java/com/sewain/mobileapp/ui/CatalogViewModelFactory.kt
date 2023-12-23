@@ -23,7 +23,7 @@ class CatalogViewModelFactory(private val repository: CatalogRepository, private
             return CheckoutViewModel(repository) as T
         }
         if (modelClass.isAssignableFrom(CreateCatalogViewModel::class.java)) {
-            return CreateCatalogViewModel(repository) as T
+            return CreateCatalogViewModel(repository, userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

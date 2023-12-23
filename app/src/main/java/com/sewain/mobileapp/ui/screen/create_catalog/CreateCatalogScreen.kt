@@ -1,6 +1,9 @@
 package com.sewain.mobileapp.ui.screen.create_catalog
 
 import android.content.res.Configuration
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,6 +67,7 @@ import com.sewain.mobileapp.ui.screen.login.LoginViewModel
 import com.sewain.mobileapp.ui.theme.MidnightBlue
 import com.sewain.mobileapp.ui.theme.RoyalBlue
 import com.sewain.mobileapp.ui.theme.SewainAppTheme
+import com.sewain.mobileapp.utils.uriToFile
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -92,6 +96,18 @@ fun CreateCatalogScreen(
     var loading by remember { mutableStateOf(false) }
     var success by remember { mutableStateOf(false) }
     var enabled by remember { mutableStateOf(true) }
+
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var hasImage by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val launcherGallery = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            hasImage = uri != null
+            imageUri = uri
+        }
+    )
 
     val scrollState = rememberScrollState()
 
@@ -150,7 +166,9 @@ fun CreateCatalogScreen(
             )
 
             IconButton(
-                onClick = { },
+                onClick = {
+                    launcherGallery.launch("image/*")
+                },
                 colors = IconButtonDefaults.filledIconButtonColors(MaterialTheme.colorScheme.primary),
                 modifier = modifier.clip(CircleShape)
             ) {
@@ -462,10 +480,17 @@ fun CreateCatalogScreen(
                             inputSize.isEmpty() ||
                             inputStatus.isEmpty() ||
                             inputDayRental.isEmpty() ||
-                            inputDayMaintenance.isEmpty()
+                            inputDayMaintenance.isEmpty() ||
+                            !hasImage
                         ) {
                             snackbarHostState.showSnackbar(message = "Incomplete Catalog field")
                         } else {
+                            imageUri?.let { uri ->
+                                val imageFile = uriToFile(uri, context)
+                                viewModel.uploadImage(imageFile)
+                            }
+                            hasImage = false
+
                             val catalog = Catalog(
                                 name = inputCatalogName,
                                 description = inputDescription,
@@ -474,8 +499,7 @@ fun CreateCatalogScreen(
                                 status = inputStatus,
                                 dayRent = inputDayRental.toInt(),
                                 dayMaintenance = inputDayMaintenance.toInt(),
-                                // Change the photo url soon
-                                photoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrqoe0TbXL7WegcQlYuz-Ma1XIF2xuGeT_PAlRNl_YFzXt_sAnXkzupifcCB4y4rtRIVw&usqp=CAU",
+                                photoUrl = viewModel.imageString.value,
                                 shopId = shopId
                             )
 
