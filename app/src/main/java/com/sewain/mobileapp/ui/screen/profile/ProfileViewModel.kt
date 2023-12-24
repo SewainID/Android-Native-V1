@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
 import com.sewain.mobileapp.data.UserRepository
+import com.sewain.mobileapp.data.remote.model.Address
+import com.sewain.mobileapp.data.remote.model.Maps
 import com.sewain.mobileapp.data.remote.response.ChangePasswordResponse
 import com.sewain.mobileapp.data.remote.response.UpdateSocialMediaErrorResponse
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,6 +79,14 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private val _locationState = mutableStateOf<Location?>(null)
     val locationState: State<Location?> = _locationState
 
+    private val _fullAddress = MutableStateFlow("")
+    val fullAddress: StateFlow<String>
+        get() = _fullAddress
+
+    private val _numberPhone = MutableStateFlow("")
+    val numberPhone: StateFlow<String>
+        get() = _numberPhone
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()
@@ -103,6 +113,8 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             _facebook.value = data?.detailsUser?.socialMediaUser?.facebookUsername.toString()
             _instagram.value = data?.detailsUser?.socialMediaUser?.instagramUsername.toString()
             _tiktok.value = data?.detailsUser?.socialMediaUser?.tiktokUsername.toString()
+            _fullAddress.value = data?.detailsUser?.addressUser?.fullAddress.toString()
+            _numberPhone.value = data?.detailsUser?.addressUser?.numberPhone.toString()
         }
     }
 
@@ -204,6 +216,37 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
             val data = repository.updateDetailShop(id, name, username)
             _success.value = true
             _message.value = "Success: ${data.message}"
+        } catch (e: HttpException) {
+            _message.value = "Error: ${e.message}"
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
+
+    suspend fun updateAddress(
+        id: String,
+        address: Address
+    ) {
+        _loading.value = true
+        try {
+            repository.updateAddress(id, address)
+            _success.value = true
+            _message.value = "Success: Address successfully update"
+        } catch (e: HttpException) {
+            _message.value = "Error: ${e.message}"
+        } catch (e: SocketTimeoutException) {
+            _message.value = "Error: Timeout! ${e.message}"
+        }
+    }
+
+    suspend fun updateMap(
+        id: String,
+        map: Maps
+    ) {
+        _loading.value = true
+        try {
+            repository.updateMap(id, map)
+            _success.value = true
         } catch (e: HttpException) {
             _message.value = "Error: ${e.message}"
         } catch (e: SocketTimeoutException) {

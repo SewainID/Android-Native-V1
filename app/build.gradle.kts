@@ -21,7 +21,7 @@ android {
         }
 
         buildConfigField("String", "BASE_URL", "${project.findProperty("BASE_URL")}")
-        manifestPlaceholders["MAPS_API_KEY"] = System.getenv("MAPS_API_KEY") ?: "defaultKey"
+        manifestPlaceholders["MAPS_API_KEY"] = System.getenv("MAPS_API_KEY") ?: "AIzaSyCQm6aPQgs9wqQWIl9HzcsW0KILfzVsCMs"
 
     }
 

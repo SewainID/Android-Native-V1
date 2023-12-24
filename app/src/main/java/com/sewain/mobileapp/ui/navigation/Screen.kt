@@ -26,7 +26,10 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "profile/shopAccount/$id"
     }
 
-    object Maps : Screen("profile/address/maps")
+    object Maps : Screen("profile/address/maps/{id}") {
+        fun createRoute(id: String) = "profile/address/maps/$id"
+    }
+
     object CreateCatalog : Screen("create_catalog/{shop_id}") {
         fun createRoute(shopId: String?) = "create_catalog/$shopId"
     }

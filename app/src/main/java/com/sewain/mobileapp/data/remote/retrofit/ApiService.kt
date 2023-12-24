@@ -1,8 +1,11 @@
 package com.sewain.mobileapp.data.remote.retrofit
 
+import com.google.gson.annotations.SerializedName
+import com.sewain.mobileapp.data.remote.model.Address
 import com.sewain.mobileapp.data.remote.model.Catalog
 import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.Login
+import com.sewain.mobileapp.data.remote.model.Maps
 import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.data.remote.model.Shop
 import com.sewain.mobileapp.data.remote.model.SocialMedia
@@ -91,4 +94,16 @@ interface ApiService {
     suspend fun addCatalog(
         @Body catalog: Catalog
     ): AddCatalogResponse
+
+    @PUT("/api/v1/users/{id}")
+    suspend fun updateAddress(
+        @Path("id") id: String,
+        @Body address: Address
+    ): UpdateUserbyIDResponse
+
+    @PUT("/api/v1/users/{id}")
+    suspend fun updateMap(
+        @Path("id") id: String,
+        @Body maps: Maps
+    ): UpdateUserbyIDResponse
 }

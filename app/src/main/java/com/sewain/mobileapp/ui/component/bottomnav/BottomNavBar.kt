@@ -142,7 +142,8 @@ fun HomeBottomNavBar(
                 ChangeScreenPasswordScreen(id, navController, snackbarHostState)
             }
             composable(Screen.Adresses.route) {
-                AdressesScreen(navController)
+                val id = it.arguments?.getString("id") ?: ""
+                AdressesScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
             }
             composable(Screen.SocialMedia.route) {
                 val id = it.arguments?.getString("id") ?: ""
@@ -171,9 +172,8 @@ fun HomeBottomNavBar(
                 // Obtain the product ID and display the detail page
             }
             composable(Screen.Maps.route) {
-                MapsScreen(
-                    navController = navController,
-                )
+                val id = it.arguments?.getString("id") ?: ""
+                MapsScreen(id = id, navController = navController, snackbarHostState = snackbarHostState)
             }
             composable(Screen.CreateCatalog.route) {
                 val shopId = it.arguments?.getString("shop_id") ?: ""

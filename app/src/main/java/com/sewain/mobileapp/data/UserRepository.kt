@@ -2,9 +2,11 @@ package com.sewain.mobileapp.data
 
 import com.sewain.mobileapp.data.local.model.SessionModel
 import com.sewain.mobileapp.data.local.preferences.SessionPreferences
+import com.sewain.mobileapp.data.remote.model.Address
 import com.sewain.mobileapp.data.remote.model.ChangePassword
 import com.sewain.mobileapp.data.remote.model.DetailsUser
 import com.sewain.mobileapp.data.remote.model.Login
+import com.sewain.mobileapp.data.remote.model.Maps
 import com.sewain.mobileapp.data.remote.model.Register
 import com.sewain.mobileapp.data.remote.model.Shop
 import com.sewain.mobileapp.data.remote.model.SocialMedia
@@ -100,6 +102,20 @@ class UserRepository private constructor(
         username: String,
     ): UpdateDetailShopResponse {
         return apiService.updateDetailShop(id, Shop(name, username))
+    }
+
+    suspend fun updateAddress(
+        id: String,
+        address: Address
+    ): UpdateUserbyIDResponse {
+        return apiService.updateAddress(id, address)
+    }
+
+    suspend fun updateMap(
+        id: String,
+        maps: Maps
+    ): UpdateUserbyIDResponse {
+        return apiService.updateMap(id, maps)
     }
 
     companion object {
